@@ -10,7 +10,7 @@ export default function Navbar() {
           <Button
             variant="outline"
             size="icon"
-            className="group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300 hover:w-30 hover:px-4 hover:gap-2 focus-visible:w-30 focus-visible:px-4 focus-visible:gap-2"
+            className="group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300 hover:w-28 hover:px-4 hover:gap-2 focus-visible:w-28 focus-visible:px-4 focus-visible:gap-2"
           >
             <User className="h-5 w-5 shrink-0" />
             <span className="max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300 group-hover:max-w-16 group-focus-visible:max-w-16">
