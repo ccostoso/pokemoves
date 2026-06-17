@@ -1,135 +1,168 @@
 type VersionGroup = {
+    apiName: string
     name: string
     id: number
 }
 
-const versionGroupList: VersionGroup[] = [
+export const versionGroupList: VersionGroup[] = [
     {
-        "name": "red-blue",
-        "id": 1
+        apiName: "red-blue",
+        name: "Red & Blue",
+        id: 1
     },
     {
-        "name": "yellow",
-        "id": 2
+        apiName: "yellow",
+        name: "Yellow",
+        id: 2
     },
     {
-        "name": "gold-silver",
-        "id": 3
+        apiName: "gold-silver",
+        name: "Gold & Silver",
+        id: 3
     },
     {
-        "name": "crystal",
-        "id": 4
+        apiName: "crystal",
+        name: "Crystal",
+        id: 4
     },
     {
-        "name": "ruby-sapphire",
-        "id": 5
+        apiName: "ruby-sapphire",
+        name: "Ruby & Sapphire",
+        id: 5
     },
     {
-        "name": "emerald",
-        "id": 6
+        apiName: "emerald",
+        name: "Emerald",
+        id: 6
     },
     {
-        "name": "firered-leafgreen",
-        "id": 7
+        apiName: "firered-leafgreen",
+        name: "FireRed & LeafGreen",
+        id: 7
     },
     {
-        "name": "diamond-pearl",
-        "id": 8
+        apiName: "diamond-pearl",
+        name: "Diamond & Pearl",
+        id: 8
     },
     {
-        "name": "platinum",
-        "id": 9
+        apiName: "platinum",
+        name: "Platinum",
+        id: 9
     },
     {
-        "name": "heartgold-soulsilver",
-        "id": 10
+        apiName: "heartgold-soulsilver",
+        name: "HeartGold & SoulSilver",
+        id: 10
     },
     {
-        "name": "black-white",
-        "id": 11
+        apiName: "black-white",
+        name: "Black & White",
+        id: 11
     },
     {
-        "name": "colosseum",
-        "id": 12
+        apiName: "colosseum",
+        name: "Colosseum",
+        id: 12
     },
     {
-        "name": "xd",
-        "id": 13
+        apiName: "xd",
+        name: "XD",
+        id: 13
     },
     {
-        "name": "black-2-white-2",
-        "id": 14
+        apiName: "black-2-white-2",
+        name: "Black 2 & White 2",
+        id: 14
     },
     {
-        "name": "x-y",
-        "id": 15
+        apiName: "x-y",
+        name: "X & Y",
+        id: 15
     },
     {
-        "name": "omega-ruby-alpha-sapphire",
-        "id": 16
+        apiName: "omega-ruby-alpha-sapphire",
+        name: "Omega Ruby & Alpha Sapphire",
+        id: 16
     },
     {
-        "name": "sun-moon",
-        "id": 17
+        apiName: "sun-moon",
+        name: "Sun & Moon",
+        id: 17
     },
     {
-        "name": "ultra-sun-ultra-moon",
-        "id": 18
+        apiName: "ultra-sun-ultra-moon",
+        name: "Ultra Sun & Ultra Moon",
+        id: 18
     },
     {
-        "name": "lets-go-pikachu-lets-go-eevee",
-        "id": 19
+        apiName: "lets-go-pikachu-lets-go-eevee",
+        name: "Let's Go, Pikachu! & Let's Go, Eevee!",
+        id: 19
     },
     {
-        "name": "sword-shield",
-        "id": 20
+        apiName: "sword-shield",
+        name: "Sword & Shield",
+        id: 20
     },
     {
-        "name": "the-isle-of-armor",
-        "id": 21
+        apiName: "the-isle-of-armor",
+        name: "The Isle of Armor",
+        id: 21
     },
     {
-        "name": "the-crown-tundra",
-        "id": 22
+        apiName: "the-crown-tundra",
+        name: "The Crown Tundra",
+        id: 22
     },
     {
-        "name": "brilliant-diamond-shining-pearl",
-        "id": 23
+        apiName: "brilliant-diamond-shining-pearl",
+        name: "Brilliant Diamond & Shining Pearl",
+        id: 23
     },
     {
-        "name": "legends-arceus",
-        "id": 24
+        apiName: "legends-arceus",
+        name: "Legends: Arceus",
+        id: 24
     },
     {
-        "name": "scarlet-violet",
-        "id": 25
+        apiName: "scarlet-violet",
+        name: "Scarlet & Violet",
+        id: 25
     },
     {
-        "name": "the-teal-mask",
-        "id": 26
+        apiName: "the-teal-mask",
+        name: "The Teal Mask",
+        id: 26
     },
     {
-        "name": "the-indigo-disk",
-        "id": 27
+        apiName: "the-indigo-disk",
+        name: "The Indigo Disk",
+        id: 27
     },
     {
-        "name": "red-green-japan",
-        "id": 28
+        apiName: "red-green-japan",
+        name: "Red & Green (Japan)",
+        id: 28
     },
     {
-        "name": "blue-japan",
-        "id": 29
+        apiName: "blue-japan",
+        name: "Blue (Japan)",
+        id: 29
     },
     {
-        "name": "legends-za",
-        "id": 30
+        apiName: "legends-za",
+        name: "Legends: ZA",
+        id: 30
     },
     {
-        "name": "mega-dimension",
-        "id": 31
+        apiName: "mega-dimension",
+        name: "Mega Dimension",
+        id: 31
     },
     {
-        "name": "champions",
-        "id": 32
+        apiName: "champions",
+        name: "Champions",
+        id: 32
     }
 ]

@@ -3,7 +3,7 @@ type Pokemon = {
     id: number
 }
 
-const pokemonList: Pokemon[] = [
+export const pokemonList: Pokemon[] = [
     {
         "name": "bulbasaur",
         "id": 1
