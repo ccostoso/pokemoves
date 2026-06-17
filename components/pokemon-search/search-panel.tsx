@@ -20,9 +20,10 @@ export default function SearchPanel() {
         "",
         "",
     ) // Initialize with empty values
-    const [pokemonName, setPokemonName] = useState("")
-    const [versionGroupName, setVersionGroupName] = useState("")
+
     const [pokemonList, setPokemonList] = useState([])
+    const [versionGroupName, setVersionGroupName] = useState("")
+    const [pokemonName, setPokemonName] = useState("")
     const [moves, setMoves] = useState([])
 
     useEffect(() => {
