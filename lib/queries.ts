@@ -16,13 +16,23 @@ query getAllVersionGroups {
   }
 }`
 
+export const GET_POKEMON_BY_VERSIONGROUP_NAME = gql`
+query getPokemonByVersionGroupName($versionGroupName: String!) {
+  pokemon(
+    where: {pokemongameindices: {version: {versiongroup: {name: {_eq: $versionGroupName}}}}}
+  ) {
+    id
+    name
+  }
+}`
+
 export const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION = gql`
-query getLevelUpMovesByPokemonNameAndGeneration {
-  pokemon(where: {name: {_eq: ""}}) {
+query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
+  pokemon(where: {name: {_eq: $pokemonName}}) {
     id
     name
     pokemonmoves(
-      where: {versiongroup: {name: {_eq: "red-blue"}}, movelearnmethod: {name: {_eq: "level-up"}}}
+      where: {versiongroup: {name: {_eq: $versionGroupName}}, movelearnmethod: {name: {_eq: "level-up"}}}
     ) {
       level
       movelearnmethod {
@@ -39,12 +49,12 @@ query getLevelUpMovesByPokemonNameAndGeneration {
 }`
 
 export const GET_LEVEL_UP_MOVES_BY_POKEMON_ID_AND_GENERATION = gql`
-query getLevelUpMovesByPokemonIdAndGeneration {
-  pokemon(where: {id: {_eq: ""}}) {
+query getLevelUpMovesByPokemonIdAndGeneration($pokemonId: Int!, $versionGroupName: String!) {
+  pokemon(where: {id: {_eq: $pokemonId}}) {
     id
     name
     pokemonmoves(
-      where: {versiongroup: {name: {_eq: "red-blue"}}, movelearnmethod: {name: {_eq: "level-up"}}}
+      where: {versiongroup: {name: {_eq: $versionGroupName}}, movelearnmethod: {name: {_eq: "level-up"}}}
     ) {
       level
       movelearnmethod {
@@ -61,12 +71,12 @@ query getLevelUpMovesByPokemonIdAndGeneration {
 }`
 
 export const GET_MACHINE_MOVES_BY_POKEMON_NAME_AND_GENERATION = gql`
-query getMachineMovesByPokemonNameAndGeneration {
-  pokemon(where: {name: {_eq: ""}}) {
+query getMachineMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
+  pokemon(where: {name: {_eq: $pokemonName}}) {
     id
     name
     pokemonmoves(
-      where: {versiongroup: {name: {_eq: "red-blue"}}, movelearnmethod: {name: {_eq: "machine"}}}
+      where: {versiongroup: {name: {_eq: $versionGroupName}}, movelearnmethod: {name: {_eq: "machine"}}}
     ) {
       level
       movelearnmethod {
@@ -77,7 +87,7 @@ query getMachineMovesByPokemonNameAndGeneration {
         type {
           name
         }
-        machines(where: {versiongroup: {name: {_eq: "red-blue"}}}) {
+        machines(where: {versiongroup: {name: {_eq: $versionGroupName}}}) {
           machine_number
           versiongroup {
             name
@@ -89,12 +99,12 @@ query getMachineMovesByPokemonNameAndGeneration {
 }`
 
 export const GET_MACHINE_MOVES_BY_POKEMON_ID_AND_GENERATION = gql`
-query getMachineMovesByPokemonIdAndGeneration {
-  pokemon(where: {id: {_eq: ""}}) {
+query getMachineMovesByPokemonIdAndGeneration($pokemonId: Int!, $versionGroupName: String!) {
+  pokemon(where: {id: {_eq: $pokemonId}}) {
     id
     name
     pokemonmoves(
-      where: {versiongroup: {name: {_eq: "red-blue"}}, movelearnmethod: {name: {_eq: "machine"}}}
+      where: {versiongroup: {name: {_eq: $versionGroupName}}, movelearnmethod: {name: {_eq: "machine"}}}
     ) {
       level
       movelearnmethod {
@@ -105,7 +115,7 @@ query getMachineMovesByPokemonIdAndGeneration {
         type {
           name
         }
-        machines(where: {versiongroup: {name: {_eq: "red-blue"}}}) {
+        machines(where: {versiongroup: {name: {_eq: $versionGroupName}}}) {
           machine_number
           versiongroup {
             name

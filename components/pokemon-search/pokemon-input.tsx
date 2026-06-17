@@ -9,18 +9,34 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox"
-import { pokemonList } from "@/lib/data/pokemon-list"
 
-export default function PokemonInput() {
+interface PokemonInputProps {
+    pokemonList: { id: number; name: string }[] // Add pokemonList as a prop
+    value: string
+    onChange: (value: string) => void
+}
+
+export default function PokemonInput({
+    pokemonList,
+    value,
+    onChange,
+}: PokemonInputProps) {
     return (
         <Field>
             <FieldLabel htmlFor="name">Pokémon Name</FieldLabel>
-            <Combobox items={pokemonList}>
+            <Combobox
+                items={pokemonList}
+                onValueChange={(val: string | null) => {
+                    if (val) onChange(val)
+                }}
+            >
                 <ComboboxInput
                     id="name"
                     autoComplete="off"
                     placeholder="Pikachu"
                     className="w-full"
+                    value={value}
+                    onChange={(e) => onChange(e.target.value)}
                 />
                 <ComboboxContent>
                     <ComboboxEmpty>No Pokemon found.</ComboboxEmpty>
