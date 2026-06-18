@@ -7,7 +7,7 @@ import {
     TableBody,
     TableCell,
 } from "../ui/table"
-import { getVersionGroupDisplayName } from "@/lib/utils"
+import { getTypeNumber, getVersionGroupDisplayName } from "@/lib/utils"
 import Image from "next/image"
 import { Button } from "../ui/button"
 import { X } from "lucide-react"
@@ -27,16 +27,40 @@ interface Move {
     }
 }
 
+function TypeSprite({ typeName }: { typeName: string }) {
+    const typeNumber = getTypeNumber(typeName)
+    const typeSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/types/generation-vii/sun-moon/${typeNumber}.png`
+
+    return (
+        <Image
+            src={typeSpriteUrl}
+            alt={typeName}
+            className="mx-auto"
+            width={48}
+            height={48}
+        />
+    )
+}
+
 export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
     const pokemonName =
         result?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
         result?.pokemon?.[0]?.name ||
         "Unknown"
     const pokemonMoves = result?.pokemon?.[0]?.pokemonmoves || []
+
+    // Get display name for version group
     const versionGroupName = getVersionGroupDisplayName(
         result?.versionGroupName,
     )
-    const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${result?.pokemon?.[0]?.id}.png`
+    // Get type number for the first move's type (if available) to construct sprite URL
+    const typeNumber = getTypeNumber(pokemonMoves[0]?.move.type.name || "")
+
+    // Construct sprite URLs
+    const pokemonSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${result?.pokemon?.[0]?.id}.png`
+    const typeSpriteUrl = pokemonMoves[0]?.move.type.name
+        ? `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/types/generation-vii/sun-moon/${typeNumber}.png`
+        : null
 
     return (
         <div className="basis-1/4 shrink-0 min-w-72">
@@ -53,9 +77,9 @@ export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
                             >
                                 <X className="h-4 w-4" />
                             </Button>
-                            {spriteUrl && (
+                            {pokemonSpriteUrl && (
                                 <Image
-                                    src={spriteUrl}
+                                    src={pokemonSpriteUrl}
                                     alt={pokemonName}
                                     className="mx-auto"
                                     width={96}
@@ -89,7 +113,13 @@ export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
                             <TableCell>
                                 {move.move.movenames[0]?.name}
                             </TableCell>
-                            <TableCell>{move.move.type.name}</TableCell>
+                            <TableCell>
+                                {move.move.type.name && (
+                                    <TypeSprite
+                                        typeName={move.move.type.name}
+                                    />
+                                )}
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
