@@ -20,7 +20,16 @@ const fetcher: Fetcher<Move[], [string, string]> = async ([name, version]) => {
         GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION,
         { pokemonName: name, versionGroupName: version }
     )
-    return response.pokemon[0]?.pokemonmoves || []
+
+    const root = response as any
+    const pokemon = root.pokemon ?? root.pokemon_v2_pokemon ?? []
+    const firstPokemon = pokemon[0]
+
+    return (
+        firstPokemon?.pokemonmoves ??
+        firstPokemon?.pokemon_v2_pokemonmoves ??
+        []
+    )
 }
 
 export function useLevelUpMovesByPokemonNameAndGeneration(

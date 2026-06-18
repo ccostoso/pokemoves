@@ -18,10 +18,9 @@ export default function SearchShell() {
         "",
     ) // Initialize with empty values
 
-    const [pokemonList, setPokemonList] = useState([])
+    const [pokemonList, setPokemonList] = useState<any[]>([])
     const [versionGroupName, setVersionGroupName] = useState("")
     const [pokemonName, setPokemonName] = useState("")
-    const [result, setResult] = useState<queryResult | null>(null)
     const [resultArr, setResultArr] = useState<queryResult[]>([])
 
     useEffect(() => {
@@ -68,6 +67,7 @@ export default function SearchShell() {
                 )
             // setResult(pokemonMoves)
             // Push new result to resultArr
+            console.log("pokemonMoves:", pokemonMoves) // Debugging log
             setResultArr((prev) => [...prev, pokemonMoves])
 
             revalidateMoves()
@@ -90,15 +90,10 @@ export default function SearchShell() {
                     isSubmitting={isSubmitting}
                     error={error}
                     handleSubmit={handleSubmit}
-                    result={result}
                 />
             </section>
             <section id="results" className="mt-8 overflow-x-auto">
-                <PokemonMovesPanel
-                    resultArr={resultArr}
-                    pokemonName={pokemonName}
-                    versionGroupName={versionGroupName}
-                />
+                <PokemonMovesPanel resultArr={resultArr} />
             </section>
         </>
     )

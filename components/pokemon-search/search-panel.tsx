@@ -7,7 +7,6 @@ import { Search } from "lucide-react"
 import PokemonInput from "./pokemon-input"
 import VersionInput from "./version-input"
 import { SubmitEventHandler } from "react"
-import { queryResult } from "@/lib/types"
 
 interface SearchPanelProps {
     pokemonList: any[]
@@ -18,7 +17,6 @@ interface SearchPanelProps {
     isSubmitting: boolean
     error: string | null
     handleSubmit: SubmitEventHandler
-    result: queryResult | null
 }
 
 export default function SearchPanel({
@@ -30,7 +28,6 @@ export default function SearchPanel({
     isSubmitting,
     error,
     handleSubmit,
-    result,
 }: SearchPanelProps) {
     return (
         <Card className="w-full max-w-md mt-8 mx-auto">
@@ -65,11 +62,6 @@ export default function SearchPanel({
                         <strong>{versionGroupName}</strong>.
                     </p>
                 )}
-                {/* {result && (
-                    <pre className="mt-4 text-sm text-gray-600">
-                        {JSON.stringify(result, null, 2)}
-                    </pre>
-                )} */}
             </CardContent>
         </Card>
     )

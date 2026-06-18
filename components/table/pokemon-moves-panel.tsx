@@ -3,21 +3,24 @@ import { queryResult } from "@/lib/types"
 
 interface PokemonMovesPanelProps {
     resultArr: queryResult[]
-    pokemonName: string
-    versionGroupName: string
 }
 
 export default function PokemonMovesPanel({
     resultArr,
-    pokemonName,
-    versionGroupName,
 }: PokemonMovesPanelProps) {
-    console.log("Received result in PokemonMovesPanel:", resultArr) // Debugging log
     return (
-        <PokemonTable
-            result={resultArr[resultArr.length - 1] || null}
-            pokemonName={pokemonName}
-            versionGroupName={versionGroupName}
-        />
+        <div className="flex flex-nowrap justify-center gap-4 pb-2">
+            {resultArr.length > 0 ? (
+                resultArr.map((result, index) => (
+                    <div key={index} className="mb-8">
+                        <PokemonTable result={result} />
+                    </div>
+                ))
+            ) : (
+                <p className="text-center text-gray-500">
+                    No results to display.
+                </p>
+            )}
+        </div>
     )
 }

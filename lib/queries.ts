@@ -1,4 +1,5 @@
 import { gql } from 'graphql-request'
+import { POKEAPI_SCHEMA_MODE } from './graphql-client'
 
 export const GET_ALL_POKEMON_NAMES_AND_IDS = gql`
 query getAllPokemon {
@@ -16,7 +17,7 @@ query getAllVersionGroups {
   }
 }`
 
-export const GET_POKEMON_BY_VERSIONGROUP_NAME = gql`
+const GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA = gql`
 query getPokemonByVersionGroupName($versionGroupName: String!) {
   pokemon_v2_pokemon(
     where: {
@@ -35,7 +36,27 @@ query getPokemonByVersionGroupName($versionGroupName: String!) {
   }
 }`
 
-export const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION = gql`
+const GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA2 = gql`
+query getPokemonByVersionGroupName($versionGroupName: String!) {
+  pokemon(
+    where: {pokemongameindices: {version: {versiongroup: {name: {_eq: $versionGroupName}}}}}
+  ) {
+    id
+    name
+    pokemonspecy {
+      pokemonspeciesnames(where: {language: {name: {_eq: "en"}}}) {
+        name
+      }
+    }
+  }
+}`
+
+export const GET_POKEMON_BY_VERSIONGROUP_NAME =
+    POKEAPI_SCHEMA_MODE === 'v1beta2'
+        ? GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA2
+        : GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA
+
+const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA = gql`
 query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
   pokemon_v2_pokemon(where: {name: {_eq: $pokemonName}}) {
     id
@@ -67,6 +88,41 @@ query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionG
     }
   }
 }`
+
+const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA2 = gql`
+query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
+  pokemon(where: {name: {_eq: $pokemonName}}) {
+    id
+    name
+    pokemonmoves(
+      where: {versiongroup: {name: {_eq: $versionGroupName}}, movelearnmethod: {name: {_eq: "level-up"}}}
+    ) {
+      level
+      movelearnmethod {
+        name
+      }
+      move {
+        name
+        type {
+          name
+        }
+        movenames(where: {language: {name: {_eq: "en"}}}) {
+          name
+        }
+      }
+    }
+  }
+  pokemonspecies(where: {name: {_eq: $pokemonName}}) {
+    pokemonspeciesnames(where: {language: {name: {_eq: "en"}}}) {
+      name
+    }
+  }
+}`
+
+export const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION =
+    POKEAPI_SCHEMA_MODE === 'v1beta2'
+        ? GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA2
+        : GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA
 
 export const GET_LEVEL_UP_MOVES_BY_POKEMON_ID_AND_GENERATION = gql`
 query getLevelUpMovesByPokemonIdAndGeneration($pokemonId: Int!, $versionGroupName: String!) {
