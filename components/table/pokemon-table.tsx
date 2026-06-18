@@ -8,6 +8,7 @@ import {
     TableCell,
 } from "../ui/table"
 import { getVersionGroupDisplayName } from "@/lib/utils"
+import Image from "next/image"
 
 interface PokemonTableProps {
     result: queryResult | null
@@ -24,23 +25,41 @@ interface Move {
 }
 
 export default function PokemonTable({ result }: PokemonTableProps) {
-    const pokemonmoves = result?.pokemon?.[0]?.pokemonmoves || []
+    const pokemonName =
+        result?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
+        result?.pokemon?.[0]?.name ||
+        "Unknown"
+    const pokemonMoves = result?.pokemon?.[0]?.pokemonmoves || []
     const versionGroupName = getVersionGroupDisplayName(
         result?.versionGroupName,
     )
+    const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${result?.pokemon?.[0]?.id}.png`
 
     return (
         <div className="basis-1/4 shrink-0 min-w-72">
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead colSpan={2} className="text-center">
-                            Version Group: <strong>{versionGroupName}</strong>
+                        <TableHead colSpan={3} className="text-center">
+                            {spriteUrl && (
+                                <Image
+                                    src={spriteUrl}
+                                    alt={pokemonName}
+                                    className="mx-auto"
+                                    width={96}
+                                    height={96}
+                                />
+                            )}
                         </TableHead>
                     </TableRow>
                     <TableRow>
-                        <TableHead colSpan={2} className="text-center">
-                            Name: <strong>{result?.pokemon?.[0]?.name}</strong>
+                        <TableHead colSpan={3} className="text-center">
+                            <strong>{pokemonName}</strong>
+                        </TableHead>
+                    </TableRow>
+                    <TableRow>
+                        <TableHead colSpan={3} className="text-center">
+                            <strong>{versionGroupName}</strong>
                         </TableHead>
                     </TableRow>
                     <TableRow>
@@ -50,7 +69,7 @@ export default function PokemonTable({ result }: PokemonTableProps) {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {pokemonmoves.map((move: Move, index: number) => (
+                    {pokemonMoves.map((move: Move, index: number) => (
                         <TableRow key={index}>
                             <TableCell className="text-center">
                                 {move.level}

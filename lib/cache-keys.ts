@@ -1,29 +1,21 @@
-// type VersionGroupKey = {
-//     apiName: string
-//     name: string
-//     id: number
-// }
+// Cache key: uniquely identifies one specific cached result
+// Cache tag: labels a group of results for bulk invalidation
 
-// export function createVersionGroupCacheKey({ apiName, name, id }: VersionGroupKey) {
-//     const keyParts = ["versionGroup"]
+export const pokemonListCacheKey = (versionGroupName: string) =>
+    `pokemon-list:${versionGroupName}`
 
-//     if (apiName) keyParts.push(`apiName=${apiName}`)
-//     if (name) keyParts.push(`name=${name}`)
-//     if (id) keyParts.push(`id=${id}`)
+export const pokemonListCacheTag = (versionGroupName: string) =>
+    `pokemon-list:${versionGroupName}`
 
-//     return keyParts.join("&")
-// }
+// Top-level tag covering ALL pokemon list entries — useful if you ever
+// want to invalidate every cached list at once (e.g. after a data update)
+export const POKEMON_LIST_TAG = "pokemon-list"
 
-// type ProductsTagKey = {
-//     slug?: string
-//     query?: string
-// }
+// For the level-up moves query, two variables means a compound key
+export const movesCacheKey = (pokemonName: string, versionGroupName: string) =>
+    `moves:${pokemonName}:${versionGroupName}`
 
-// export function createProductsTags({ query, slug }: ProductsTagKey) {
-//     const tags = ["products"]
+export const movesCacheTag = (pokemonName: string, versionGroupName: string) =>
+    `moves:${pokemonName}:${versionGroupName}`
 
-//     if (slug) tags.push(`category=${slug}`)
-//     if (query) tags.push(`query=${query}`)
-
-//     return tags
-// }
+export const MOVES_TAG = "moves"

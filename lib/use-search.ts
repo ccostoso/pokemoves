@@ -1,6 +1,5 @@
 import useSWR, { Fetcher, mutate } from "swr"
-import { gqlClient } from "@/lib/graphql-client"
-import { GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION } from "@/lib/queries"
+import { getLevelUpMovesByPokemonNameAndGeneration, LevelUpResult } from "./actions"
 
 type Move = {
     level: number
@@ -15,21 +14,8 @@ type Move = {
     }
 }
 
-const fetcher: Fetcher<Move[], [string, string]> = async ([name, version]) => {
-    const response = await gqlClient.request(
-        GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION,
-        { pokemonName: name, versionGroupName: version }
-    )
-
-    const root = response as any
-    const pokemon = root.pokemon ?? root.pokemon_v2_pokemon ?? []
-    const firstPokemon = pokemon[0]
-
-    return (
-        firstPokemon?.pokemonmoves ??
-        firstPokemon?.pokemon_v2_pokemonmoves ??
-        []
-    )
+const fetcher: Fetcher<LevelUpResult, [string, string]> = async ([name, version]) => {
+    return getLevelUpMovesByPokemonNameAndGeneration(name, version)
 }
 
 export function useLevelUpMovesByPokemonNameAndGeneration(
