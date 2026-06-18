@@ -86,24 +86,26 @@ export default function SearchShell() {
 
     return (
         <>
-            <section id="search" className="mt-8 max-w-2xl mx-auto">
-                <SearchPanel
-                    pokemonList={pokemonList}
-                    versionGroupName={versionGroupName}
-                    setVersionGroupName={setVersionGroupName}
-                    pokemonName={pokemonName}
-                    setPokemonName={setPokemonName}
-                    isSubmitting={isSubmitting}
-                    error={error}
-                    handleSubmit={handleSubmit}
-                />
-            </section>
-            <section id="results" className="mt-8 overflow-x-auto">
-                <PokemonMovesPanel
-                    resultArr={resultArr}
-                    onRemoveResult={handleRemoveResult}
-                />
-            </section>
+            <div className="flex gap-6 mt-6">
+                <aside className="w-72 shrink-0">
+                    <SearchPanel
+                        pokemonList={pokemonList}
+                        versionGroupName={versionGroupName}
+                        setVersionGroupName={setVersionGroupName}
+                        pokemonName={pokemonName}
+                        setPokemonName={setPokemonName}
+                        isSubmitting={isSubmitting}
+                        error={error}
+                        handleSubmit={handleSubmit}
+                    />
+                </aside>
+                <section className="flex-1 overflow-x-auto ">
+                    <PokemonMovesPanel
+                        resultArr={resultArr}
+                        onRemoveResult={handleRemoveResult}
+                    />
+                </section>
+            </div>
         </>
     )
 }

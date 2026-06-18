@@ -11,7 +11,7 @@ export default function PokemonMovesPanel({
     onRemoveResult,
 }: PokemonMovesPanelProps) {
     return (
-        <div className="flex flex-nowrap justify-center gap-4 pb-2">
+        <div className="flex w-max flex-nowrap justify-start gap-4 pb-2">
             {resultArr.length > 0 ? (
                 resultArr.map((result, index) => (
                     <div key={index} className="mb-8">

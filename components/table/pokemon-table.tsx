@@ -53,14 +53,9 @@ export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
     const versionGroupName = getVersionGroupDisplayName(
         result?.versionGroupName,
     )
-    // Get type number for the first move's type (if available) to construct sprite URL
-    const typeNumber = getTypeNumber(pokemonMoves[0]?.move.type.name || "")
 
     // Construct sprite URLs
     const pokemonSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${result?.pokemon?.[0]?.id}.png`
-    const typeSpriteUrl = pokemonMoves[0]?.move.type.name
-        ? `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/types/generation-vii/sun-moon/${typeNumber}.png`
-        : null
 
     return (
         <div className="basis-1/4 shrink-0 min-w-72">
