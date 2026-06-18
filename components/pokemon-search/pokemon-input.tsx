@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo, useState } from "react"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import {
     Combobox,
@@ -10,8 +11,18 @@ import {
     ComboboxList,
 } from "@/components/ui/combobox"
 
+type PokemonName = {
+    id: number
+    name: string
+    pokemonspecy: {
+        pokemonspeciesnames: {
+            name: string
+        }[]
+    }
+}
+
 interface PokemonInputProps {
-    pokemonList: { id: number; name: string }[] // Add pokemonList as a prop
+    pokemonList: PokemonName[]
     value: string
     onChange: (value: string) => void
 }
@@ -21,13 +32,29 @@ export default function PokemonInput({
     value,
     onChange,
 }: PokemonInputProps) {
+    const [inputText, setInputText] = useState(value)
+
+    // Map formatted display name → canonical name used in GraphQL queries
+    const displayToCanonical = useMemo(
+        () =>
+            new Map(
+                pokemonList.map((p) => [
+                    p.pokemonspecy.pokemonspeciesnames[0]?.name ?? p.name,
+                    p.name,
+                ]),
+            ),
+        [pokemonList],
+    )
+
     return (
         <Field>
             <FieldLabel htmlFor="name">Pokémon Name</FieldLabel>
             <Combobox
                 items={pokemonList}
-                onValueChange={(val: string | null) => {
-                    if (val) onChange(val)
+                onValueChange={(displayName: string | null) => {
+                    if (!displayName) return
+                    setInputText(displayName)
+                    onChange(displayToCanonical.get(displayName) ?? displayName)
                 }}
             >
                 <ComboboxInput
@@ -35,17 +62,25 @@ export default function PokemonInput({
                     autoComplete="off"
                     placeholder="Pikachu"
                     className="w-full"
-                    value={value}
-                    onChange={(e) => onChange(e.target.value)}
+                    value={inputText}
+                    onChange={(e) => setInputText(e.target.value)}
                 />
                 <ComboboxContent>
                     <ComboboxEmpty>No Pokemon found.</ComboboxEmpty>
                     <ComboboxList>
-                        {(pokemon) => (
-                            <ComboboxItem key={pokemon.id} value={pokemon.name}>
-                                {pokemon.name}
-                            </ComboboxItem>
-                        )}
+                        {(pokemon) => {
+                            const displayName =
+                                pokemon.pokemonspecy.pokemonspeciesnames[0]
+                                    ?.name ?? pokemon.name
+                            return (
+                                <ComboboxItem
+                                    key={pokemon.id}
+                                    value={displayName}
+                                >
+                                    {displayName}
+                                </ComboboxItem>
+                            )
+                        }}
                     </ComboboxList>
                 </ComboboxContent>
             </Combobox>

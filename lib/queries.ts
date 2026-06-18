@@ -18,32 +18,52 @@ query getAllVersionGroups {
 
 export const GET_POKEMON_BY_VERSIONGROUP_NAME = gql`
 query getPokemonByVersionGroupName($versionGroupName: String!) {
-  pokemon(
-    where: {pokemongameindices: {version: {versiongroup: {name: {_eq: $versionGroupName}}}}}
+  pokemon_v2_pokemon(
+    where: {
+      pokemon_v2_pokemongameindices: {
+        pokemon_v2_version: {pokemon_v2_versiongroup: {name: {_eq: $versionGroupName}}}
+      }
+    }
   ) {
     id
     name
+    pokemon_v2_pokemonspecy {
+      pokemon_v2_pokemonspeciesnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+        name
+      }
+    }
   }
 }`
 
 export const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION = gql`
 query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
-  pokemon(where: {name: {_eq: $pokemonName}}) {
+  pokemon_v2_pokemon(where: {name: {_eq: $pokemonName}}) {
     id
     name
-    pokemonmoves(
-      where: {versiongroup: {name: {_eq: $versionGroupName}}, movelearnmethod: {name: {_eq: "level-up"}}}
+    pokemon_v2_pokemonmoves(
+      where: {
+        pokemon_v2_versiongroup: {name: {_eq: $versionGroupName}}
+        pokemon_v2_movelearnmethod: {name: {_eq: "level-up"}}
+      }
     ) {
       level
-      movelearnmethod {
+      pokemon_v2_movelearnmethod {
         name
       }
-      move {
+      pokemon_v2_move {
         name
-        type {
+        pokemon_v2_type {
+          name
+        }
+        pokemon_v2_movenames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
           name
         }
       }
+    }
+  }
+  pokemon_v2_pokemonspecies(where: {name: {_eq: $pokemonName}}) {
+    pokemon_v2_pokemonspeciesnames(where: {pokemon_v2_language: {name: {_eq: "en"}}}) {
+      name
     }
   }
 }`
