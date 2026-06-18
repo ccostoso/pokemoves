@@ -9,9 +9,12 @@ import {
 } from "../ui/table"
 import { getVersionGroupDisplayName } from "@/lib/utils"
 import Image from "next/image"
+import { Button } from "../ui/button"
+import { X } from "lucide-react"
 
 interface PokemonTableProps {
     result: queryResult | null
+    onRemove: () => void
 }
 
 interface Move {
@@ -24,7 +27,7 @@ interface Move {
     }
 }
 
-export default function PokemonTable({ result }: PokemonTableProps) {
+export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
     const pokemonName =
         result?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
         result?.pokemon?.[0]?.name ||
@@ -40,7 +43,16 @@ export default function PokemonTable({ result }: PokemonTableProps) {
             <Table>
                 <TableHeader>
                     <TableRow>
-                        <TableHead colSpan={3} className="text-center">
+                        <TableHead colSpan={3} className="relative text-center">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-1 right-1"
+                                onClick={onRemove}
+                                aria-label="Remove table"
+                            >
+                                <X className="h-4 w-4" />
+                            </Button>
                             {spriteUrl && (
                                 <Image
                                     src={spriteUrl}

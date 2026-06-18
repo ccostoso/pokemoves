@@ -78,6 +78,12 @@ export default function SearchShell() {
         }
     }
 
+    const handleRemoveResult = (indexToRemove: number) => {
+        setResultArr((prev) =>
+            prev.filter((_, index) => index !== indexToRemove),
+        )
+    }
+
     return (
         <>
             <section id="search" className="mt-8 max-w-2xl mx-auto">
@@ -93,7 +99,10 @@ export default function SearchShell() {
                 />
             </section>
             <section id="results" className="mt-8 overflow-x-auto">
-                <PokemonMovesPanel resultArr={resultArr} />
+                <PokemonMovesPanel
+                    resultArr={resultArr}
+                    onRemoveResult={handleRemoveResult}
+                />
             </section>
         </>
     )
