@@ -11,9 +11,6 @@ import {
 import { QueryResult } from "@/lib/types"
 
 export default function SearchShell() {
-    // const [isSubmitting, setIsSubmitting] = useState(false)
-    // const [error, setError] = useState<string | null>(null)
-
     type RequestState =
         | { status: "idle" }
         | { status: "loading" }
@@ -45,9 +42,6 @@ export default function SearchShell() {
                     await getAllPokemonByVersionGroupName(versionGroupName)
                 if (!cancelled) {
                     setPokemonList(pokemon)
-                }
-                if (pokemon.length === 0) {
-                    setPokemonList([])
                 }
             } catch (err) {
                 console.error("Error fetching Pokémon by version group:", err)
