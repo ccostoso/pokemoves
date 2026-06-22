@@ -1,6 +1,6 @@
 import { LocalizedName } from "./actions"
 
-// --- Normalized output types (what the frontend sees) ---
+// --- Normalized output types for frontend ---
 
 export type PokemonListItem = {
     id: number
