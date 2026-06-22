@@ -7,6 +7,7 @@ import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
 import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndGeneration,
+    PokemonListItem,
 } from "@/lib/actions"
 import { queryResult } from "@/lib/types"
 
@@ -18,7 +19,7 @@ export default function SearchShell() {
         "",
     ) // Initialize with empty values
 
-    const [pokemonList, setPokemonList] = useState<any[]>([])
+    const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([])
     const [versionGroupName, setVersionGroupName] = useState("")
     const [pokemonName, setPokemonName] = useState("")
     const [resultArr, setResultArr] = useState<queryResult[]>([])
@@ -68,7 +69,10 @@ export default function SearchShell() {
             // setResult(pokemonMoves)
             // Push new result to resultArr
             console.log("pokemonMoves:", pokemonMoves) // Debugging log
-            setResultArr((prev) => [...prev, pokemonMoves])
+            setResultArr((prev) => [
+                ...prev,
+                { ...pokemonMoves, id: crypto.randomUUID() },
+            ])
 
             revalidateMoves()
         } catch (err) {
@@ -84,26 +88,44 @@ export default function SearchShell() {
         )
     }
 
+    const handleReorderResult = (fromIndex: number, toIndex: number) => {
+        setResultArr((prev) => {
+            // Create a copy of the array to avoid mutating state directly
+            const next = [...prev]
+
+            // Remove the item from its original position
+            // splice() returns an array of removed items, so we take the first one using destructuring
+            const [moved] = next.splice(fromIndex, 1)
+
+            // Adjust toIndex if the item is moved forward in the array
+            next.splice(toIndex, 0, moved)
+            return next
+        })
+    }
+
     return (
         <>
-            <section id="search" className="mt-8 max-w-2xl mx-auto">
-                <SearchPanel
-                    pokemonList={pokemonList}
-                    versionGroupName={versionGroupName}
-                    setVersionGroupName={setVersionGroupName}
-                    pokemonName={pokemonName}
-                    setPokemonName={setPokemonName}
-                    isSubmitting={isSubmitting}
-                    error={error}
-                    handleSubmit={handleSubmit}
-                />
-            </section>
-            <section id="results" className="mt-8 overflow-x-auto">
-                <PokemonMovesPanel
-                    resultArr={resultArr}
-                    onRemoveResult={handleRemoveResult}
-                />
-            </section>
+            <div className="flex gap-6 mt-6">
+                <aside className="w-72 shrink-0">
+                    <SearchPanel
+                        pokemonList={pokemonList}
+                        versionGroupName={versionGroupName}
+                        setVersionGroupName={setVersionGroupName}
+                        pokemonName={pokemonName}
+                        setPokemonName={setPokemonName}
+                        isSubmitting={isSubmitting}
+                        error={error}
+                        handleSubmit={handleSubmit}
+                    />
+                </aside>
+                <section className="flex-1 overflow-x-auto ">
+                    <PokemonMovesPanel
+                        resultArr={resultArr}
+                        onRemoveResult={handleRemoveResult}
+                        onReorderResult={handleReorderResult}
+                    />
+                </section>
+            </div>
         </>
     )
 }
