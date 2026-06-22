@@ -10,12 +10,8 @@ import {
 import { getTypeNumber, getVersionGroupDisplayName } from "@/lib/utils"
 import Image from "next/image"
 import { Button } from "../ui/button"
-import { X } from "lucide-react"
-
-interface PokemonTableProps {
-    result: queryResult | null
-    onRemove: () => void
-}
+import { GripVertical, X } from "lucide-react"
+import { HTMLAttributes } from "react"
 
 interface Move {
     level: number
@@ -27,7 +23,11 @@ interface Move {
     }
 }
 
-function TypeSprite({ typeName }: { typeName: string }) {
+interface TypeSpriteProps {
+    typeName: string
+}
+
+function TypeSprite({ typeName }: TypeSpriteProps) {
     const typeNumber = getTypeNumber(typeName)
     const typeSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/types/generation-vii/sun-moon/${typeNumber}.png`
 
@@ -42,7 +42,17 @@ function TypeSprite({ typeName }: { typeName: string }) {
     )
 }
 
-export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
+interface PokemonTableProps {
+    result: queryResult | null
+    onRemove: () => void
+    dragHandleProps?: HTMLAttributes<HTMLButtonElement>
+}
+
+export default function PokemonTable({
+    result,
+    onRemove,
+    dragHandleProps,
+}: PokemonTableProps) {
     const pokemonName =
         result?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
         result?.pokemon?.[0]?.name ||
@@ -63,6 +73,15 @@ export default function PokemonTable({ result, onRemove }: PokemonTableProps) {
                 <TableHeader>
                     <TableRow>
                         <TableHead colSpan={3} className="relative text-center">
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="absolute top-1 left-1 cursor-grab active:cursor-grabbing"
+                                aria-label="Drag table"
+                                {...dragHandleProps}
+                            >
+                                <GripVertical className="h-4 w-4" />
+                            </Button>
                             <Button
                                 variant="ghost"
                                 size="icon"

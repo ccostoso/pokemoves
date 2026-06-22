@@ -68,7 +68,10 @@ export default function SearchShell() {
             // setResult(pokemonMoves)
             // Push new result to resultArr
             console.log("pokemonMoves:", pokemonMoves) // Debugging log
-            setResultArr((prev) => [...prev, pokemonMoves])
+            setResultArr((prev) => [
+                ...prev,
+                { ...pokemonMoves, id: crypto.randomUUID() },
+            ])
 
             revalidateMoves()
         } catch (err) {
@@ -82,6 +85,21 @@ export default function SearchShell() {
         setResultArr((prev) =>
             prev.filter((_, index) => index !== indexToRemove),
         )
+    }
+
+    const handleReorderResult = (fromIndex: number, toIndex: number) => {
+        setResultArr((prev) => {
+            // Create a copy of the array to avoid mutating state directly
+            const next = [...prev]
+
+            // Remove the item from its original position
+            // splice() returns an array of removed items, so we take the first one using destructuring
+            const [moved] = next.splice(fromIndex, 1)
+
+            // Adjust toIndex if the item is moved forward in the array
+            next.splice(toIndex, 0, moved)
+            return next
+        })
     }
 
     return (
@@ -103,6 +121,7 @@ export default function SearchShell() {
                     <PokemonMovesPanel
                         resultArr={resultArr}
                         onRemoveResult={handleRemoveResult}
+                        onReorderResult={handleReorderResult}
                     />
                 </section>
             </div>
