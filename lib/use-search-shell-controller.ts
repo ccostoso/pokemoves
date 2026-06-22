@@ -1,11 +1,30 @@
 import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndGeneration, PokemonListItem } from "./actions";
 import { QueryResult } from "./types";
-import { SubmitEventHandler, useEffect, useState } from "react"
+import { SubmitEventHandler, useEffect, useReducer, useState } from "react"
 
 type RequestState =
     | { status: "idle" }
     | { status: "loading" }
     | { status: "error"; message: string }
+
+type SearchShellState = {
+    pokemonList: PokemonListItem[]
+    versionGroupName: string
+    pokemonName: string
+    resultArr: QueryResult[]
+    requestState: RequestState
+}
+
+type SearchShellAction =
+    | { type: "versionGroupChanged"; versionGroupName: string }
+    | { type: "pokemonNameChanged"; pokemonName: string }
+    | { type: "pokemonListLoaded"; pokemonList: PokemonListItem[] }
+    | { type: "pokemonListFailed" }
+    | { type: "submitStarted" }
+    | { type: "submitSucceeded"; result: QueryResult }
+    | { type: "submitFailed"; message: string }
+    | { type: "resultRemoved"; indexToRemove: number }
+    | { type: "resultReordered"; fromIndex: number; toIndex: number }
 
 type UseSearchShellControllerReturn = {
     // form state
@@ -30,36 +49,105 @@ type UseSearchShellControllerReturn = {
     handleReorderResult: (fromIndex: number, toIndex: number) => void
 }
 
+function searchShellReducer(
+    state: SearchShellState,
+    action: SearchShellAction,
+): SearchShellState {
+    switch (action.type) {
+        case "versionGroupChanged":
+            return {
+                ...state,
+                versionGroupName: action.versionGroupName,
+                pokemonList: [],
+            }
+
+        case "pokemonNameChanged":
+            return {
+                ...state,
+                pokemonName: action.pokemonName,
+            }
+
+        case "pokemonListLoaded":
+            return {
+                ...state,
+                pokemonList: action.pokemonList,
+            }
+
+        case "pokemonListFailed":
+            return {
+                ...state,
+                pokemonList: [],
+            }
+
+        case "submitStarted":
+            return {
+                ...state,
+                requestState: { status: "loading" },
+            }
+
+        case "submitSucceeded":
+            return {
+                ...state,
+                requestState: { status: "idle" },
+                resultArr: [action.result, ...state.resultArr],
+            }
+
+        case "submitFailed":
+            return {
+                ...state,
+                requestState: { status: "error", message: action.message },
+            }
+
+        case "resultRemoved":
+            return {
+                ...state,
+                resultArr: state.resultArr.filter(
+                    (_, index) => index !== action.indexToRemove,
+                ),
+            }
+
+        case "resultReordered": {
+            const next = [...state.resultArr]
+            const [moved] = next.splice(action.fromIndex, 1)
+            next.splice(action.toIndex, 0, moved)
+
+            return {
+                ...state,
+                resultArr: next,
+            }
+        }
+
+        default:
+            return state
+    }
+}
+
 export function useSearchShellController(): UseSearchShellControllerReturn {
-    const [requestState, setRequestState] = useState<RequestState>({
-        status: "idle",
+    const [state, dispatch] = useReducer(searchShellReducer, {
+        pokemonList: [],
+        versionGroupName: "",
+        pokemonName: "",
+        resultArr: [],
+        requestState: { status: "idle" },
     })
 
-    const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([])
-    const [versionGroupName, setVersionGroupName] = useState("")
-    const [pokemonName, setPokemonName] = useState("")
-    const [resultArr, setResultArr] = useState<QueryResult[]>([])
-
     useEffect(() => {
-        if (!versionGroupName) {
-            setPokemonList([])
+        if (!state.versionGroupName) {
+            dispatch({ type: "pokemonListLoaded", pokemonList: [] })
             return
         }
 
-        // To prevent state updates on unmounted component
         let cancelled = false
 
         const loadPokemon = async () => {
             try {
-                const pokemon =
-                    await getAllPokemonByVersionGroupName(versionGroupName)
+                const pokemon = await getAllPokemonByVersionGroupName(state.versionGroupName)
                 if (!cancelled) {
-                    setPokemonList(pokemon)
+                    dispatch({ type: "pokemonListLoaded", pokemonList: pokemon })
                 }
-            } catch (err) {
-                console.error("Error fetching Pokémon by version group:", err)
+            } catch {
                 if (!cancelled) {
-                    setPokemonList([])
+                    dispatch({ type: "pokemonListFailed" })
                 }
             }
         }
@@ -69,68 +157,49 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         return () => {
             cancelled = true
         }
-    }, [versionGroupName])
+    }, [state.versionGroupName])
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
-        setRequestState({ status: "loading" })
+        dispatch({ type: "submitStarted" })
 
         try {
             const pokemonMoves =
                 await getLevelUpMovesByPokemonNameAndGeneration(
-                    pokemonName,
-                    versionGroupName,
+                    state.pokemonName,
+                    state.versionGroupName,
                 )
 
-            // Push new result to resultArr
-            setResultArr((prev) => [
-                { ...pokemonMoves, id: crypto.randomUUID() },
-                ...prev,
-            ])
-
-            // revalidateMoves()
-            setRequestState({ status: "idle" })
-        } catch (err) {
-            setRequestState({
-                status: "error",
+            dispatch({
+                type: "submitSucceeded",
+                result: { ...pokemonMoves, id: crypto.randomUUID() },
+            })
+        } catch {
+            dispatch({
+                type: "submitFailed",
                 message: "An error occurred while searching. Please try again.",
             })
         }
     }
 
-    const handleRemoveResult = (indexToRemove: number) => {
-        setResultArr((prev) =>
-            prev.filter((_, index) => index !== indexToRemove),
-        )
-    }
-
-    const handleReorderResult = (fromIndex: number, toIndex: number) => {
-        setResultArr((prev) => {
-            // Create a copy of the array to avoid mutating state directly
-            const next = [...prev]
-
-            // Remove the item from its original position
-            // splice() returns an array of removed items, so we take the first one using destructuring
-            const [moved] = next.splice(fromIndex, 1)
-
-            // Adjust toIndex if the item is moved forward in the array
-            next.splice(toIndex, 0, moved)
-            return next
-        })
-    }
-
     return {
-        pokemonList,
-        versionGroupName,
-        pokemonName,
-        resultArr,
-        isSubmitting: requestState.status === "loading",
+        pokemonList: state.pokemonList,
+        versionGroupName: state.versionGroupName,
+        pokemonName: state.pokemonName,
+        resultArr: state.resultArr,
+        isSubmitting: state.requestState.status === "loading",
         error:
-            requestState.status === "error" ? requestState.message : null,
-        setVersionGroupName,
-        setPokemonName,
+            state.requestState.status === "error"
+                ? state.requestState.message
+                : null,
+        setVersionGroupName: (name: string) =>
+            dispatch({ type: "versionGroupChanged", versionGroupName: name }),
+        setPokemonName: (name: string) =>
+            dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleSubmit,
-        handleRemoveResult,
-        handleReorderResult,
+        handleRemoveResult: (indexToRemove: number) =>
+            dispatch({ type: "resultRemoved", indexToRemove }),
+        handleReorderResult: (fromIndex: number, toIndex: number) =>
+            dispatch({ type: "resultReordered", fromIndex, toIndex }),
     }
 }
