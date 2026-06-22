@@ -1,3 +1,6 @@
+// Commenting out for future use.
+
+/*
 import useSWR, { Fetcher, mutate } from "swr"
 import { getLevelUpMovesByPokemonNameAndGeneration, LevelUpResult } from "./actions"
 
@@ -43,3 +46,18 @@ export function useLevelUpMovesByPokemonNameAndGeneration(
         revalidateMoves,
     }
 }
+*/
+
+// If, later, we want to add again, we should add the following to search-shell.tsx:
+/* 
+    import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
+    (...)
+    export default function SearchShell() {
+    (...)
+        const { revalidateMoves } = useLevelUpMovesByPokemonNameAndGeneration(
+            "",
+            "",
+        ) // Initialize with empty values.
+         (...)
+    }
+*/

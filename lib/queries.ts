@@ -21,8 +21,8 @@ const GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA = gql`
 query getPokemonByVersionGroupName($versionGroupName: String!) {
   pokemon_v2_pokemon(
     where: {
-      pokemon_v2_pokemongameindices: {
-        pokemon_v2_version: {pokemon_v2_versiongroup: {name: {_eq: $versionGroupName}}}
+      pokemon_v2_pokemonmoves: {
+        pokemon_v2_versiongroup: {name: {_eq: $versionGroupName}}
       }
     }
   ) {
@@ -37,9 +37,13 @@ query getPokemonByVersionGroupName($versionGroupName: String!) {
 }`
 
 const GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA2 = gql`
-query getPokemonByVersionGroupName($versionGroupName: String!) {
+query getPokemonByVersionGroup($versionGroupName: String!) {
   pokemon(
-    where: {pokemongameindices: {version: {versiongroup: {name: {_eq: $versionGroupName}}}}}
+    where: {
+        pokemonmoves: {
+            versiongroup: {name: {_eq: $versionGroupName}}
+        }
+    }
   ) {
     id
     name

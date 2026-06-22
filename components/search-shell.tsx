@@ -3,7 +3,7 @@
 import { SubmitEventHandler, useEffect, useState } from "react"
 import SearchPanel from "./pokemon-search/search-panel"
 import PokemonMovesPanel from "./table/pokemon-moves-panel"
-import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
+// import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
 import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndGeneration,
@@ -14,10 +14,10 @@ import { queryResult } from "@/lib/types"
 export default function SearchShell() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    const { revalidateMoves } = useLevelUpMovesByPokemonNameAndGeneration(
-        "",
-        "",
-    ) // Initialize with empty values
+    // const { revalidateMoves } = useLevelUpMovesByPokemonNameAndGeneration(
+    //     "",
+    //     "",
+    // ) // Initialize with empty values.
 
     const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([])
     const [versionGroupName, setVersionGroupName] = useState("")
@@ -32,6 +32,8 @@ export default function SearchShell() {
 
         // To prevent state updates on unmounted component
         let cancelled = false
+
+        console.log(versionGroupName) // Debugging log
 
         const loadPokemon = async () => {
             try {
@@ -70,11 +72,11 @@ export default function SearchShell() {
             // Push new result to resultArr
             console.log("pokemonMoves:", pokemonMoves) // Debugging log
             setResultArr((prev) => [
-                ...prev,
                 { ...pokemonMoves, id: crypto.randomUUID() },
+                ...prev,
             ])
 
-            revalidateMoves()
+            // revalidateMoves()
         } catch (err) {
             setError("An error occurred while searching. Please try again.")
         } finally {
