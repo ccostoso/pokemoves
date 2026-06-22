@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core"
-import { QueryResult } from "@/lib/types"
+import { MovesetItem } from "@/lib/types"
 import {
     SortableContext,
     horizontalListSortingStrategy,
@@ -10,9 +10,9 @@ import { HTMLAttributes, ReactNode } from "react"
 import PokemonMovesetCard from "./pokemon-moveset-card"
 
 interface PokemonMovesetPanelProps {
-    resultArr: QueryResult[]
-    onRemoveResult: (index: number) => void
-    onReorderResult: (fromIndex: number, toIndex: number) => void
+    movesetList: MovesetItem[]
+    onRemoveMoveset: (index: number) => void
+    onReorderMoveset: (fromIndex: number, toIndex: number) => void
 }
 
 function SortableItem({
@@ -43,35 +43,35 @@ function SortableItem({
 }
 
 export default function PokemonMovesetPanel({
-    resultArr,
-    onRemoveResult,
-    onReorderResult,
+    movesetList,
+    onRemoveMoveset,
+    onReorderMoveset,
 }: PokemonMovesetPanelProps) {
     // PokemonMovesetPanel
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
-        const fromIndex = resultArr.findIndex((r) => r.id === active.id)
-        const toIndex = resultArr.findIndex((r) => r.id === over.id)
-        onReorderResult(fromIndex, toIndex)
+        const fromIndex = movesetList.findIndex((r) => r.id === active.id)
+        const toIndex = movesetList.findIndex((r) => r.id === over.id)
+        onReorderMoveset(fromIndex, toIndex)
     }
 
     return (
         <div className="flex w-max flex-nowrap justify-start gap-4 pb-2">
-            {resultArr.length > 0 ? (
+            {movesetList.length > 0 ? (
                 <DndContext onDragEnd={handleDragEnd}>
                     <SortableContext
-                        items={resultArr.map((r) => r.id)}
+                        items={movesetList.map((r) => r.id)}
                         strategy={horizontalListSortingStrategy}
                     >
-                        {resultArr.map((result, index) => (
+                        {movesetList.map((result, index) => (
                             <SortableItem key={result.id} id={result.id}>
                                 {(dragHandleProps) => (
                                     <div className="mb-8">
                                         <PokemonMovesetCard
                                             result={result}
                                             onRemove={() =>
-                                                onRemoveResult(index)
+                                                onRemoveMoveset(index)
                                             }
                                             dragHandleProps={dragHandleProps}
                                         />

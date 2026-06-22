@@ -13,12 +13,13 @@ import {
     movesCacheKey,
     MOVES_TAG,
 } from "./cache-keys"
+import { LevelUpResult, PokemonListItem } from "./types"
 
 // --- Shared primitives ---
 
-// Represents the name of a Pokémon or. version group in a specific region/language, 
+// Represents the name of a Pokémon or version group in a specific region/language, 
 // as returned by the API. We only care about English names for now.
-type LocalizedName = { name: string }
+export type LocalizedName = { name: string }
 
 // --- Pokemon list types ---
 
@@ -83,36 +84,6 @@ type RawLevelUpResponse = {
     // v1beta
     pokemon_v2_pokemon?: RawLevelUpPokemon[]
     pokemon_v2_pokemonspecies?: RawSpecies[]
-}
-
-// --- Normalized output types (what the frontend sees) ---
-
-export type PokemonListItem = {
-    id: number
-    name: string
-    pokemonspecy: {
-        pokemonspeciesnames: LocalizedName[]
-    }
-}
-
-export type LevelUpMove = {
-    level: number
-    movelearnmethod: { name: string }
-    move: {
-        name: string
-        type: { name: string }
-        movenames: LocalizedName[]
-    }
-}
-
-export type LevelUpResult = {
-    pokemon: Array<{
-        id: number
-        name: string
-        pokemonmoves: LevelUpMove[]
-    }>
-    pokemonspecies: Array<{ pokemonspeciesnames: LocalizedName[] }>
-    versionGroupName: string
 }
 
 // --- Mapping functions ---
