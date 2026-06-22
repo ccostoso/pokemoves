@@ -7,9 +7,10 @@ import { Plus } from "lucide-react"
 import PokemonInput from "./pokemon-input"
 import VersionInput from "./version-input"
 import { SubmitEventHandler } from "react"
+import { PokemonListItem } from "@/lib/actions"
 
 interface SearchPanelProps {
-    pokemonList: any[]
+    pokemonList: PokemonListItem[]
     versionGroupName: string
     setVersionGroupName: (name: string) => void
     pokemonName: string

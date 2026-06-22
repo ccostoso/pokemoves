@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core"
-import { queryResult } from "@/lib/types"
+import { QueryResult } from "@/lib/types"
 import {
     SortableContext,
     horizontalListSortingStrategy,
@@ -10,7 +10,7 @@ import { HTMLAttributes, ReactNode } from "react"
 import PokemonMovesetCard from "./pokemon-moveset-card"
 
 interface PokemonMovesetPanelProps {
-    resultArr: queryResult[]
+    resultArr: QueryResult[]
     onRemoveResult: (index: number) => void
     onReorderResult: (fromIndex: number, toIndex: number) => void
 }

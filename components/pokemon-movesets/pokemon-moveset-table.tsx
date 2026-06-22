@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/table"
 import Image from "next/image"
 import TypeSprite from "../type-sprite"
-import { queryResult } from "@/lib/types"
 
 interface Move {
     level: number

@@ -1,4 +1,4 @@
-import { queryResult } from "@/lib/types"
+import { QueryResult } from "@/lib/types"
 import { getVersionGroupDisplayName } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { GripVertical, X } from "lucide-react"
@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 import PokemonMovesetTable from "./pokemon-moveset-table"
 
 interface PokemonMovesetCardProps {
-    result: queryResult | null
+    result: QueryResult | null
     onRemove: () => void
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
