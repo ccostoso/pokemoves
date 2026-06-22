@@ -13,7 +13,7 @@ import {
     movesCacheKey,
     MOVES_TAG,
 } from "./cache-keys"
-import { LevelUpResult, PokemonListItem } from "./types"
+import { LevelUpMoveset, PokemonListItem } from "./types"
 
 // --- Shared primitives ---
 
@@ -106,7 +106,7 @@ const mapPokemonListResponse = (response: RawPokemonListResponse): PokemonListIt
 const mapLevelUpResponse = (
     response: RawLevelUpResponse,
     versionGroupName: string,
-): LevelUpResult => {
+): LevelUpMoveset => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
     const rawSpecies = response.pokemonspecies ?? response.pokemon_v2_pokemonspecies ?? []
 
@@ -164,7 +164,7 @@ export const getLevelUpMovesByPokemonNameAndGeneration = unstable_cache(
     async (
         pokemonName: string,
         versionGroupName: string,
-    ): Promise<LevelUpResult> => {
+    ): Promise<LevelUpMoveset> => {
         const response = await gqlClient.request<RawLevelUpResponse>(
             GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION,
             { pokemonName, versionGroupName }

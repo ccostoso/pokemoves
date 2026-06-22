@@ -1,5 +1,5 @@
 import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndGeneration } from "./actions";
-import { MovesetItem, PokemonListItem } from "./types";
+import { MovesetListItem, PokemonListItem } from "./types";
 import { SubmitEventHandler, useEffect, useReducer } from "react"
 
 type RequestState =
@@ -11,7 +11,7 @@ type SearchShellState = {
     pokemonList: PokemonListItem[]
     versionGroupName: string
     pokemonName: string
-    movesetList: MovesetItem[]
+    movesetList: MovesetListItem[]
     requestState: RequestState
 }
 
@@ -21,7 +21,7 @@ type SearchShellAction =
     | { type: "pokemonListLoaded"; pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
     | { type: "submitStarted" }
-    | { type: "submitSucceeded"; result: MovesetItem }
+    | { type: "submitSucceeded"; moveset: MovesetListItem }
     | { type: "submitFailed"; message: string }
     | { type: "movesetRemoved"; indexToRemove: number }
     | { type: "movesetReordered"; fromIndex: number; toIndex: number }
@@ -32,8 +32,8 @@ type UseSearchShellControllerReturn = {
     versionGroupName: string
     pokemonName: string
 
-    // result state
-    movesetList: MovesetItem[]
+    // moveset list state
+    movesetList: MovesetListItem[]
 
     // request/derived UI state
     isSubmitting: boolean
@@ -89,7 +89,7 @@ function searchShellReducer(
             return {
                 ...state,
                 requestState: { status: "idle" },
-                movesetList: [action.result, ...state.movesetList],
+                movesetList: [...state.movesetList, action.moveset],
             }
 
         case "submitFailed":
@@ -172,7 +172,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
 
             dispatch({
                 type: "submitSucceeded",
-                result: { ...pokemonMoves, id: crypto.randomUUID() },
+                moveset: { ...pokemonMoves, id: crypto.randomUUID() },
             })
         } catch {
             dispatch({
