@@ -2,8 +2,7 @@
 
 import { SubmitEventHandler, useEffect, useState } from "react"
 import SearchPanel from "./pokemon-search/search-panel"
-import PokemonMovesPanel from "./table/pokemon-moves-panel"
-// import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
+import PokemonMovesetPanel from "./pokemon-movesets/pokemon-moveset-panel"
 import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndGeneration,
@@ -14,10 +13,6 @@ import { queryResult } from "@/lib/types"
 export default function SearchShell() {
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [error, setError] = useState<string | null>(null)
-    // const { revalidateMoves } = useLevelUpMovesByPokemonNameAndGeneration(
-    //     "",
-    //     "",
-    // ) // Initialize with empty values.
 
     const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([])
     const [versionGroupName, setVersionGroupName] = useState("")
@@ -41,6 +36,9 @@ export default function SearchShell() {
                     await getAllPokemonByVersionGroupName(versionGroupName)
                 if (!cancelled) {
                     setPokemonList(pokemon)
+                }
+                if (pokemon.length === 0) {
+                    setPokemonList([])
                 }
             } catch (err) {
                 console.error("Error fetching Pokémon by version group:", err)
@@ -121,7 +119,7 @@ export default function SearchShell() {
                     />
                 </aside>
                 <section className="flex-1 overflow-x-auto ">
-                    <PokemonMovesPanel
+                    <PokemonMovesetPanel
                         resultArr={resultArr}
                         onRemoveResult={handleRemoveResult}
                         onReorderResult={handleReorderResult}
