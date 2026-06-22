@@ -7,6 +7,7 @@ import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
 import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndGeneration,
+    PokemonListItem,
 } from "@/lib/actions"
 import { queryResult } from "@/lib/types"
 
@@ -18,7 +19,7 @@ export default function SearchShell() {
         "",
     ) // Initialize with empty values
 
-    const [pokemonList, setPokemonList] = useState<any[]>([])
+    const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([])
     const [versionGroupName, setVersionGroupName] = useState("")
     const [pokemonName, setPokemonName] = useState("")
     const [resultArr, setResultArr] = useState<queryResult[]>([])
