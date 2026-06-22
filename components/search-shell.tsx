@@ -11,12 +11,12 @@ export default function SearchShell() {
         setVersionGroupName,
         pokemonName,
         setPokemonName,
-        resultArr,
+        movesetList,
         error,
         isSubmitting,
         handleSubmit,
-        handleRemoveResult,
-        handleReorderResult,
+        handleRemoveMoveset,
+        handleReorderMoveset,
     } = useSearchShellController()
 
     return (
@@ -36,9 +36,9 @@ export default function SearchShell() {
                 </aside>
                 <section className="flex-1 overflow-x-auto ">
                     <PokemonMovesetPanel
-                        resultArr={resultArr}
-                        onRemoveResult={handleRemoveResult}
-                        onReorderResult={handleReorderResult}
+                        movesetList={movesetList}
+                        onRemoveMoveset={handleRemoveMoveset}
+                        onReorderMoveset={handleReorderMoveset}
                     />
                 </section>
             </div>

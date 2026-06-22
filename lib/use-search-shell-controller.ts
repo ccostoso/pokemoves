@@ -1,6 +1,6 @@
-import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndGeneration, PokemonListItem } from "./actions";
-import { QueryResult } from "./types";
-import { SubmitEventHandler, useEffect, useReducer, useState } from "react"
+import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndGeneration } from "./actions";
+import { MovesetItem, PokemonListItem } from "./types";
+import { SubmitEventHandler, useEffect, useReducer } from "react"
 
 type RequestState =
     | { status: "idle" }
@@ -11,7 +11,7 @@ type SearchShellState = {
     pokemonList: PokemonListItem[]
     versionGroupName: string
     pokemonName: string
-    resultArr: QueryResult[]
+    movesetList: MovesetItem[]
     requestState: RequestState
 }
 
@@ -21,10 +21,10 @@ type SearchShellAction =
     | { type: "pokemonListLoaded"; pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
     | { type: "submitStarted" }
-    | { type: "submitSucceeded"; result: QueryResult }
+    | { type: "submitSucceeded"; result: MovesetItem }
     | { type: "submitFailed"; message: string }
-    | { type: "resultRemoved"; indexToRemove: number }
-    | { type: "resultReordered"; fromIndex: number; toIndex: number }
+    | { type: "movesetRemoved"; indexToRemove: number }
+    | { type: "movesetReordered"; fromIndex: number; toIndex: number }
 
 type UseSearchShellControllerReturn = {
     // form state
@@ -33,7 +33,7 @@ type UseSearchShellControllerReturn = {
     pokemonName: string
 
     // result state
-    resultArr: QueryResult[]
+    movesetList: MovesetItem[]
 
     // request/derived UI state
     isSubmitting: boolean
@@ -45,8 +45,8 @@ type UseSearchShellControllerReturn = {
 
     // handlers used by child components
     handleSubmit: SubmitEventHandler<HTMLFormElement>
-    handleRemoveResult: (indexToRemove: number) => void
-    handleReorderResult: (fromIndex: number, toIndex: number) => void
+    handleRemoveMoveset: (indexToRemove: number) => void
+    handleReorderMoveset: (fromIndex: number, toIndex: number) => void
 }
 
 function searchShellReducer(
@@ -89,7 +89,7 @@ function searchShellReducer(
             return {
                 ...state,
                 requestState: { status: "idle" },
-                resultArr: [action.result, ...state.resultArr],
+                movesetList: [action.result, ...state.movesetList],
             }
 
         case "submitFailed":
@@ -98,22 +98,22 @@ function searchShellReducer(
                 requestState: { status: "error", message: action.message },
             }
 
-        case "resultRemoved":
+        case "movesetRemoved":
             return {
                 ...state,
-                resultArr: state.resultArr.filter(
+                movesetList: state.movesetList.filter(
                     (_, index) => index !== action.indexToRemove,
                 ),
             }
 
-        case "resultReordered": {
-            const next = [...state.resultArr]
+        case "movesetReordered": {
+            const next = [...state.movesetList]
             const [moved] = next.splice(action.fromIndex, 1)
             next.splice(action.toIndex, 0, moved)
 
             return {
                 ...state,
-                resultArr: next,
+                movesetList: next,
             }
         }
 
@@ -127,7 +127,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         pokemonList: [],
         versionGroupName: "",
         pokemonName: "",
-        resultArr: [],
+        movesetList: [],
         requestState: { status: "idle" },
     })
 
@@ -186,7 +186,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         pokemonList: state.pokemonList,
         versionGroupName: state.versionGroupName,
         pokemonName: state.pokemonName,
-        resultArr: state.resultArr,
+        movesetList: state.movesetList,
         isSubmitting: state.requestState.status === "loading",
         error:
             state.requestState.status === "error"
@@ -197,9 +197,9 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         setPokemonName: (name: string) =>
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleSubmit,
-        handleRemoveResult: (indexToRemove: number) =>
-            dispatch({ type: "resultRemoved", indexToRemove }),
-        handleReorderResult: (fromIndex: number, toIndex: number) =>
-            dispatch({ type: "resultReordered", fromIndex, toIndex }),
+        handleRemoveMoveset: (indexToRemove: number) =>
+            dispatch({ type: "movesetRemoved", indexToRemove }),
+        handleReorderMoveset: (fromIndex: number, toIndex: number) =>
+            dispatch({ type: "movesetReordered", fromIndex, toIndex }),
     }
 }
