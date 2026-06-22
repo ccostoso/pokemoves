@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core"
-import { queryResult } from "@/lib/types"
+import { QueryResult } from "@/lib/types"
 import {
     SortableContext,
     horizontalListSortingStrategy,
@@ -7,10 +7,10 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { HTMLAttributes, ReactNode } from "react"
-import PokemonMovesCard from "./pokemon-moves-card"
+import PokemonMovesetCard from "./pokemon-moveset-card"
 
-interface PokemonMovesPanelProps {
-    resultArr: queryResult[]
+interface PokemonMovesetPanelProps {
+    resultArr: QueryResult[]
     onRemoveResult: (index: number) => void
     onReorderResult: (fromIndex: number, toIndex: number) => void
 }
@@ -42,12 +42,12 @@ function SortableItem({
     )
 }
 
-export default function PokemonMovesPanel({
+export default function PokemonMovesetPanel({
     resultArr,
     onRemoveResult,
     onReorderResult,
-}: PokemonMovesPanelProps) {
-    // PokemonMovesPanel
+}: PokemonMovesetPanelProps) {
+    // PokemonMovesetPanel
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
@@ -68,7 +68,7 @@ export default function PokemonMovesPanel({
                             <SortableItem key={result.id} id={result.id}>
                                 {(dragHandleProps) => (
                                     <div className="mb-8">
-                                        <PokemonMovesCard
+                                        <PokemonMovesetCard
                                             result={result}
                                             onRemove={() =>
                                                 onRemoveResult(index)

@@ -2,27 +2,28 @@
 
 import { SubmitEventHandler, useEffect, useState } from "react"
 import SearchPanel from "./pokemon-search/search-panel"
-import PokemonMovesPanel from "./table/pokemon-moves-panel"
-import { useLevelUpMovesByPokemonNameAndGeneration } from "@/lib/use-search"
+import PokemonMovesetPanel from "./pokemon-movesets/pokemon-moveset-panel"
 import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndGeneration,
     PokemonListItem,
 } from "@/lib/actions"
-import { queryResult } from "@/lib/types"
+import { QueryResult } from "@/lib/types"
 
 export default function SearchShell() {
-    const [isSubmitting, setIsSubmitting] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const { revalidateMoves } = useLevelUpMovesByPokemonNameAndGeneration(
-        "",
-        "",
-    ) // Initialize with empty values
+    type RequestState =
+        | { status: "idle" }
+        | { status: "loading" }
+        | { status: "error"; message: string }
+
+    const [requestState, setRequestState] = useState<RequestState>({
+        status: "idle",
+    })
 
     const [pokemonList, setPokemonList] = useState<PokemonListItem[]>([])
     const [versionGroupName, setVersionGroupName] = useState("")
     const [pokemonName, setPokemonName] = useState("")
-    const [resultArr, setResultArr] = useState<queryResult[]>([])
+    const [resultArr, setResultArr] = useState<QueryResult[]>([])
 
     useEffect(() => {
         if (!versionGroupName) {
@@ -32,6 +33,8 @@ export default function SearchShell() {
 
         // To prevent state updates on unmounted component
         let cancelled = false
+
+        console.log(versionGroupName) // Debugging log
 
         const loadPokemon = async () => {
             try {
@@ -57,8 +60,7 @@ export default function SearchShell() {
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
-        setIsSubmitting(true)
-        setError(null)
+        setRequestState({ status: "loading" })
 
         try {
             const pokemonMoves =
@@ -70,15 +72,17 @@ export default function SearchShell() {
             // Push new result to resultArr
             console.log("pokemonMoves:", pokemonMoves) // Debugging log
             setResultArr((prev) => [
-                ...prev,
                 { ...pokemonMoves, id: crypto.randomUUID() },
+                ...prev,
             ])
 
-            revalidateMoves()
+            // revalidateMoves()
+            setRequestState({ status: "idle" })
         } catch (err) {
-            setError("An error occurred while searching. Please try again.")
-        } finally {
-            setIsSubmitting(false)
+            setRequestState({
+                status: "error",
+                message: "An error occurred while searching. Please try again.",
+            })
         }
     }
 
@@ -113,13 +117,17 @@ export default function SearchShell() {
                         setVersionGroupName={setVersionGroupName}
                         pokemonName={pokemonName}
                         setPokemonName={setPokemonName}
-                        isSubmitting={isSubmitting}
-                        error={error}
+                        isSubmitting={requestState.status === "loading"}
+                        error={
+                            requestState.status === "error"
+                                ? requestState.message
+                                : null
+                        }
                         handleSubmit={handleSubmit}
                     />
                 </aside>
                 <section className="flex-1 overflow-x-auto ">
-                    <PokemonMovesPanel
+                    <PokemonMovesetPanel
                         resultArr={resultArr}
                         onRemoveResult={handleRemoveResult}
                         onReorderResult={handleReorderResult}

@@ -1,22 +1,22 @@
-import { queryResult } from "@/lib/types"
+import { QueryResult } from "@/lib/types"
 import { getVersionGroupDisplayName } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { GripVertical, X } from "lucide-react"
 import { HTMLAttributes } from "react"
 import { Card, CardContent, CardHeader } from "../ui/card"
-import PokemonMovesTable from "./pokemon-moves-table"
+import PokemonMovesetTable from "./pokemon-moveset-table"
 
-interface PokemonTableProps {
-    result: queryResult | null
+interface PokemonMovesetCardProps {
+    result: QueryResult | null
     onRemove: () => void
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
 
-export default function PokemonTable({
+export default function PokemonMovesetCard({
     result,
     onRemove,
     dragHandleProps,
-}: PokemonTableProps) {
+}: PokemonMovesetCardProps) {
     const pokemonName =
         result?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
         result?.pokemon?.[0]?.name ||
@@ -56,7 +56,7 @@ export default function PokemonTable({
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="overflow-hidden rounded-xl">
-                        <PokemonMovesTable
+                        <PokemonMovesetTable
                             pokemonName={pokemonName}
                             versionGroupName={versionGroupName}
                             pokemonMoves={pokemonMoves}

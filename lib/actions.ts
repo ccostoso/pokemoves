@@ -174,6 +174,11 @@ export const getAllPokemonByVersionGroupName = unstable_cache(
             GET_POKEMON_BY_VERSIONGROUP_NAME,
             { versionGroupName }
         )
+
+        if (!response.pokemon && !response.pokemon_v2_pokemon) {
+            throw new Error('Empty response, skipping cache')
+        }
+
         return mapPokemonListResponse(response)
     },
     // The cache key factory — Next.js calls this with the same args to derive the key
@@ -193,6 +198,11 @@ export const getLevelUpMovesByPokemonNameAndGeneration = unstable_cache(
             GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION,
             { pokemonName, versionGroupName }
         )
+
+        if (!response.pokemon && !response.pokemon_v2_pokemon) {
+            throw new Error('Empty response, skipping cache')
+        }
+
         return mapLevelUpResponse(response, versionGroupName)
     },
     [movesCacheKey("", "")],

@@ -7,16 +7,17 @@ import { Plus } from "lucide-react"
 import PokemonInput from "./pokemon-input"
 import VersionInput from "./version-input"
 import { SubmitEventHandler } from "react"
+import { PokemonListItem } from "@/lib/actions"
 
 interface SearchPanelProps {
-    pokemonList: any[]
+    pokemonList: PokemonListItem[]
     versionGroupName: string
     setVersionGroupName: (name: string) => void
     pokemonName: string
     setPokemonName: (name: string) => void
     isSubmitting: boolean
     error: string | null
-    handleSubmit: SubmitEventHandler
+    handleSubmit: SubmitEventHandler<HTMLFormElement>
 }
 
 export default function SearchPanel({
@@ -49,7 +50,12 @@ export default function SearchPanel({
                         <Button
                             type="submit"
                             variant="default"
-                            disabled={isSubmitting}
+                            disabled={
+                                isSubmitting ||
+                                pokemonList.length === 0 ||
+                                !versionGroupName ||
+                                !pokemonName
+                            }
                         >
                             <Plus className="mr-2 h-4 w-4" /> Add to Panel
                         </Button>
