@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core"
-import { MovesetItem } from "@/lib/types"
+import { MovesetListItem } from "@/lib/types"
 import {
     SortableContext,
     horizontalListSortingStrategy,
@@ -10,7 +10,7 @@ import { HTMLAttributes, ReactNode } from "react"
 import PokemonMovesetCard from "./pokemon-moveset-card"
 
 interface PokemonMovesetPanelProps {
-    movesetList: MovesetItem[]
+    movesetList: MovesetListItem[]
     onRemoveMoveset: (index: number) => void
     onReorderMoveset: (fromIndex: number, toIndex: number) => void
 }

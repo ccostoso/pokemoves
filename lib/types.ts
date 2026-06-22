@@ -10,7 +10,7 @@ export type PokemonListItem = {
     }
 }
 
-export type MovesetItem = LevelUpResult & {
+export type MovesetListItem = LevelUpMoveset & {
     id: string // Unique ID for DnD tracking
 }
 
@@ -24,7 +24,7 @@ export type LevelUpMove = {
     }
 }
 
-export type LevelUpResult = {
+export type LevelUpMoveset = {
     pokemon: Array<{
         id: number
         name: string

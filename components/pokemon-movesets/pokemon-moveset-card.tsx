@@ -1,4 +1,4 @@
-import { MovesetItem } from "@/lib/types"
+import { MovesetListItem } from "@/lib/types"
 import { getVersionGroupDisplayName } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { GripVertical, X } from "lucide-react"
@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 import PokemonMovesetTable from "./pokemon-moveset-table"
 
 interface PokemonMovesetCardProps {
-    result: MovesetItem | null
+    result: MovesetListItem | null
     onRemove: () => void
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
