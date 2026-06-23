@@ -50,17 +50,6 @@ export default function PokemonLearnsetPanel({
     const scrollContainerRef = useRef<HTMLDivElement>(null)
     const previousLengthRef = useRef(learnsetList.length)
 
-    // PokemonLearnsetPanel
-    const handleDragEnd = (event: DragEndEvent) => {
-        const { active, over } = event
-        if (!over || active.id === over.id) return
-        const fromIndex = learnsetList.findIndex(
-            (item) => item.id === active.id,
-        )
-        const toIndex = learnsetList.findIndex((item) => item.id === over.id)
-        onReorderLearnset(fromIndex, toIndex)
-    }
-
     useEffect(() => {
         if (learnsetList.length > previousLengthRef.current) {
             const container = scrollContainerRef.current
@@ -76,6 +65,16 @@ export default function PokemonLearnsetPanel({
 
         previousLengthRef.current = learnsetList.length
     }, [learnsetList.length])
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event
+        if (!over || active.id === over.id) return
+        const fromIndex = learnsetList.findIndex(
+            (item) => item.id === active.id,
+        )
+        const toIndex = learnsetList.findIndex((item) => item.id === over.id)
+        onReorderLearnset(fromIndex, toIndex)
+    }
 
     return (
         <div

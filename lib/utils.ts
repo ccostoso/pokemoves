@@ -7,6 +7,18 @@ export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
 
+const REGION_SUFFIXES: Record<string, string> = {
+    'alola': 'Alola',
+    'galar': 'Galar',
+    'hisui': 'Hisui',
+    'paldea': 'Paldea',
+}
+
+export function getRegionalSuffix(pokemonName: string): string | null {
+    const suffix = pokemonName.split('-').pop()
+    return suffix ? REGION_SUFFIXES[suffix] ?? null : null
+}
+
 export function getVersionGroupDisplayName(apiName: string = ""): string {
     // Look up the version group name from the list, and return the display name if found, 
     // otherwise return the API name as a fallback
