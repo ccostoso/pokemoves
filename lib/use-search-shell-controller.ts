@@ -1,5 +1,5 @@
 import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndGeneration } from "./actions";
-import { MovesetListItem, PokemonListItem } from "./types";
+import { LevelUpLearnset, PokemonListItem } from "./types";
 import { SubmitEventHandler, useEffect, useReducer } from "react"
 
 type RequestState =
@@ -11,7 +11,7 @@ type SearchShellState = {
     pokemonList: PokemonListItem[]
     versionGroupName: string
     pokemonName: string
-    movesetList: MovesetListItem[]
+    learnsetList: LevelUpLearnset[]
     requestState: RequestState
 }
 
@@ -21,10 +21,10 @@ type SearchShellAction =
     | { type: "pokemonListLoaded"; pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
     | { type: "submitStarted" }
-    | { type: "submitSucceeded"; moveset: MovesetListItem }
+    | { type: "submitSucceeded"; learnset: LevelUpLearnset }
     | { type: "submitFailed"; message: string }
-    | { type: "movesetRemoved"; indexToRemove: number }
-    | { type: "movesetReordered"; fromIndex: number; toIndex: number }
+    | { type: "learnsetRemoved"; indexToRemove: number }
+    | { type: "learnsetReordered"; fromIndex: number; toIndex: number }
 
 type UseSearchShellControllerReturn = {
     // form state
@@ -32,8 +32,8 @@ type UseSearchShellControllerReturn = {
     versionGroupName: string
     pokemonName: string
 
-    // moveset list state
-    movesetList: MovesetListItem[]
+    // learnset list state
+    learnsetList: LevelUpLearnset[]
 
     // request/derived UI state
     isSubmitting: boolean
@@ -45,8 +45,8 @@ type UseSearchShellControllerReturn = {
 
     // handlers used by child components
     handleSubmit: SubmitEventHandler<HTMLFormElement>
-    handleRemoveMoveset: (indexToRemove: number) => void
-    handleReorderMoveset: (fromIndex: number, toIndex: number) => void
+    handleRemoveLearnset: (indexToRemove: number) => void
+    handleReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
 function searchShellReducer(
@@ -89,7 +89,7 @@ function searchShellReducer(
             return {
                 ...state,
                 requestState: { status: "idle" },
-                movesetList: [...state.movesetList, action.moveset],
+                learnsetList: [...state.learnsetList, action.learnset],
             }
 
         case "submitFailed":
@@ -98,22 +98,22 @@ function searchShellReducer(
                 requestState: { status: "error", message: action.message },
             }
 
-        case "movesetRemoved":
+        case "learnsetRemoved":
             return {
                 ...state,
-                movesetList: state.movesetList.filter(
+                learnsetList: state.learnsetList.filter(
                     (_, index) => index !== action.indexToRemove,
                 ),
             }
 
-        case "movesetReordered": {
-            const next = [...state.movesetList]
+        case "learnsetReordered": {
+            const next = [...state.learnsetList]
             const [moved] = next.splice(action.fromIndex, 1)
             next.splice(action.toIndex, 0, moved)
 
             return {
                 ...state,
-                movesetList: next,
+                learnsetList: next,
             }
         }
 
@@ -127,7 +127,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         pokemonList: [],
         versionGroupName: "",
         pokemonName: "",
-        movesetList: [],
+        learnsetList: [],
         requestState: { status: "idle" },
     })
 
@@ -170,9 +170,23 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
                     state.versionGroupName,
                 )
 
+
+            console.log("pokemonMoves", pokemonMoves)
+            console.log("pokemonMoves.pokemon.length", pokemonMoves.pokemon.length)
+
+            const hasMoves = pokemonMoves.pokemon.some((p) => p.pokemonmoves.length > 0)
+
+            if (!hasMoves) {
+                dispatch({
+                    type: "submitFailed",
+                    message: `No level-up moves found for ${state.pokemonName} in ${state.versionGroupName}.`,
+                })
+                return
+            }
+
             dispatch({
                 type: "submitSucceeded",
-                moveset: { ...pokemonMoves, id: crypto.randomUUID() },
+                learnset: { ...pokemonMoves, id: crypto.randomUUID() },
             })
         } catch {
             dispatch({
@@ -186,7 +200,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         pokemonList: state.pokemonList,
         versionGroupName: state.versionGroupName,
         pokemonName: state.pokemonName,
-        movesetList: state.movesetList,
+        learnsetList: state.learnsetList,
         isSubmitting: state.requestState.status === "loading",
         error:
             state.requestState.status === "error"
@@ -197,9 +211,9 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         setPokemonName: (name: string) =>
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleSubmit,
-        handleRemoveMoveset: (indexToRemove: number) =>
-            dispatch({ type: "movesetRemoved", indexToRemove }),
-        handleReorderMoveset: (fromIndex: number, toIndex: number) =>
-            dispatch({ type: "movesetReordered", fromIndex, toIndex }),
+        handleRemoveLearnset: (indexToRemove: number) =>
+            dispatch({ type: "learnsetRemoved", indexToRemove }),
+        handleReorderLearnset: (fromIndex: number, toIndex: number) =>
+            dispatch({ type: "learnsetReordered", fromIndex, toIndex }),
     }
 }

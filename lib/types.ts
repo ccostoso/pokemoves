@@ -10,10 +10,6 @@ export type PokemonListItem = {
     }
 }
 
-export type MovesetListItem = LevelUpMoveset & {
-    id: string // Unique ID for DnD tracking
-}
-
 export type LevelUpMove = {
     level: number
     movelearnmethod: { name: string }
@@ -24,7 +20,7 @@ export type LevelUpMove = {
     }
 }
 
-export type LevelUpMoveset = {
+export type LevelUpLearnset = {
     pokemon: Array<{
         id: number
         name: string
@@ -32,4 +28,5 @@ export type LevelUpMoveset = {
     }>
     pokemonspecies: Array<{ pokemonspeciesnames: LocalizedName[] }>
     versionGroupName: string
+    id: string // Unique ID for DnD tracking
 }

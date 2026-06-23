@@ -1,5 +1,5 @@
 import { DndContext, DragEndEvent } from "@dnd-kit/core"
-import { MovesetListItem } from "@/lib/types"
+import { LevelUpLearnset } from "@/lib/types"
 import {
     SortableContext,
     horizontalListSortingStrategy,
@@ -7,12 +7,12 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import { HTMLAttributes, ReactNode } from "react"
-import PokemonMovesetCard from "./pokemon-moveset-card"
+import PokemonLearnsetCard from "./pokemon-learnset-card"
 
-interface PokemonMovesetPanelProps {
-    movesetList: MovesetListItem[]
-    onRemoveMoveset: (index: number) => void
-    onReorderMoveset: (fromIndex: number, toIndex: number) => void
+interface PokemonLearnsetPanelProps {
+    learnsetList: LevelUpLearnset[]
+    onRemoveLearnset: (index: number) => void
+    onReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
 function SortableItem({
@@ -42,36 +42,38 @@ function SortableItem({
     )
 }
 
-export default function PokemonMovesetPanel({
-    movesetList,
-    onRemoveMoveset,
-    onReorderMoveset,
-}: PokemonMovesetPanelProps) {
-    // PokemonMovesetPanel
+export default function PokemonLearnsetPanel({
+    learnsetList,
+    onRemoveLearnset,
+    onReorderLearnset,
+}: PokemonLearnsetPanelProps) {
+    // PokemonLearnsetPanel
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
-        const fromIndex = movesetList.findIndex((r) => r.id === active.id)
-        const toIndex = movesetList.findIndex((r) => r.id === over.id)
-        onReorderMoveset(fromIndex, toIndex)
+        const fromIndex = learnsetList.findIndex(
+            (item) => item.id === active.id,
+        )
+        const toIndex = learnsetList.findIndex((item) => item.id === over.id)
+        onReorderLearnset(fromIndex, toIndex)
     }
 
     return (
         <div className="flex w-max flex-nowrap justify-start gap-4 pb-2">
-            {movesetList.length > 0 ? (
+            {learnsetList.length > 0 ? (
                 <DndContext onDragEnd={handleDragEnd}>
                     <SortableContext
-                        items={movesetList.map((r) => r.id)}
+                        items={learnsetList.map((item) => item.id)}
                         strategy={horizontalListSortingStrategy}
                     >
-                        {movesetList.map((result, index) => (
-                            <SortableItem key={result.id} id={result.id}>
+                        {learnsetList.map((item, index) => (
+                            <SortableItem key={item.id} id={item.id}>
                                 {(dragHandleProps) => (
                                     <div className="mb-8">
-                                        <PokemonMovesetCard
-                                            result={result}
+                                        <PokemonLearnsetCard
+                                            item={item}
                                             onRemove={() =>
-                                                onRemoveMoveset(index)
+                                                onRemoveLearnset(index)
                                             }
                                             dragHandleProps={dragHandleProps}
                                         />

@@ -1,35 +1,33 @@
-import { MovesetListItem } from "@/lib/types"
+import { LevelUpLearnset } from "@/lib/types"
 import { getVersionGroupDisplayName } from "@/lib/utils"
 import { Button } from "../ui/button"
 import { GripVertical, X } from "lucide-react"
 import { HTMLAttributes } from "react"
 import { Card, CardContent, CardHeader } from "../ui/card"
-import PokemonMovesetTable from "./pokemon-moveset-table"
+import PokemonLearnsetTable from "./pokemon-learnset-table"
 
-interface PokemonMovesetCardProps {
-    result: MovesetListItem | null
+interface PokemonLearnsetCardProps {
+    item: LevelUpLearnset | null
     onRemove: () => void
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
 
-export default function PokemonMovesetCard({
-    result,
+export default function PokemonLearnsetCard({
+    item,
     onRemove,
     dragHandleProps,
-}: PokemonMovesetCardProps) {
+}: PokemonLearnsetCardProps) {
     const pokemonName =
-        result?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
-        result?.pokemon?.[0]?.name ||
+        item?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
+        item?.pokemon?.[0]?.name ||
         "Unknown"
-    const pokemonMoves = result?.pokemon?.[0]?.pokemonmoves || []
+    const pokemonMoves = item?.pokemon?.[0]?.pokemonmoves || []
 
     // Get display name for version group
-    const versionGroupName = getVersionGroupDisplayName(
-        result?.versionGroupName,
-    )
+    const versionGroupName = getVersionGroupDisplayName(item?.versionGroupName)
 
     // Construct sprite URLs
-    const pokemonSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${result?.pokemon?.[0]?.id}.png`
+    const pokemonSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item?.pokemon?.[0]?.id}.png`
 
     return (
         <div className="basis-1/4 shrink-0 min-w-72">
@@ -56,7 +54,7 @@ export default function PokemonMovesetCard({
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="overflow-hidden rounded-xl">
-                        <PokemonMovesetTable
+                        <PokemonLearnsetTable
                             pokemonName={pokemonName}
                             versionGroupName={versionGroupName}
                             pokemonMoves={pokemonMoves}
