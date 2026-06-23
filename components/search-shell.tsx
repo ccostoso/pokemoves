@@ -34,7 +34,7 @@ export default function SearchShell() {
                         handleSubmit={handleSubmit}
                     />
                 </aside>
-                <section className="flex-1 overflow-x-auto ">
+                <section className="flex-1 min-w-0 overflow-x-hidden">
                     <PokemonLearnsetPanel
                         learnsetList={learnsetList}
                         onRemoveLearnset={handleRemoveLearnset}

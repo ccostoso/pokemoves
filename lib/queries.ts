@@ -60,8 +60,8 @@ export const GET_POKEMON_BY_VERSIONGROUP_NAME =
         ? GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA2
         : GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA
 
-const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA = gql`
-query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
+const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP_V1BETA = gql`
+query getLevelUpMovesByPokemonNameAndVersionGroup($pokemonName: String!, $versionGroupName: String!) {
   pokemon_v2_pokemon(where: {name: {_eq: $pokemonName}}) {
     id
     name
@@ -93,8 +93,8 @@ query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionG
   }
 }`
 
-const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA2 = gql`
-query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
+const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP_V1BETA2 = gql`
+query getLevelUpMovesByPokemonNameAndVersionGroup($pokemonName: String!, $versionGroupName: String!) {
   pokemon(where: {name: {_eq: $pokemonName}}) {
     id
     name
@@ -123,13 +123,13 @@ query getLevelUpMovesByPokemonNameAndGeneration($pokemonName: String!, $versionG
   }
 }`
 
-export const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION =
+export const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP =
     POKEAPI_SCHEMA_MODE === 'v1beta2'
-        ? GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA2
-        : GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION_V1BETA
+        ? GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP_V1BETA2
+        : GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP_V1BETA
 
-export const GET_LEVEL_UP_MOVES_BY_POKEMON_ID_AND_GENERATION = gql`
-query getLevelUpMovesByPokemonIdAndGeneration($pokemonId: Int!, $versionGroupName: String!) {
+export const GET_LEVEL_UP_MOVES_BY_POKEMON_ID_AND_VERSIONGROUP = gql`
+query getLevelUpMovesByPokemonIdAndVersionGroup($pokemonId: Int!, $versionGroupName: String!) {
   pokemon(where: {id: {_eq: $pokemonId}}) {
     id
     name
@@ -150,8 +150,8 @@ query getLevelUpMovesByPokemonIdAndGeneration($pokemonId: Int!, $versionGroupNam
   }
 }`
 
-export const GET_MACHINE_MOVES_BY_POKEMON_NAME_AND_GENERATION = gql`
-query getMachineMovesByPokemonNameAndGeneration($pokemonName: String!, $versionGroupName: String!) {
+export const GET_MACHINE_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP = gql`
+query getMachineMovesByPokemonNameAndVersionGroup($pokemonName: String!, $versionGroupName: String!) {
   pokemon(where: {name: {_eq: $pokemonName}}) {
     id
     name

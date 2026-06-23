@@ -3,7 +3,7 @@
 import { gqlClient } from "./graphql-client"
 import {
     GET_POKEMON_BY_VERSIONGROUP_NAME,
-    GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION,
+    GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
 } from "./queries"
 
 import { unstable_cache } from "next/cache"
@@ -162,13 +162,13 @@ export const getAllPokemonByVersionGroupName = unstable_cache(
     }
 )
 
-export const getLevelUpMovesByPokemonNameAndGeneration = unstable_cache(
+export const getLevelUpMovesByPokemonNameAndVersionGroup = unstable_cache(
     async (
         pokemonName: string,
         versionGroupName: string,
     ): Promise<LevelUpLearnset> => {
         const response = await gqlClient.request<RawLevelUpResponse>(
-            GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_GENERATION,
+            GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
             { pokemonName, versionGroupName }
         )
 
