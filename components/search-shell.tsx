@@ -1,7 +1,7 @@
 "use client"
 
 import SearchPanel from "./pokemon-search/search-panel"
-import PokemonMovesetPanel from "./pokemon-movesets/pokemon-moveset-panel"
+import PokemonLearnsetPanel from "./pokemon-learnsets/pokemon-learnset-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 
 export default function SearchShell() {
@@ -11,12 +11,12 @@ export default function SearchShell() {
         setVersionGroupName,
         pokemonName,
         setPokemonName,
-        movesetList,
+        learnsetList,
         error,
         isSubmitting,
         handleSubmit,
-        handleRemoveMoveset,
-        handleReorderMoveset,
+        handleRemoveLearnset,
+        handleReorderLearnset,
     } = useSearchShellController()
 
     return (
@@ -35,10 +35,10 @@ export default function SearchShell() {
                     />
                 </aside>
                 <section className="flex-1 overflow-x-auto ">
-                    <PokemonMovesetPanel
-                        movesetList={movesetList}
-                        onRemoveMoveset={handleRemoveMoveset}
-                        onReorderMoveset={handleReorderMoveset}
+                    <PokemonLearnsetPanel
+                        learnsetList={learnsetList}
+                        onRemoveLearnset={handleRemoveLearnset}
+                        onReorderLearnset={handleReorderLearnset}
                     />
                 </section>
             </div>

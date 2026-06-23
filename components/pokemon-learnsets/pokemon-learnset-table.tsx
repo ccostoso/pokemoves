@@ -19,19 +19,19 @@ interface Move {
     }
 }
 
-interface PokemonMovesTableProps {
+interface PokemonLearnsetTableProps {
     pokemonName: string
     versionGroupName: string
     pokemonMoves: Move[]
     pokemonSpriteUrl: string
 }
 
-export default function PokemonMovesTable({
+export default function PokemonLearnsetTable({
     pokemonName,
     versionGroupName,
     pokemonMoves,
     pokemonSpriteUrl,
-}: PokemonMovesTableProps) {
+}: PokemonLearnsetTableProps) {
     return (
         <Table>
             <TableHeader>
