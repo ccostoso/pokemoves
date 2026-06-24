@@ -66,11 +66,13 @@ type RawLevelUpPokemon = {
     name: string
     // v1beta2
     pokemonmoves?: RawPokemonMove[]
+    pokemonspecy?: RawSpecy
     // v1beta
     pokemon_v2_pokemonmoves?: RawPokemonMove[]
+    pokemon_v2_pokemonspecy?: RawSpecy
 }
 
-type RawSpecies = {
+type RawSpecy = {
     // v1beta2
     pokemonspeciesnames?: LocalizedName[]
     // v1beta
@@ -80,10 +82,10 @@ type RawSpecies = {
 type RawLevelUpResponse = {
     // v1beta2
     pokemon?: RawLevelUpPokemon[]
-    pokemonspecies?: RawSpecies[]
+    pokemonspecy?: RawSpecy[]
     // v1beta
     pokemon_v2_pokemon?: RawLevelUpPokemon[]
-    pokemon_v2_pokemonspecies?: RawSpecies[]
+    pokemon_v2_pokemonspecy?: RawSpecy[]
 }
 
 // --- Mapping functions ---
@@ -108,7 +110,8 @@ const mapLevelUpResponse = (
     versionGroupName: string,
 ): LevelUpLearnset => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
-    const rawSpecies = response.pokemonspecies ?? response.pokemon_v2_pokemonspecies ?? []
+    const fallbackSpecy =
+        (response.pokemonspecy ?? response.pokemon_v2_pokemonspecy ?? [])[0]
 
     const pokemon = rawPokemon.map((p) => ({
         id: p.id,
@@ -127,16 +130,19 @@ const mapLevelUpResponse = (
                     m.move?.movenames ?? m.pokemon_v2_move?.pokemon_v2_movenames ?? [],
             },
         })),
-    }))
-
-    const pokemonspecies = rawSpecies.map((s) => ({
-        pokemonspeciesnames:
-            s.pokemonspeciesnames ?? s.pokemon_v2_pokemonspeciesnames ?? [],
+        pokemonspecy: {
+            pokemonspeciesnames:
+                p.pokemonspecy?.pokemonspeciesnames ??
+                p.pokemon_v2_pokemonspecy?.pokemon_v2_pokemonspeciesnames ??
+                fallbackSpecy?.pokemonspeciesnames ??
+                fallbackSpecy?.pokemon_v2_pokemonspeciesnames ??
+                [],
+        },
     }))
 
     const id = crypto.randomUUID()
 
-    return { pokemon, pokemonspecies, versionGroupName, id }
+    return { pokemon, versionGroupName, id }
 }
 
 // --- Exported server actions ---

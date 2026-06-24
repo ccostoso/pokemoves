@@ -10,30 +10,13 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox"
-import { getRegionalSuffix } from "@/lib/utils"
-
-type PokemonListItem = {
-    id: number
-    name: string
-    pokemonspecy: {
-        pokemonspeciesnames: {
-            name: string
-        }[]
-    }
-}
+import { getPokemonDisplayName } from "@/lib/utils"
+import { PokemonListItem } from "@/lib/types"
 
 interface PokemonInputProps {
     pokemonList: PokemonListItem[]
     value: string
     onChange: (value: string) => void
-}
-
-function getPokemonDisplayName(pokemon: PokemonListItem): string {
-    const region = getRegionalSuffix(pokemon.name)
-    const regionlessName =
-        pokemon.pokemonspecy.pokemonspeciesnames[0]?.name ?? pokemon.name
-
-    return region ? `${regionlessName} (${region})` : regionlessName
 }
 
 export default function PokemonInput({
