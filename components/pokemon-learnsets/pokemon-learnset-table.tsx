@@ -66,7 +66,9 @@ export default function PokemonLearnsetTable({
             </TableHeader>
             <TableBody>
                 {pokemonMoves.map((move: Move, index: number) => (
-                    <TableRow key={index}>
+                    <TableRow
+                        key={`${move.move.movenames[0]?.name}-${move.level}`}
+                    >
                         <TableCell className="text-center">
                             {move.level}
                         </TableCell>

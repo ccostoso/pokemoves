@@ -2,9 +2,22 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { versionGroupList } from "./data/versiongroup-list"
 import { types } from "./data/type-list"
+import { PokemonListItem } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
+}
+
+const REGION_SUFFIXES: Record<string, string> = {
+    'alola': 'Alola',
+    'galar': 'Galar',
+    'hisui': 'Hisui',
+    'paldea': 'Paldea',
+}
+
+export function getRegionalSuffix(pokemonName: string): string | null {
+    const suffix = pokemonName.split('-').pop()
+    return suffix ? REGION_SUFFIXES[suffix] ?? null : null
 }
 
 export function getVersionGroupDisplayName(apiName: string = ""): string {
@@ -18,4 +31,12 @@ export function getTypeNumber(typeName: string): number {
     // Map Pokémon type names to numbers for sprite retrieval
     const type = types.find(t => t.name === typeName)
     return type ? type.id : 0 // Return 0 or a default value if not found
+}
+
+export function getPokemonDisplayName(pokemon: PokemonListItem): string {
+    const region = getRegionalSuffix(pokemon.name)
+    const regionlessName =
+        pokemon.pokemonspecy.pokemonspeciesnames[0]?.name ?? pokemon.name
+
+    return region ? `${regionlessName} (${region})` : regionlessName
 }

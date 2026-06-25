@@ -18,7 +18,7 @@ export default function PokemonLearnsetCard({
     dragHandleProps,
 }: PokemonLearnsetCardProps) {
     const pokemonName =
-        item?.pokemonspecies?.[0]?.pokemonspeciesnames?.[0]?.name ||
+        item?.pokemon?.[0]?.pokemonspecy?.pokemonspeciesnames?.[0]?.name ||
         item?.pokemon?.[0]?.name ||
         "Unknown"
     const pokemonMoves = item?.pokemon?.[0]?.pokemonmoves || []

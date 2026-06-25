@@ -1,4 +1,4 @@
-import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndGeneration } from "./actions";
+import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndVersionGroup } from "./actions";
 import { LevelUpLearnset, PokemonListItem } from "./types";
 import { SubmitEventHandler, useEffect, useReducer } from "react"
 
@@ -165,7 +165,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
 
         try {
             const pokemonMoves =
-                await getLevelUpMovesByPokemonNameAndGeneration(
+                await getLevelUpMovesByPokemonNameAndVersionGroup(
                     state.pokemonName,
                     state.versionGroupName,
                 )

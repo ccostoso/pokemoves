@@ -6,7 +6,7 @@ import {
     useSortable,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
-import { HTMLAttributes, ReactNode } from "react"
+import { HTMLAttributes, ReactNode, useEffect, useRef } from "react"
 import PokemonLearnsetCard from "./pokemon-learnset-card"
 
 interface PokemonLearnsetPanelProps {
@@ -47,7 +47,25 @@ export default function PokemonLearnsetPanel({
     onRemoveLearnset,
     onReorderLearnset,
 }: PokemonLearnsetPanelProps) {
-    // PokemonLearnsetPanel
+    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const previousLengthRef = useRef(learnsetList.length)
+
+    useEffect(() => {
+        if (learnsetList.length > previousLengthRef.current) {
+            const container = scrollContainerRef.current
+            if (container) {
+                requestAnimationFrame(() => {
+                    container.scrollTo({
+                        left: container.scrollWidth,
+                        behavior: "smooth",
+                    })
+                })
+            }
+        }
+
+        previousLengthRef.current = learnsetList.length
+    }, [learnsetList.length])
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
@@ -59,28 +77,35 @@ export default function PokemonLearnsetPanel({
     }
 
     return (
-        <div className="flex w-max flex-nowrap justify-start gap-4 pb-2">
+        <div
+            ref={scrollContainerRef}
+            className="w-full max-w-full overflow-x-auto"
+        >
             {learnsetList.length > 0 ? (
                 <DndContext onDragEnd={handleDragEnd}>
                     <SortableContext
                         items={learnsetList.map((item) => item.id)}
                         strategy={horizontalListSortingStrategy}
                     >
-                        {learnsetList.map((item, index) => (
-                            <SortableItem key={item.id} id={item.id}>
-                                {(dragHandleProps) => (
-                                    <div className="mb-8">
-                                        <PokemonLearnsetCard
-                                            item={item}
-                                            onRemove={() =>
-                                                onRemoveLearnset(index)
-                                            }
-                                            dragHandleProps={dragHandleProps}
-                                        />
-                                    </div>
-                                )}
-                            </SortableItem>
-                        ))}
+                        <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 pb-2">
+                            {learnsetList.map((item, index) => (
+                                <SortableItem key={item.id} id={item.id}>
+                                    {(dragHandleProps) => (
+                                        <div className="mb-8">
+                                            <PokemonLearnsetCard
+                                                item={item}
+                                                onRemove={() =>
+                                                    onRemoveLearnset(index)
+                                                }
+                                                dragHandleProps={
+                                                    dragHandleProps
+                                                }
+                                            />
+                                        </div>
+                                    )}
+                                </SortableItem>
+                            ))}
+                        </div>
                     </SortableContext>
                 </DndContext>
             ) : (

@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import {
     Combobox,
@@ -10,19 +10,11 @@ import {
     ComboboxItem,
     ComboboxList,
 } from "@/components/ui/combobox"
-
-type PokemonName = {
-    id: number
-    name: string
-    pokemonspecy: {
-        pokemonspeciesnames: {
-            name: string
-        }[]
-    }
-}
+import { getPokemonDisplayName } from "@/lib/utils"
+import { PokemonListItem } from "@/lib/types"
 
 interface PokemonInputProps {
-    pokemonList: PokemonName[]
+    pokemonList: PokemonListItem[]
     value: string
     onChange: (value: string) => void
 }
@@ -32,29 +24,36 @@ export default function PokemonInput({
     value,
     onChange,
 }: PokemonInputProps) {
-    const [inputText, setInputText] = useState(value)
-
-    // Map formatted display name → canonical name used in GraphQL queries
-    const displayToCanonical = useMemo(
+    const canonicalToDisplay = useMemo(
         () =>
             new Map(
-                pokemonList.map((p) => [
-                    p.pokemonspecy.pokemonspeciesnames[0]?.name ?? p.name,
-                    p.name,
+                pokemonList.map((pokemon) => [
+                    pokemon.name,
+                    getPokemonDisplayName(pokemon),
                 ]),
             ),
         [pokemonList],
     )
+
+    const [inputText, setInputText] = useState(
+        canonicalToDisplay.get(value) ?? value,
+    )
+
+    useEffect(() => {
+        setInputText(canonicalToDisplay.get(value) ?? value)
+    }, [value, canonicalToDisplay])
 
     return (
         <Field>
             <FieldLabel htmlFor="name">Pokémon Name</FieldLabel>
             <Combobox
                 items={pokemonList}
-                onValueChange={(displayName: string | null) => {
-                    if (!displayName) return
-                    setInputText(displayName)
-                    onChange(displayToCanonical.get(displayName) ?? displayName)
+                onValueChange={(canonicalName: string | null) => {
+                    if (!canonicalName) return
+                    setInputText(
+                        canonicalToDisplay.get(canonicalName) ?? canonicalName,
+                    )
+                    onChange(canonicalName)
                 }}
             >
                 <ComboboxInput
@@ -68,19 +67,11 @@ export default function PokemonInput({
                 <ComboboxContent>
                     <ComboboxEmpty>No Pokemon found.</ComboboxEmpty>
                     <ComboboxList>
-                        {(pokemon) => {
-                            const displayName =
-                                pokemon.pokemonspecy.pokemonspeciesnames[0]
-                                    ?.name ?? pokemon.name
-                            return (
-                                <ComboboxItem
-                                    key={pokemon.id}
-                                    value={displayName}
-                                >
-                                    {displayName}
-                                </ComboboxItem>
-                            )
-                        }}
+                        {(pokemon) => (
+                            <ComboboxItem key={pokemon.id} value={pokemon.name}>
+                                {getPokemonDisplayName(pokemon)}
+                            </ComboboxItem>
+                        )}
                     </ComboboxList>
                 </ComboboxContent>
             </Combobox>
