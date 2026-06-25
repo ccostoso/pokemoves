@@ -1,0 +1,48 @@
+import { ReactNode } from "react"
+import { Button } from "./ui/button"
+import { cn } from "@/lib/utils"
+
+type NavbarExpandableButtonProps = {
+    label: string
+    icon: ReactNode
+    isActive: boolean
+    onActivate: () => void
+    onClick?: () => void
+    expandedWidthClass?: string
+}
+
+const baseClass =
+    "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
+
+export default function NavbarExpandableButton({
+    label,
+    icon,
+    isActive,
+    onActivate,
+    onClick,
+    expandedWidthClass = "w-28",
+}: NavbarExpandableButtonProps) {
+    return (
+        <Button
+            variant="outline"
+            size="icon"
+            onClick={onClick}
+            onMouseEnter={onActivate}
+            onFocus={onActivate}
+            className={cn(
+                baseClass,
+                isActive ? `${expandedWidthClass} px-4 gap-2` : "w-8 px-0 gap-0",
+            )}
+        >
+            {icon}
+            <span
+                className={cn(
+                    "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
+                    isActive && "max-w-16",
+                )}
+            >
+                {label}
+            </span>
+        </Button>
+    )
+}
