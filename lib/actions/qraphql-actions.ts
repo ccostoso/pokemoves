@@ -1,10 +1,10 @@
 "use server"
 
-import { gqlClient } from "./graphql-client"
+import { gqlClient } from "../graphql-client"
 import {
     GET_POKEMON_BY_VERSIONGROUP_NAME,
     GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
-} from "./queries"
+} from "../queries"
 
 import { unstable_cache } from "next/cache"
 import {
@@ -12,8 +12,8 @@ import {
     POKEMON_LIST_TAG,
     movesCacheKey,
     MOVES_TAG,
-} from "./cache-keys"
-import { LevelUpLearnset, PokemonListItem } from "./types"
+} from "../cache-keys"
+import { LevelUpLearnset, PokemonListItem } from "../types"
 
 // --- Shared primitives ---
 

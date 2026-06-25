@@ -1,4 +1,4 @@
-import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndVersionGroup } from "./actions";
+import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndVersionGroup } from "./actions/qraphql-actions";
 import { LevelUpLearnset, PokemonListItem } from "./types";
 import { SubmitEventHandler, useEffect, useReducer } from "react"
 
