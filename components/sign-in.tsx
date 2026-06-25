@@ -2,7 +2,7 @@
 
 import { SubmitEvent, useState } from "react"
 import { useRouter } from "next/navigation"
-import { signInWithEmail } from "@/lib/actions/auth-actions/sign-in"
+import { signInWithUsername } from "@/lib/actions/auth-actions/sign-in"
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import Link from "next/link"
 
 type SignInDialogProps = {
   open: boolean
@@ -32,11 +33,11 @@ export default function SignInDialog({ open, onOpenChange }: SignInDialogProps) 
     setIsLoading(true)
 
     const formData = new FormData(event.currentTarget)
-    const email = String(formData.get("email") ?? "")
+    const username = String(formData.get("username") ?? "")
     const password = String(formData.get("password") ?? "")
 
-    const { error } = await signInWithEmail({
-      email,
+    const { error } = await signInWithUsername({
+      username,
       password,
       callbackURL: "/user/",
     })
@@ -70,6 +71,7 @@ export default function SignInDialog({ open, onOpenChange }: SignInDialogProps) 
               <Input id='password' name='password' type='password' autoComplete='current-password' required />
             </div>
             {errorMessage ? <p className='text-sm text-red-600'>{errorMessage}</p> : null}
+            <p className="text-muted-foreground">Not a member? <Link href="/auth/sign-up" className="text-primary hover:underline">Sign up</Link></p>
           </div>
           <DialogFooter>
             <DialogClose asChild>

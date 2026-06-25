@@ -1,14 +1,14 @@
 import { authClient } from "@/lib/auth-client"
 
 export type SignInInput = {
-    email: string
+    username: string
     password: string
     callbackURL?: string
 }
 
-export async function signInWithEmail(input: SignInInput) {
-    return authClient.signIn.email({
-        email: input.email,
+export async function signInWithUsername(input: SignInInput) {
+    return authClient.signIn.username({
+        username: input.username,
         password: input.password,
         callbackURL: input.callbackURL ?? "/dashboard",
     })
