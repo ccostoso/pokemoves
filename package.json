@@ -8,6 +8,8 @@
         "start": "next start",
         "lint": "eslint",
         "lint:fix": "eslint --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
         "shadd": "pnpm dlx shadcn@latest add",
         "studio": "prisma studio --browser \"google chrome\""
     },
@@ -47,6 +49,7 @@
         "@types/react-dom": "^19",
         "eslint": "^9",
         "eslint-config-next": "16.2.9",
+        "prettier": "^3.8.4",
         "prisma": "^7.8.0",
         "tailwindcss": "^4",
         "tsx": "^4.22.4",
