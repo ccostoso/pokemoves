@@ -1,4 +1,4 @@
-import { LocalizedName } from "./actions"
+import { LocalizedName } from "./actions/qraphql-actions"
 
 // --- Normalized output types for frontend ---
 

@@ -2,16 +2,39 @@
 
 import { CircleQuestionMark, Pencil, User } from "lucide-react"
 import { useState } from "react"
-import { Button } from "./ui/button"
+import { useRouter } from "next/navigation"
 import { ModeToggle } from "./mode-toggle"
-import { cn } from "@/lib/utils"
+import SignInDialog from "./sign-in"
+import { authClient } from "@/lib/auth-client"
+import NavbarExpandableButton from "./navbar-expandable-button"
 
 export default function Navbar() {
+    const router = useRouter()
     const [activeButton, setActiveButton] = useState<string | null>(null)
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
+    const [isSignInOpen, setIsSignInOpen] = useState(false)
+    const { data: session, isPending } = authClient.useSession()
 
-    const expandableButtonBaseClass =
-        "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
+    const handleAccountClick = () => {
+        if (isPending) {
+            return
+        }
+
+        if (session?.user) {
+            router.push("/user/")
+            return
+        }
+
+        setIsSignInOpen(true)
+    }
+
+    const handleSignInOpenChange = (open: boolean) => {
+        setIsSignInOpen(open)
+
+        if (!open && !isThemeMenuOpen) {
+            setActiveButton(null)
+        }
+    }
 
     return (
         <nav
@@ -25,72 +48,28 @@ export default function Navbar() {
             <div className="container mx-auto flex justify-between items-center px-4">
                 <div className="text-xl font-bold">Pokémoves</div>
                 <div className="flex items-center gap-3 md:gap-4">
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onMouseEnter={() => setActiveButton("account")}
-                        onFocus={() => setActiveButton("account")}
-                        className={cn(
-                            expandableButtonBaseClass,
-                            activeButton === "account"
-                                ? "w-28 px-4 gap-2"
-                                : "w-8 px-0 gap-0",
-                        )}
-                    >
-                        <User className="h-5 w-5 shrink-0" />
-                        <span
-                            className={cn(
-                                "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
-                                activeButton === "account" && "max-w-16",
-                            )}
-                        >
-                            Account
-                        </span>
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onMouseEnter={() => setActiveButton("about")}
-                        onFocus={() => setActiveButton("about")}
-                        className={cn(
-                            expandableButtonBaseClass,
-                            activeButton === "about"
-                                ? "w-24 px-4 gap-2"
-                                : "w-8 px-0 gap-0",
-                        )}
-                    >
-                        <CircleQuestionMark className="h-5 w-5 shrink-0" />
-                        <span
-                            className={cn(
-                                "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
-                                activeButton === "about" && "max-w-16",
-                            )}
-                        >
-                            About
-                        </span>
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="icon"
-                        onMouseEnter={() => setActiveButton("contact")}
-                        onFocus={() => setActiveButton("contact")}
-                        className={cn(
-                            expandableButtonBaseClass,
-                            activeButton === "contact"
-                                ? "w-28 px-4 gap-2"
-                                : "w-8 px-0 gap-0",
-                        )}
-                    >
-                        <Pencil className="h-5 w-5 shrink-0" />
-                        <span
-                            className={cn(
-                                "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
-                                activeButton === "contact" && "max-w-16",
-                            )}
-                        >
-                            Contact
-                        </span>
-                    </Button>
+                    <NavbarExpandableButton
+                        label="Account"
+                        icon={<User className="shrink-0 h-5 w-5" />}
+                        isActive={activeButton === "account"}
+                        onActivate={() => setActiveButton("account")}
+                        onClick={handleAccountClick}
+                        expandedWidthClass="w-28"
+                    />
+                    <NavbarExpandableButton
+                        label="About"
+                        icon={<CircleQuestionMark className="shrink-0 h-5 w-5" />}
+                        isActive={activeButton === "about"}
+                        onActivate={() => setActiveButton("about")}
+                        expandedWidthClass="w-24"
+                    />
+                    <NavbarExpandableButton
+                        label="Contact"
+                        icon={<Pencil className="shrink-0 h-5 w-5" />}
+                        isActive={activeButton === "contact"}
+                        onActivate={() => setActiveButton("contact")}
+                        expandedWidthClass="w-28"
+                    />
                     <ModeToggle
                         isActive={activeButton === "theme" || isThemeMenuOpen}
                         onActivate={() => setActiveButton("theme")}
@@ -105,6 +84,7 @@ export default function Navbar() {
                             setActiveButton(null)
                         }}
                     />
+                    <SignInDialog open={isSignInOpen} onOpenChange={handleSignInOpenChange} />
                 </div>
             </div>
         </nav>
