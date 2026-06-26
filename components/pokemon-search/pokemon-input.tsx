@@ -13,7 +13,7 @@ import {
 import { getPokemonDisplayName } from "@/lib/utils"
 import { PokemonListItem } from "@/lib/types"
 
-interface PokemonInputProps {
+type PokemonInputProps = {
     pokemonList: PokemonListItem[]
     value: string
     onChange: (value: string) => void

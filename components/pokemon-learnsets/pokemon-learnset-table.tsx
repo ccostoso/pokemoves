@@ -9,7 +9,7 @@ import {
 import Image from "next/image"
 import TypeSprite from "../type-sprite"
 
-interface Move {
+type Move = {
     level: number
     move: {
         type: {
@@ -19,7 +19,7 @@ interface Move {
     }
 }
 
-interface PokemonLearnsetTableProps {
+type PokemonLearnsetTableProps = {
     pokemonName: string
     versionGroupName: string
     pokemonMoves: Move[]

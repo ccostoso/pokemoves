@@ -1,7 +1,7 @@
 import { getTypeNumber } from "@/lib/utils"
 import Image from "next/image"
 
-interface TypeSpriteProps {
+type TypeSpriteProps = {
     typeName: string
 }
 

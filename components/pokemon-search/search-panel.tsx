@@ -9,7 +9,7 @@ import VersionInput from "./version-input"
 import { SubmitEventHandler } from "react"
 import { PokemonListItem } from "@/lib/types"
 
-interface SearchPanelProps {
+type SearchPanelProps = {
     pokemonList: PokemonListItem[]
     versionGroupName: string
     setVersionGroupName: (name: string) => void

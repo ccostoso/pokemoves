@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/select"
 import { versionGroupList } from "@/lib/data/versiongroup-list"
 
-interface VersionInputProps {
+type VersionInputProps = {
     value: string
     onChange: (value: string) => void
 }

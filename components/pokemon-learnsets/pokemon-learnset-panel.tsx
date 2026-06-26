@@ -9,12 +9,13 @@ import { CSS } from "@dnd-kit/utilities"
 import { HTMLAttributes, ReactNode, useEffect, useRef } from "react"
 import PokemonLearnsetCard from "./pokemon-learnset-card"
 
-interface PokemonLearnsetPanelProps {
+type PokemonLearnsetPanelProps = {
     learnsetList: LevelUpLearnset[]
     onRemoveLearnset: (index: number) => void
     onReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
+// SortableItem component to wrap each learnset card and provide drag-and-drop functionality
 function SortableItem({
     id,
     children,

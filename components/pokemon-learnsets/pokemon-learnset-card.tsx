@@ -6,7 +6,7 @@ import { HTMLAttributes } from "react"
 import { Card, CardContent, CardHeader } from "../ui/card"
 import PokemonLearnsetTable from "./pokemon-learnset-table"
 
-interface PokemonLearnsetCardProps {
+type PokemonLearnsetCardProps = {
     item: LevelUpLearnset | null
     onRemove: () => void
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
