@@ -7,6 +7,7 @@ type NavbarExpandableButtonProps = {
     icon: ReactNode
     isActive: boolean
     onActivate: () => void
+    activateOnFocus?: boolean
     expandedWidthClass?: string
 } & Omit<ComponentProps<typeof Button>, "children">
 
@@ -18,6 +19,7 @@ export default function NavbarExpandableButton({
     icon,
     isActive,
     onActivate,
+    activateOnFocus = true,
     expandedWidthClass = "w-28",
     className,
     onMouseEnter,
@@ -35,7 +37,10 @@ export default function NavbarExpandableButton({
                 onMouseEnter?.(event)
             }}
             onFocus={(event) => {
-                onActivate()
+                if (activateOnFocus) {
+                    onActivate()
+                }
+
                 onFocus?.(event)
             }}
             className={cn(

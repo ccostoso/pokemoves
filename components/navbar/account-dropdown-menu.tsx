@@ -12,17 +12,7 @@ import {
 } from "../ui/dropdown-menu"
 import NavbarExpandableButton from "./navbar-expandable-button"
 import { authClient } from "@/lib/auth-client"
-import router from "next/router"
-
-const sessionSignOut = async () => {
-    await authClient.signOut({
-        fetchOptions: {
-            onSuccess: () => {
-                router.push("/login") // redirect to login page
-            },
-        },
-    })
-}
+import { useRouter } from "next/navigation"
 
 type AccountDropdownMenuProps = {
     activeButton: string | null
@@ -37,6 +27,17 @@ export default function AccountDropdownMenu({
     isAccountMenuOpen,
     handleAccountMenuOpenChange,
 }: AccountDropdownMenuProps) {
+    const router = useRouter()
+
+    const sessionSignOut = async () => {
+        await authClient.signOut({
+            fetchOptions: {
+                onSuccess: () => {
+                    router.push("/") // redirect to login page
+                },
+            },
+        })
+    }
     return (
         <DropdownMenu onOpenChange={handleAccountMenuOpenChange}>
             <DropdownMenuTrigger asChild>
@@ -45,6 +46,7 @@ export default function AccountDropdownMenu({
                     icon={<User className="shrink-0 h-5 w-5" />}
                     isActive={activeButton === "account" || isAccountMenuOpen}
                     onActivate={() => setActiveButton("account")}
+                    activateOnFocus={false}
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
