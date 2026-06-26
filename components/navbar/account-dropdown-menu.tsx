@@ -1,3 +1,5 @@
+"use client"
+
 import { User } from "lucide-react"
 import {
     DropdownMenu,
@@ -9,6 +11,18 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import NavbarExpandableButton from "./navbar-expandable-button"
+import { authClient } from "@/lib/auth-client"
+import router from "next/router"
+
+const sessionSignOut = async () => {
+    await authClient.signOut({
+        fetchOptions: {
+            onSuccess: () => {
+                router.push("/login") // redirect to login page
+            },
+        },
+    })
+}
 
 type AccountDropdownMenuProps = {
     activeButton: string | null
@@ -38,12 +52,12 @@ export default function AccountDropdownMenu({
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>My Account</DropdownMenuLabel>
                     <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Billing</DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
-                    <DropdownMenuItem>Subscription</DropdownMenuItem>
+                    <DropdownMenuItem onClick={sessionSignOut}>
+                        Sign Out
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>
