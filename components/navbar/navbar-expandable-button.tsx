@@ -1,5 +1,5 @@
-import { ComponentProps, ReactNode, forwardRef } from "react"
-import { Button } from "./ui/button"
+import { ComponentProps, ReactNode } from "react"
+import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
 
 type NavbarExpandableButtonProps = {
@@ -13,23 +13,18 @@ type NavbarExpandableButtonProps = {
 const baseClass =
     "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
 
-const NavbarExpandableButton = forwardRef<
-    HTMLButtonElement,
-    NavbarExpandableButtonProps
->(function NavbarExpandableButton(
-    {
-        label,
-        icon,
-        isActive,
-        onActivate,
-        expandedWidthClass = "w-28",
-        className,
-        onMouseEnter,
-        onFocus,
-        ...buttonProps
-    },
+export default function NavbarExpandableButton({
+    label,
+    icon,
+    isActive,
+    onActivate,
+    expandedWidthClass = "w-28",
+    className,
+    onMouseEnter,
+    onFocus,
     ref,
-) {
+    ...buttonProps
+}: NavbarExpandableButtonProps) {
     return (
         <Button
             ref={ref}
@@ -63,6 +58,4 @@ const NavbarExpandableButton = forwardRef<
             </span>
         </Button>
     )
-})
-
-export default NavbarExpandableButton
+}

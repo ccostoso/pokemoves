@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -18,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInSchema, SignInSchemaType } from "@/lib/schemas"
 import { signInWithUsername } from "@/lib/actions/auth-actions/sign-in"
 import Link from "next/link"
-import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field"
+import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field"
 
 type SignInDialogProps = {
     open: boolean
@@ -29,7 +28,6 @@ export default function SignInDialog({
     open,
     onOpenChange,
 }: SignInDialogProps) {
-    const router = useRouter()
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
@@ -70,7 +68,6 @@ export default function SignInDialog({
         }
 
         onOpenChange(false)
-        // router.push("/account/")
     }
 
     return (

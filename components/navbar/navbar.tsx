@@ -16,6 +16,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import AccountDropdownMenu from "./account-dropdown-menu"
 
 export default function Navbar() {
     const [activeButton, setActiveButton] = useState<string | null>(null)
@@ -72,40 +73,14 @@ export default function Navbar() {
                 </div>
                 <div className="flex items-center gap-3 md:gap-4">
                     {session?.user ? (
-                        <DropdownMenu
-                            onOpenChange={handleAccountMenuOpenChange}
-                        >
-                            <DropdownMenuTrigger asChild>
-                                <NavbarExpandableButton
-                                    label="Account"
-                                    icon={<User className="shrink-0 h-5 w-5" />}
-                                    isActive={
-                                        activeButton === "account" ||
-                                        isAccountMenuOpen
-                                    }
-                                    onActivate={() =>
-                                        setActiveButton("account")
-                                    }
-                                    expandedWidthClass="w-28"
-                                />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuGroup>
-                                    <DropdownMenuLabel>
-                                        My Account
-                                    </DropdownMenuLabel>
-                                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                                    <DropdownMenuItem>Billing</DropdownMenuItem>
-                                </DropdownMenuGroup>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuGroup>
-                                    <DropdownMenuItem>Team</DropdownMenuItem>
-                                    <DropdownMenuItem>
-                                        Subscription
-                                    </DropdownMenuItem>
-                                </DropdownMenuGroup>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <AccountDropdownMenu
+                            activeButton={activeButton}
+                            setActiveButton={setActiveButton}
+                            isAccountMenuOpen={isAccountMenuOpen}
+                            handleAccountMenuOpenChange={
+                                handleAccountMenuOpenChange
+                            }
+                        />
                     ) : (
                         <NavbarExpandableButton
                             label="Account"
