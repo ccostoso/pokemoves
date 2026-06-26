@@ -1,4 +1,4 @@
-import { ReactNode } from "react"
+import { ComponentProps, ReactNode, forwardRef } from "react"
 import { Button } from "./ui/button"
 import { cn } from "@/lib/utils"
 
@@ -7,32 +7,50 @@ type NavbarExpandableButtonProps = {
     icon: ReactNode
     isActive: boolean
     onActivate: () => void
-    onClick?: () => void
     expandedWidthClass?: string
-}
+} & Omit<ComponentProps<typeof Button>, "children">
 
 const baseClass =
     "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
 
-export default function NavbarExpandableButton({
-    label,
-    icon,
-    isActive,
-    onActivate,
-    onClick,
-    expandedWidthClass = "w-28",
-}: NavbarExpandableButtonProps) {
+const NavbarExpandableButton = forwardRef<
+    HTMLButtonElement,
+    NavbarExpandableButtonProps
+>(function NavbarExpandableButton(
+    {
+        label,
+        icon,
+        isActive,
+        onActivate,
+        expandedWidthClass = "w-28",
+        className,
+        onMouseEnter,
+        onFocus,
+        ...buttonProps
+    },
+    ref,
+) {
     return (
         <Button
+            ref={ref}
             variant="outline"
             size="icon"
-            onClick={onClick}
-            onMouseEnter={onActivate}
-            onFocus={onActivate}
+            onMouseEnter={(event) => {
+                onActivate()
+                onMouseEnter?.(event)
+            }}
+            onFocus={(event) => {
+                onActivate()
+                onFocus?.(event)
+            }}
             className={cn(
                 baseClass,
-                isActive ? `${expandedWidthClass} px-4 gap-2` : "w-8 px-0 gap-0",
+                isActive
+                    ? `${expandedWidthClass} px-4 gap-2`
+                    : "w-8 px-0 gap-0",
+                className,
             )}
+            {...buttonProps}
         >
             {icon}
             <span
@@ -45,4 +63,6 @@ export default function NavbarExpandableButton({
             </span>
         </Button>
     )
-}
+})
+
+export default NavbarExpandableButton

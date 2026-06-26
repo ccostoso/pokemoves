@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import SignUpForm from "./sign-up-form"
-import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { User } from "lucide-react"
 
@@ -37,7 +36,7 @@ export default function SignUpPage() {
                 username: data.username,
                 password: data.password,
                 name: data.name,
-                callbackURL: "/user/",
+                callbackURL: "/",
             })
 
             setIsLoading(false)
@@ -57,7 +56,7 @@ export default function SignUpPage() {
             setIsLoading(false)
         }
 
-        router.push("/user/")
+        router.push("/")
     }
 
     return (

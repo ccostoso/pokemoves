@@ -49,7 +49,7 @@ export default function SignInDialog({
             const { error } = await signInWithUsername({
                 username: data.username,
                 password: data.password,
-                callbackURL: "/user/",
+                callbackURL: "/",
             })
 
             setIsLoading(false)
@@ -70,7 +70,7 @@ export default function SignInDialog({
         }
 
         onOpenChange(false)
-        router.push("/user/")
+        // router.push("/account/")
     }
 
     return (
