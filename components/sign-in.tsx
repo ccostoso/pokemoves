@@ -1,8 +1,7 @@
 "use client"
 
-import { SubmitEvent, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { signInWithUsername } from "@/lib/actions/auth-actions/sign-in"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -15,7 +14,12 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Controller, useForm } from "react-hook-form"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { SignInSchema, SignInSchemaType } from "@/lib/schemas"
+import { signInWithUsername } from "@/lib/actions/auth-actions/sign-in"
 import Link from "next/link"
+import { Field, FieldError, FieldGroup, FieldLabel } from "./ui/field"
 
 type SignInDialogProps = {
     open: boolean
@@ -30,28 +34,40 @@ export default function SignInDialog({
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-    async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-        event.preventDefault()
+    const form = useForm<SignInSchemaType>({
+        resolver: zodResolver(SignInSchema),
+        defaultValues: {
+            username: "",
+            password: "",
+        },
+    })
+
+    const onSubmit = async (data: SignInSchemaType) => {
         setErrorMessage(null)
         setIsLoading(true)
 
-        const formData = new FormData(event.currentTarget)
-        const username = String(formData.get("username") ?? "")
-        const password = String(formData.get("password") ?? "")
+        try {
+            const { error } = await signInWithUsername({
+                username: data.username,
+                password: data.password,
+                callbackURL: "/user/",
+            })
 
-        const { error } = await signInWithUsername({
-            username,
-            password,
-            callbackURL: "/user/",
-        })
+            setIsLoading(false)
 
-        setIsLoading(false)
-
-        if (error) {
-            setErrorMessage(
-                error.message ? error.message : "An unknown error occurred.",
-            )
+            if (error) {
+                setErrorMessage(
+                    error.message
+                        ? error.message
+                        : "An unknown error occurred.",
+                )
+                return
+            }
+        } catch (error) {
+            setErrorMessage("An unknown error occurred.")
             return
+        } finally {
+            setIsLoading(false)
         }
 
         onOpenChange(false)
@@ -61,33 +77,72 @@ export default function SignInDialog({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="data-open:zoom-in-100! data-open:slide-in-from-left-20 data-open:duration-600 sm:max-w-106.25">
-                <form onSubmit={handleSubmit}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    className="grid gap-4"
+                >
                     <DialogHeader>
                         <DialogTitle>Sign in</DialogTitle>
                         <DialogDescription>
-                            Use your username and password to continue.
+                            Sign in with your username and password.
                         </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4">
                         <div className="grid gap-3">
-                            <Label htmlFor="username">Username</Label>
-                            <Input
-                                id="username"
-                                name="username"
-                                type="text"
-                                autoComplete="username"
-                                required
-                            />
+                            <FieldGroup>
+                                <Controller
+                                    name="username"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field>
+                                            <FieldLabel htmlFor="username">
+                                                Username
+                                            </FieldLabel>
+                                            <Input
+                                                {...field}
+                                                id="username"
+                                                type="text"
+                                                aria-invalid={
+                                                    fieldState.invalid
+                                                }
+                                            />
+                                            {fieldState.invalid && (
+                                                <FieldError
+                                                    errors={[fieldState.error]}
+                                                />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                            </FieldGroup>
                         </div>
                         <div className="grid gap-3">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                            />
+                            <FieldGroup>
+                                <Controller
+                                    name="password"
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
+                                        <Field>
+                                            <FieldLabel htmlFor="password">
+                                                Password
+                                            </FieldLabel>
+                                            <Input
+                                                {...field}
+                                                id="password"
+                                                type="password"
+                                                aria-invalid={
+                                                    fieldState.invalid
+                                                }
+                                            />
+                                            {fieldState.invalid && (
+                                                <FieldError
+                                                    errors={[fieldState.error]}
+                                                />
+                                            )}
+                                        </Field>
+                                    )}
+                                />
+                            </FieldGroup>
                         </div>
                         {errorMessage ? (
                             <p className="text-sm text-red-600">
@@ -100,16 +155,22 @@ export default function SignInDialog({
                                 href="/auth/sign-up"
                                 className="text-primary hover:underline"
                             >
-                                Sign up
+                                Click here to sign up
                             </Link>
+                            .
                         </p>
                     </div>
                     <DialogFooter>
                         <DialogClose asChild>
                             <Button variant="outline">Cancel</Button>
                         </DialogClose>
-                        <Button type="submit" disabled={isLoading}>
-                            {isLoading ? "Signing in..." : "Sign in"}
+                        <Button
+                            type="submit"
+                            disabled={form.formState.isSubmitting || isLoading}
+                        >
+                            {form.formState.isSubmitting || isLoading
+                                ? "Signing in..."
+                                : "Sign in"}
                         </Button>
                     </DialogFooter>
                 </form>
