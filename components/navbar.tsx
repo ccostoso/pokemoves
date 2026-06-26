@@ -4,9 +4,10 @@ import { CircleQuestionMark, Pencil, User } from "lucide-react"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { ModeToggle } from "./mode-toggle"
-import SignInDialog from "./sign-in"
+import SignInDialog from "./sign-in-dialog"
 import { authClient } from "@/lib/auth-client"
 import NavbarExpandableButton from "./navbar-expandable-button"
+import Link from "next/link"
 
 export default function Navbar() {
     const router = useRouter()
@@ -46,7 +47,9 @@ export default function Navbar() {
             }}
         >
             <div className="container mx-auto flex justify-between items-center px-4">
-                <div className="text-xl font-bold">Pokémoves</div>
+                <div className="text-xl font-bold">
+                    <Link href="/">Pokémoves</Link>
+                </div>
                 <div className="flex items-center gap-3 md:gap-4">
                     <NavbarExpandableButton
                         label="Account"
@@ -58,7 +61,9 @@ export default function Navbar() {
                     />
                     <NavbarExpandableButton
                         label="About"
-                        icon={<CircleQuestionMark className="shrink-0 h-5 w-5" />}
+                        icon={
+                            <CircleQuestionMark className="shrink-0 h-5 w-5" />
+                        }
                         isActive={activeButton === "about"}
                         onActivate={() => setActiveButton("about")}
                         expandedWidthClass="w-24"
@@ -84,7 +89,10 @@ export default function Navbar() {
                             setActiveButton(null)
                         }}
                     />
-                    <SignInDialog open={isSignInOpen} onOpenChange={handleSignInOpenChange} />
+                    <SignInDialog
+                        open={isSignInOpen}
+                        onOpenChange={handleSignInOpenChange}
+                    />
                 </div>
             </div>
         </nav>

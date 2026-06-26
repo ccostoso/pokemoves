@@ -13,7 +13,6 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { SignInSchema, SignInSchemaType } from "@/lib/schemas"
@@ -81,15 +80,15 @@ export default function SignInDialog({
                     onSubmit={form.handleSubmit(onSubmit)}
                     className="grid gap-4"
                 >
-                    <DialogHeader>
-                        <DialogTitle>Sign in</DialogTitle>
-                        <DialogDescription>
-                            Sign in with your username and password.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4">
-                        <div className="grid gap-3">
-                            <FieldGroup>
+                    <FieldGroup>
+                        <DialogHeader>
+                            <DialogTitle>Sign in</DialogTitle>
+                            <DialogDescription>
+                                Sign in with your username and password.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4">
+                            <div className="grid gap-3">
                                 <Controller
                                     name="username"
                                     control={form.control}
@@ -105,6 +104,7 @@ export default function SignInDialog({
                                                 aria-invalid={
                                                     fieldState.invalid
                                                 }
+                                                autoComplete="off"
                                             />
                                             {fieldState.invalid && (
                                                 <FieldError
@@ -114,10 +114,8 @@ export default function SignInDialog({
                                         </Field>
                                     )}
                                 />
-                            </FieldGroup>
-                        </div>
-                        <div className="grid gap-3">
-                            <FieldGroup>
+                            </div>
+                            <div className="grid gap-3">
                                 <Controller
                                     name="password"
                                     control={form.control}
@@ -133,6 +131,7 @@ export default function SignInDialog({
                                                 aria-invalid={
                                                     fieldState.invalid
                                                 }
+                                                autoComplete="off"
                                             />
                                             {fieldState.invalid && (
                                                 <FieldError
@@ -142,37 +141,40 @@ export default function SignInDialog({
                                         </Field>
                                     )}
                                 />
-                            </FieldGroup>
-                        </div>
-                        {errorMessage ? (
-                            <p className="text-sm text-red-600">
-                                {errorMessage}
+                            </div>
+                            {errorMessage ? (
+                                <p className="text-sm text-red-600">
+                                    {errorMessage}
+                                </p>
+                            ) : null}
+                            <p className="text-muted-foreground">
+                                Not a member?{" "}
+                                <Link
+                                    href="/signup"
+                                    className="text-primary hover:underline"
+                                    onClick={() => onOpenChange(false)}
+                                >
+                                    Click here to sign up
+                                </Link>
+                                .
                             </p>
-                        ) : null}
-                        <p className="text-muted-foreground">
-                            Not a member?{" "}
-                            <Link
-                                href="/auth/sign-up"
-                                className="text-primary hover:underline"
+                        </div>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant="outline">Cancel</Button>
+                            </DialogClose>
+                            <Button
+                                type="submit"
+                                disabled={
+                                    form.formState.isSubmitting || isLoading
+                                }
                             >
-                                Click here to sign up
-                            </Link>
-                            .
-                        </p>
-                    </div>
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline">Cancel</Button>
-                        </DialogClose>
-                        <Button
-                            type="submit"
-                            disabled={form.formState.isSubmitting || isLoading}
-                        >
-                            {form.formState.isSubmitting || isLoading
-                                ? "Signing in..."
-                                : "Sign in"}
-                        </Button>
-                    </DialogFooter>
+                                {form.formState.isSubmitting || isLoading
+                                    ? "Signing in..."
+                                    : "Sign in"}
+                            </Button>
+                        </DialogFooter>
+                    </FieldGroup>
                 </form>
             </DialogContent>
         </Dialog>
