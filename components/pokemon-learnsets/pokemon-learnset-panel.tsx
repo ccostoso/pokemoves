@@ -8,6 +8,7 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { HTMLAttributes, ReactNode, useEffect, useRef } from "react"
 import PokemonLearnsetCard from "./pokemon-learnset-card"
+import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 
 type PokemonLearnsetPanelProps = {
     learnsetList: LevelUpLearnset[],
@@ -48,16 +49,19 @@ export default function PokemonLearnsetPanel({
     onRemoveLearnset,
     onReorderLearnset,
 }: PokemonLearnsetPanelProps) {
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const scrollAreaRef = useRef<HTMLDivElement>(null)
     const previousLengthRef = useRef(learnsetList.length)
 
     useEffect(() => {
         if (learnsetList.length > previousLengthRef.current) {
-            const container = scrollContainerRef.current
-            if (container) {
+            const viewport = scrollAreaRef.current?.querySelector(
+                "[data-slot='scroll-area-viewport']",
+            ) as HTMLDivElement | null
+
+            if (viewport) {
                 requestAnimationFrame(() => {
-                    container.scrollTo({
-                        left: container.scrollWidth,
+                    viewport.scrollTo({
+                        left: viewport.scrollWidth,
                         behavior: "smooth",
                     })
                 })
@@ -78,10 +82,7 @@ export default function PokemonLearnsetPanel({
     }
 
     return (
-        <div
-            ref={scrollContainerRef}
-            className="w-full max-w-full overflow-x-auto"
-        >
+        <ScrollArea ref={scrollAreaRef} className="w-full max-w-full">
             {learnsetList.length > 0 ? (
                 <DndContext onDragEnd={handleDragEnd}>
                     <SortableContext
@@ -114,6 +115,7 @@ export default function PokemonLearnsetPanel({
                     No results to display.
                 </p>
             )}
-        </div>
+            <ScrollBar orientation="horizontal" className="h-2" />
+        </ScrollArea>
     )
 }
