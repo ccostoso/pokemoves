@@ -157,7 +157,9 @@ const mapLevelUpResponse = (
 
     const id = crypto.randomUUID()
 
-    return { pokemon, versionGroupName, id }
+    const pokemonName = pokemon[0]?.name ?? ""
+
+    return { pokemon, pokemonName, versionGroupName, id }
 }
 
 // --- Exported server actions ---

@@ -29,6 +29,7 @@ export type LevelUpLearnset = {
             pokemonspeciesnames: LocalizedName[]
         }
     }>,
+    pokemonName: string,
     versionGroupName: string,
     id: string // Unique ID for DnD tracking
 }

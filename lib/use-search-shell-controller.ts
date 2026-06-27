@@ -170,6 +170,22 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
 
     const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
+
+        const isDuplicate = state.learnsetList.some(
+            (learnset) =>
+                learnset.pokemonName === state.pokemonName &&
+            learnset.versionGroupName === state.versionGroupName
+        )
+
+        if (isDuplicate) {
+            dispatch({
+                type: "submitFailed",
+                message: `${state.pokemonName} in ${state.versionGroupName} is already in this deck.`,
+            })
+            return
+        }
+
+
         dispatch({ type: "submitStarted" })
 
         try {
