@@ -8,47 +8,47 @@ import { SubmitEventHandler, useEffect, useReducer } from "react"
 type RequestState =
     | { status: "idle" }
     | { status: "loading" }
-    | { status: "error"; message: string }
+    | { status: "error", message: string }
 
 type SearchShellState = {
-    pokemonList: PokemonListItem[]
-    versionGroupName: string
-    pokemonName: string
-    learnsetList: LevelUpLearnset[]
+    pokemonList: PokemonListItem[],
+    versionGroupName: string,
+    pokemonName: string,
+    learnsetList: LevelUpLearnset[],
     requestState: RequestState
 }
 
 type SearchShellAction =
-    | { type: "versionGroupChanged"; versionGroupName: string }
-    | { type: "pokemonNameChanged"; pokemonName: string }
-    | { type: "pokemonListLoaded"; pokemonList: PokemonListItem[] }
+    | { type: "versionGroupChanged", versionGroupName: string }
+    | { type: "pokemonNameChanged", pokemonName: string }
+    | { type: "pokemonListLoaded", pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
     | { type: "submitStarted" }
-    | { type: "submitSucceeded"; learnset: LevelUpLearnset }
-    | { type: "submitFailed"; message: string }
-    | { type: "learnsetRemoved"; indexToRemove: number }
-    | { type: "learnsetReordered"; fromIndex: number; toIndex: number }
+    | { type: "submitSucceeded", learnset: LevelUpLearnset }
+    | { type: "submitFailed", message: string }
+    | { type: "learnsetRemoved", indexToRemove: number }
+    | { type: "learnsetReordered", fromIndex: number, toIndex: number }
 
 type UseSearchShellControllerReturn = {
     // form state
-    pokemonList: PokemonListItem[]
-    versionGroupName: string
-    pokemonName: string
+    pokemonList: PokemonListItem[],
+    versionGroupName: string,
+    pokemonName: string,
 
     // learnset list state
-    learnsetList: LevelUpLearnset[]
+    learnsetList: LevelUpLearnset[],
 
     // request/derived UI state
-    isSubmitting: boolean
-    error: string | null
+    isSubmitting: boolean,
+    error: string | null,
 
     // setters used by SearchPanel inputs
-    setVersionGroupName: (name: string) => void
-    setPokemonName: (name: string) => void
+    setVersionGroupName: (name: string) => void,
+    setPokemonName: (name: string) => void,
 
     // handlers used by child components
-    handleSubmit: SubmitEventHandler<HTMLFormElement>
-    handleRemoveLearnset: (indexToRemove: number) => void
+    handleSubmit: SubmitEventHandler<HTMLFormElement>,
+    handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 

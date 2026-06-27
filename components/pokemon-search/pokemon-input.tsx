@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import {
     Combobox,
@@ -14,8 +14,8 @@ import { getPokemonDisplayName } from "@/lib/utils"
 import { PokemonListItem } from "@/lib/types"
 
 type PokemonInputProps = {
-    pokemonList: PokemonListItem[]
-    value: string
+    pokemonList: PokemonListItem[],
+    value: string,
     onChange: (value: string) => void
 }
 
@@ -39,10 +39,6 @@ export default function PokemonInput({
         canonicalToDisplay.get(value) ?? value,
     )
 
-    useEffect(() => {
-        setInputText(canonicalToDisplay.get(value) ?? value)
-    }, [value, canonicalToDisplay])
-
     return (
         <Field>
             <FieldLabel htmlFor="name">Pokémon Name</FieldLabel>
@@ -59,7 +55,7 @@ export default function PokemonInput({
                 <ComboboxInput
                     id="name"
                     autoComplete="off"
-                    placeholder="Pikachu"
+                    placeholder="Enter Pokémon name"
                     className="w-full"
                     value={inputText}
                     onChange={(e) => setInputText(e.target.value)}
@@ -76,8 +72,7 @@ export default function PokemonInput({
                 </ComboboxContent>
             </Combobox>
             <FieldDescription>
-                Enter the name or National Dex number of the Pokémon you want to
-                search.
+                Enter the name of the Pokémon to look up.
             </FieldDescription>
         </Field>
     )

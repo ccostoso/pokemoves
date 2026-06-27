@@ -10,13 +10,13 @@ import { SubmitEventHandler } from "react"
 import { PokemonListItem } from "@/lib/types"
 
 type SearchPanelProps = {
-    pokemonList: PokemonListItem[]
-    versionGroupName: string
-    setVersionGroupName: (name: string) => void
-    pokemonName: string
-    setPokemonName: (name: string) => void
-    isSubmitting: boolean
-    error: string | null
+    pokemonList: PokemonListItem[],
+    versionGroupName: string,
+    setVersionGroupName: (name: string) => void,
+    pokemonName: string,
+    setPokemonName: (name: string) => void,
+    isSubmitting: boolean,
+    error: string | null,
     handleSubmit: SubmitEventHandler<HTMLFormElement>
 }
 
@@ -43,6 +43,7 @@ export default function SearchPanel({
                             onChange={setVersionGroupName}
                         />
                         <PokemonInput
+                            key={versionGroupName}
                             pokemonList={pokemonList}
                             value={pokemonName}
                             onChange={setPokemonName}
