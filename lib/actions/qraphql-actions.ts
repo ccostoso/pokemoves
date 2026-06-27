@@ -17,24 +17,26 @@ import { LevelUpLearnset, PokemonListItem } from "../types"
 
 // --- Shared primitives ---
 
-// Represents the name of a Pokémon or version group in a specific region/language, 
+// Represents the name of a Pokémon or version group in a specific region/language,
 // as returned by the API. We only care about English names for now.
 export type LocalizedName = { name: string }
 
 // --- Pokemon list types ---
 
 type RawPokemonListItem = {
-    id: number
-    name: string
+    id: number,
+    name: string,
     // v1beta2
-    pokemonspecy?: { pokemonspeciesnames: LocalizedName[] }
+    pokemonspecy?: { pokemonspeciesnames: LocalizedName[] },
     // v1beta
-    pokemon_v2_pokemonspecy?: { pokemon_v2_pokemonspeciesnames: LocalizedName[] }
+    pokemon_v2_pokemonspecy?: {
+        pokemon_v2_pokemonspeciesnames: LocalizedName[]
+    }
 }
 
 type RawPokemonListResponse = {
     // v1beta2
-    pokemon?: RawPokemonListItem[]
+    pokemon?: RawPokemonListItem[],
     // v1beta
     pokemon_v2_pokemon?: RawPokemonListItem[]
 }
@@ -42,55 +44,57 @@ type RawPokemonListResponse = {
 // --- Level-up move types ---
 
 type RawMove = {
-    name: string
+    name: string,
     // v1beta2
-    type?: { name: string }
-    movenames?: LocalizedName[]
+    type?: { name: string },
+    movenames?: LocalizedName[],
     // v1beta
-    pokemon_v2_type?: { name: string }
+    pokemon_v2_type?: { name: string },
     pokemon_v2_movenames?: LocalizedName[]
 }
 
 type RawPokemonMove = {
-    level: number
+    level: number,
     // v1beta2
-    movelearnmethod?: { name: string }
-    move?: RawMove
+    movelearnmethod?: { name: string },
+    move?: RawMove,
     // v1beta
-    pokemon_v2_movelearnmethod?: { name: string }
+    pokemon_v2_movelearnmethod?: { name: string },
     pokemon_v2_move?: RawMove
 }
 
 type RawLevelUpPokemon = {
-    id: number
-    name: string
+    id: number,
+    name: string,
     // v1beta2
-    pokemonmoves?: RawPokemonMove[]
-    pokemonspecy?: RawSpecy
+    pokemonmoves?: RawPokemonMove[],
+    pokemonspecy?: RawSpecy,
     // v1beta
-    pokemon_v2_pokemonmoves?: RawPokemonMove[]
+    pokemon_v2_pokemonmoves?: RawPokemonMove[],
     pokemon_v2_pokemonspecy?: RawSpecy
 }
 
 type RawSpecy = {
     // v1beta2
-    pokemonspeciesnames?: LocalizedName[]
+    pokemonspeciesnames?: LocalizedName[],
     // v1beta
     pokemon_v2_pokemonspeciesnames?: LocalizedName[]
 }
 
 type RawLevelUpResponse = {
     // v1beta2
-    pokemon?: RawLevelUpPokemon[]
-    pokemonspecy?: RawSpecy[]
+    pokemon?: RawLevelUpPokemon[],
+    pokemonspecy?: RawSpecy[],
     // v1beta
-    pokemon_v2_pokemon?: RawLevelUpPokemon[]
+    pokemon_v2_pokemon?: RawLevelUpPokemon[],
     pokemon_v2_pokemonspecy?: RawSpecy[]
 }
 
 // --- Mapping functions ---
 
-const mapPokemonListResponse = (response: RawPokemonListResponse): PokemonListItem[] => {
+const mapPokemonListResponse = (
+    response: RawPokemonListResponse,
+): PokemonListItem[] => {
     const pokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
 
     return pokemon.map((p) => ({
@@ -110,26 +114,37 @@ const mapLevelUpResponse = (
     versionGroupName: string,
 ): LevelUpLearnset => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
-    const fallbackSpecy =
-        (response.pokemonspecy ?? response.pokemon_v2_pokemonspecy ?? [])[0]
+    const fallbackSpecy = (response.pokemonspecy ??
+        response.pokemon_v2_pokemonspecy ??
+        [])[0]
 
     const pokemon = rawPokemon.map((p) => ({
         id: p.id,
         name: p.name,
-        pokemonmoves: (p.pokemonmoves ?? p.pokemon_v2_pokemonmoves ?? []).map((m) => ({
-            level: m.level,
-            movelearnmethod: {
-                name: m.movelearnmethod?.name ?? m.pokemon_v2_movelearnmethod?.name ?? "",
-            },
-            move: {
-                name: m.move?.name ?? m.pokemon_v2_move?.name ?? "",
-                type: {
-                    name: m.move?.type?.name ?? m.pokemon_v2_move?.pokemon_v2_type?.name ?? "",
+        pokemonmoves: (p.pokemonmoves ?? p.pokemon_v2_pokemonmoves ?? []).map(
+            (m) => ({
+                level: m.level,
+                movelearnmethod: {
+                    name:
+                        m.movelearnmethod?.name ??
+                        m.pokemon_v2_movelearnmethod?.name ??
+                        "",
                 },
-                movenames:
-                    m.move?.movenames ?? m.pokemon_v2_move?.pokemon_v2_movenames ?? [],
-            },
-        })),
+                move: {
+                    name: m.move?.name ?? m.pokemon_v2_move?.name ?? "",
+                    type: {
+                        name:
+                            m.move?.type?.name ??
+                            m.pokemon_v2_move?.pokemon_v2_type?.name ??
+                            "",
+                    },
+                    movenames:
+                        m.move?.movenames ??
+                        m.pokemon_v2_move?.pokemon_v2_movenames ??
+                        [],
+                },
+            }),
+        ),
         pokemonspecy: {
             pokemonspeciesnames:
                 p.pokemonspecy?.pokemonspeciesnames ??
@@ -151,11 +166,11 @@ export const getAllPokemonByVersionGroupName = unstable_cache(
     async (versionGroupName: string): Promise<PokemonListItem[]> => {
         const response = await gqlClient.request<RawPokemonListResponse>(
             GET_POKEMON_BY_VERSIONGROUP_NAME,
-            { versionGroupName }
+            { versionGroupName },
         )
 
         if (!response.pokemon && !response.pokemon_v2_pokemon) {
-            throw new Error('Empty response, skipping cache')
+            throw new Error("Empty response, skipping cache")
         }
 
         return mapPokemonListResponse(response)
@@ -165,7 +180,7 @@ export const getAllPokemonByVersionGroupName = unstable_cache(
     {
         tags: [POKEMON_LIST_TAG],
         revalidate: 60 * 60 * 24 * 7, // one week
-    }
+    },
 )
 
 export const getLevelUpMovesByPokemonNameAndVersionGroup = unstable_cache(
@@ -175,11 +190,11 @@ export const getLevelUpMovesByPokemonNameAndVersionGroup = unstable_cache(
     ): Promise<LevelUpLearnset> => {
         const response = await gqlClient.request<RawLevelUpResponse>(
             GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
-            { pokemonName, versionGroupName }
+            { pokemonName, versionGroupName },
         )
 
         if (!response.pokemon && !response.pokemon_v2_pokemon) {
-            throw new Error('Empty response, skipping cache')
+            throw new Error("Empty response, skipping cache")
         }
 
         return mapLevelUpResponse(response, versionGroupName)
@@ -188,5 +203,5 @@ export const getLevelUpMovesByPokemonNameAndVersionGroup = unstable_cache(
     {
         tags: [MOVES_TAG],
         revalidate: 60 * 60 * 24 * 7,
-    }
+    },
 )

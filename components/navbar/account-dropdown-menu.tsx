@@ -16,9 +16,9 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 type AccountDropdownMenuProps = {
-    activeButton: string | null
-    setActiveButton: (button: string | null) => void
-    isAccountMenuOpen: boolean
+    activeButton: string | null,
+    setActiveButton: (button: string | null) => void,
+    isAccountMenuOpen: boolean,
     handleAccountMenuOpenChange: (open: boolean) => void
 }
 

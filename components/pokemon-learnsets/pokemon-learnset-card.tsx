@@ -7,8 +7,8 @@ import { Card, CardContent, CardHeader } from "../ui/card"
 import PokemonLearnsetTable from "./pokemon-learnset-table"
 
 type PokemonLearnsetCardProps = {
-    item: LevelUpLearnset | null
-    onRemove: () => void
+    item: LevelUpLearnset | null,
+    onRemove: () => void,
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
 

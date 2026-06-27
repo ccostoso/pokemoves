@@ -3,32 +3,32 @@ import { LocalizedName } from "./actions/qraphql-actions"
 // --- Normalized output types for frontend ---
 
 export type PokemonListItem = {
-    id: number
-    name: string
+    id: number,
+    name: string,
     pokemonspecy: {
         pokemonspeciesnames: LocalizedName[]
     }
 }
 
 export type LevelUpMove = {
-    level: number
-    movelearnmethod: { name: string }
+    level: number,
+    movelearnmethod: { name: string },
     move: {
-        name: string
-        type: { name: string }
+        name: string,
+        type: { name: string },
         movenames: LocalizedName[]
     }
 }
 
 export type LevelUpLearnset = {
     pokemon: Array<{
-        id: number
-        name: string
-        pokemonmoves: LevelUpMove[]
+        id: number,
+        name: string,
+        pokemonmoves: LevelUpMove[],
         pokemonspecy: {
             pokemonspeciesnames: LocalizedName[]
         }
-    }>
-    versionGroupName: string
+    }>,
+    versionGroupName: string,
     id: string // Unique ID for DnD tracking
 }

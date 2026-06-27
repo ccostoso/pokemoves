@@ -10,8 +10,8 @@ import { HTMLAttributes, ReactNode, useEffect, useRef } from "react"
 import PokemonLearnsetCard from "./pokemon-learnset-card"
 
 type PokemonLearnsetPanelProps = {
-    learnsetList: LevelUpLearnset[]
-    onRemoveLearnset: (index: number) => void
+    learnsetList: LevelUpLearnset[],
+    onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
@@ -20,7 +20,7 @@ function SortableItem({
     id,
     children,
 }: {
-    id: string
+    id: string,
     children: (dragHandleProps: HTMLAttributes<HTMLButtonElement>) => ReactNode
 }) {
     const { attributes, listeners, setNodeRef, transform, transition } =

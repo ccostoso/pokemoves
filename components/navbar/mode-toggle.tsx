@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 type ModeToggleProps = {
-    isActive?: boolean
-    onActivate?: () => void
+    isActive?: boolean,
+    onActivate?: () => void,
     onOpenChange?: (open: boolean) => void
 }
 

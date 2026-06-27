@@ -1,8 +1,8 @@
 import { authClient } from "@/lib/auth-client"
 
 export type SignInInput = {
-    username: string
-    password: string
+    username: string,
+    password: string,
     callbackURL?: string
 }
 

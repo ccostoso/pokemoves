@@ -1,11 +1,11 @@
 import { authClient } from "@/lib/auth-client"
 
 export type SignUpInput = {
-    email: string
-    username: string
-    password: string
-    name: string
-    image?: string
+    email: string,
+    username: string,
+    password: string,
+    name: string,
+    image?: string,
     callbackURL?: string
 }
 

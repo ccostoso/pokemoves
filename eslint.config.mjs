@@ -23,6 +23,7 @@ const eslintConfig = defineConfig([
                     multilineDetection: "brackets",
                 },
             ],
+            "@stylistic/indent": ["error", 4],
         },
     },
 ])

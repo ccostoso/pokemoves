@@ -1,44 +1,41 @@
 import { getServerSession } from "@/lib/auth-server"
 
 export default async function UserPage() {
+    let session: Awaited<ReturnType<typeof getServerSession>> | null = null
+    let authFailed = false
     try {
-        const session = await getServerSession()
-
-        if (!session?.user) {
-            return (
-                <main className="container mx-auto p-4 flex-1">
-                    <h1 className="text-4xl font-bold">User Dashboard</h1>
-                    <p className="mt-4 text-lg">
-                        You are not signed in. Please sign in to access your
-                        dashboard.
-                    </p>
-                </main>
-            )
-        }
-
-        return (
-            <main className="container mx-auto p-4 flex-1">
-                <h1 className="text-4xl font-bold">User Dashboard</h1>
-
-                <pre>{JSON.stringify(session, null, 2)}</pre>
-
-                <p className="mt-4 text-lg">
-                    Welcome to your dashboard! Here you can manage your account
-                    and view your Pokemon move comparisons.
-                </p>
-            </main>
-        )
+        session = await getServerSession()
     } catch (error) {
-        const errorMessage =
-            error instanceof Error ? error.message : "Unknown error"
+        authFailed = true
+    }
 
+    if (!session?.user) {
         return (
             <main className="container mx-auto p-4 flex-1">
                 <h1 className="text-4xl font-bold">User Dashboard</h1>
-                <p className="mt-4 text-lg text-red-500">
-                    Error loading session data: {errorMessage}
+                <p className="mt-4 text-lg">
+                    You are not signed in. Please sign in to access your
+                    dashboard.
                 </p>
+                {authFailed && (
+                    <p className="mt-2 text-lg text-red-500">
+                        Error retrieving session data. Please try again.
+                    </p>
+                )}
             </main>
         )
     }
+
+    return (
+        <main className="container mx-auto p-4 flex-1">
+            <h1 className="text-4xl font-bold">User Dashboard</h1>
+
+            <pre>{JSON.stringify(session, null, 2)}</pre>
+
+            <p className="mt-4 text-lg">
+                Welcome to your dashboard! Here you can manage your account and
+                view your Pokemon move comparisons.
+            </p>
+        </main>
+    )
 }

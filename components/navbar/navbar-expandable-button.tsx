@@ -3,11 +3,11 @@ import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
 
 type NavbarExpandableButtonProps = {
-    label: string
-    icon: ReactNode
-    isActive: boolean
-    onActivate: () => void
-    activateOnFocus?: boolean
+    label: string,
+    icon: ReactNode,
+    isActive: boolean,
+    onActivate: () => void,
+    activateOnFocus?: boolean,
     expandedWidthClass?: string
 } & Omit<ComponentProps<typeof Button>, "children">
 

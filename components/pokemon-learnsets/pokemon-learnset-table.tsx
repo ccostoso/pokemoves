@@ -10,19 +10,19 @@ import Image from "next/image"
 import TypeSprite from "../type-sprite"
 
 type Move = {
-    level: number
+    level: number,
     move: {
         type: {
             name: string
-        }
+        },
         movenames: { name: string }[]
     }
 }
 
 type PokemonLearnsetTableProps = {
-    pokemonName: string
-    versionGroupName: string
-    pokemonMoves: Move[]
+    pokemonName: string,
+    versionGroupName: string,
+    pokemonMoves: Move[],
     pokemonSpriteUrl: string
 }
 
@@ -65,7 +65,7 @@ export default function PokemonLearnsetTable({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {pokemonMoves.map((move: Move, index: number) => (
+                {pokemonMoves.map((move: Move) => (
                     <TableRow
                         key={`${move.move.movenames[0]?.name}-${move.level}`}
                     >

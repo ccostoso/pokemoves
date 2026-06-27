@@ -10,7 +10,7 @@ import {
 import { versionGroupList } from "@/lib/data/versiongroup-list"
 
 type VersionInputProps = {
-    value: string
+    value: string,
     onChange: (value: string) => void
 }
 
