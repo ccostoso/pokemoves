@@ -1,4 +1,3 @@
-import { SidebarProvider } from "@/components/ui/sidebar"
 import AccountSidebar from "@/app/account/components/account-sidebar"
 
 
@@ -8,11 +7,9 @@ export default function AccountLayout({
     children: React.ReactNode
 }>) {
     return (
-        <SidebarProvider>
-            <main className="container mx-auto p-4 flex-1 flex flex-row gap-4">
-                <AccountSidebar />
-                {children}
-            </main>
-        </SidebarProvider>
+        <main className="container mx-auto p-4 flex-1 flex flex-row gap-4 items-stretch">
+            <AccountSidebar />
+            {children}
+        </main>
     )
 }
