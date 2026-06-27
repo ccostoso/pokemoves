@@ -1,5 +1,8 @@
-import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndVersionGroup } from "./actions/qraphql-actions";
-import { LevelUpLearnset, PokemonListItem } from "./types";
+import {
+    getAllPokemonByVersionGroupName,
+    getLevelUpMovesByPokemonNameAndVersionGroup,
+} from "./actions/qraphql-actions"
+import { LevelUpLearnset, PokemonListItem } from "./types"
 import { SubmitEventHandler, useEffect, useReducer } from "react"
 
 type RequestState =
@@ -59,6 +62,7 @@ function searchShellReducer(
                 ...state,
                 versionGroupName: action.versionGroupName,
                 pokemonList: [],
+                pokemonName: "",
             }
 
         case "pokemonNameChanged":
@@ -141,9 +145,14 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
 
         const loadPokemon = async () => {
             try {
-                const pokemon = await getAllPokemonByVersionGroupName(state.versionGroupName)
+                const pokemon = await getAllPokemonByVersionGroupName(
+                    state.versionGroupName,
+                )
                 if (!cancelled) {
-                    dispatch({ type: "pokemonListLoaded", pokemonList: pokemon })
+                    dispatch({
+                        type: "pokemonListLoaded",
+                        pokemonList: pokemon,
+                    })
                 }
             } catch {
                 if (!cancelled) {
@@ -170,11 +179,15 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
                     state.versionGroupName,
                 )
 
-
             console.log("pokemonMoves", pokemonMoves)
-            console.log("pokemonMoves.pokemon.length", pokemonMoves.pokemon.length)
+            console.log(
+                "pokemonMoves.pokemon.length",
+                pokemonMoves.pokemon.length,
+            )
 
-            const hasMoves = pokemonMoves.pokemon.some((p) => p.pokemonmoves.length > 0)
+            const hasMoves = pokemonMoves.pokemon.some(
+                (p) => p.pokemonmoves.length > 0,
+            )
 
             if (!hasMoves) {
                 dispatch({
