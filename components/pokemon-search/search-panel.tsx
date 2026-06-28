@@ -16,6 +16,7 @@ type SearchPanelProps = {
     pokemonName: string,
     setPokemonName: (name: string) => void,
     isSubmitting: boolean,
+    pokemonListLoading: boolean,
     error: string | null,
     handleSubmit: SubmitEventHandler<HTMLFormElement>
 }
@@ -27,6 +28,7 @@ export default function SearchPanel({
     pokemonName,
     setPokemonName,
     isSubmitting,
+    pokemonListLoading,
     error,
     handleSubmit,
 }: SearchPanelProps) {
@@ -47,6 +49,7 @@ export default function SearchPanel({
                             pokemonList={pokemonList}
                             value={pokemonName}
                             onChange={setPokemonName}
+                            pokemonListLoading={pokemonListLoading}
                         />
                         <Button
                             type="submit"

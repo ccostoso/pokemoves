@@ -57,6 +57,9 @@ export default function AccountDropdownMenu({
                     <DropdownMenuItem asChild>
                         <Link href="/account">Account</Link>
                     </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/account/decks">Decks</Link>
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>

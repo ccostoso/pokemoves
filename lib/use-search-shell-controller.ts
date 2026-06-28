@@ -15,12 +15,14 @@ type SearchShellState = {
     versionGroupName: string,
     pokemonName: string,
     learnsetList: LevelUpLearnset[],
-    requestState: RequestState
+    requestState: RequestState,
+    isPokemonListLoading: boolean
 }
 
 type SearchShellAction =
     | { type: "versionGroupChanged", versionGroupName: string }
     | { type: "pokemonNameChanged", pokemonName: string }
+    | { type: "pokemonListLoading" }
     | { type: "pokemonListLoaded", pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
     | { type: "submitStarted" }
@@ -40,6 +42,7 @@ type UseSearchShellControllerReturn = {
 
     // request/derived UI state
     isSubmitting: boolean,
+    pokemonListLoading: boolean,
     error: string | null,
 
     // setters used by SearchPanel inputs
@@ -70,17 +73,25 @@ function searchShellReducer(
                 ...state,
                 pokemonName: action.pokemonName,
             }
+        
+        case "pokemonListLoading":
+            return {
+                ...state,
+                isPokemonListLoading: true,
+            }
 
         case "pokemonListLoaded":
             return {
                 ...state,
                 pokemonList: action.pokemonList,
+                isPokemonListLoading: false,
             }
 
         case "pokemonListFailed":
             return {
                 ...state,
                 pokemonList: [],
+                isPokemonListLoading: false,
             }
 
         case "submitStarted":
@@ -133,6 +144,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         pokemonName: "",
         learnsetList: [],
         requestState: { status: "idle" },
+        isPokemonListLoading: false,
     })
 
     useEffect(() => {
@@ -144,6 +156,8 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         let cancelled = false
 
         const loadPokemon = async () => {
+            dispatch({ type: "pokemonListLoading" })
+
             try {
                 const pokemon = await getAllPokemonByVersionGroupName(
                     state.versionGroupName,
@@ -231,6 +245,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         pokemonName: state.pokemonName,
         learnsetList: state.learnsetList,
         isSubmitting: state.requestState.status === "loading",
+        pokemonListLoading: state.isPokemonListLoading,
         error:
             state.requestState.status === "error"
                 ? state.requestState.message

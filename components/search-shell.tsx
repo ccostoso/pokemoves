@@ -13,6 +13,7 @@ export default function SearchShell() {
         setPokemonName,
         learnsetList,
         error,
+        pokemonListLoading,
         isSubmitting,
         handleSubmit,
         handleRemoveLearnset,
@@ -30,6 +31,7 @@ export default function SearchShell() {
                         pokemonName={pokemonName}
                         setPokemonName={setPokemonName}
                         isSubmitting={isSubmitting}
+                        pokemonListLoading={pokemonListLoading}
                         error={error}
                         handleSubmit={handleSubmit}
                     />
