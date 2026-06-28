@@ -33,3 +33,9 @@ export type LevelUpLearnset = {
     versionGroupName: string,
     id: string // Unique ID for DnD tracking
 }
+
+export type LearnsetDeckItemData = {
+    pokemonName: string,
+    versionGroupName: string,
+    sortOrder: number
+}

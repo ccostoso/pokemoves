@@ -33,6 +33,7 @@ export default function SearchPanel({
     handleSubmit,
 }: SearchPanelProps) {
     return (
+
         <Card className="w-full max-w-md mx-auto">
             <CardHeader className="text-center text-2xl font-bold">
                 <CardTitle>Enter Pokémon Details</CardTitle>
@@ -56,9 +57,9 @@ export default function SearchPanel({
                             variant="default"
                             disabled={
                                 isSubmitting ||
-                                pokemonList.length === 0 ||
-                                !versionGroupName ||
-                                !pokemonName
+                                    pokemonList.length === 0 ||
+                                    !versionGroupName ||
+                                    !pokemonName
                             }
                         >
                             <Plus className="mr-2 h-4 w-4" /> Add to Panel
