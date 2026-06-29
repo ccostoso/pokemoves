@@ -5,6 +5,7 @@ import PokemonLearnsetPanel from "./pokemon-learnsets/pokemon-learnset-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 import SavePanel from "./pokemon-search/save-panel"
 import { authClient } from "@/lib/auth-client"
+import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
 
 export default function SearchShell() {
     const {
@@ -47,7 +48,7 @@ export default function SearchShell() {
                     )}
                 </aside>
                 <section className="flex-1 min-w-0 overflow-x-hidden">
-                    <PokemonLearnsetPanel
+                    <PokemonLearnsetWindow
                         learnsetList={learnsetList}
                         onRemoveLearnset={handleRemoveLearnset}
                         onReorderLearnset={handleReorderLearnset}

@@ -16,7 +16,6 @@ type PokemonLearnsetPanelProps = {
     onReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
-// SortableItem component to wrap each learnset card and provide drag-and-drop functionality
 function SortableItem({
     id,
     children,
@@ -89,7 +88,7 @@ export default function PokemonLearnsetPanel({
                         items={learnsetList.map((item) => item.id)}
                         strategy={horizontalListSortingStrategy}
                     >
-                        <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 pb-2">
+                        <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 px-4 pt-4 pb-2">
                             {learnsetList.map((item, index) => (
                                 <SortableItem key={item.id} id={item.id}>
                                     {(dragHandleProps) => (

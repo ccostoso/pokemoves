@@ -31,8 +31,8 @@ export default function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
             suppressHydrationWarning
         >
-            <TooltipProvider>
-                <body className="min-h-full flex flex-col">
+            <body className="min-h-full flex flex-col">
+                <TooltipProvider>
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"
@@ -42,8 +42,8 @@ export default function RootLayout({
                         <Navbar />
                         {children}
                     </ThemeProvider>
-                </body>
-            </TooltipProvider>
+                </TooltipProvider>
+            </body>
         </html>
     )
 }
