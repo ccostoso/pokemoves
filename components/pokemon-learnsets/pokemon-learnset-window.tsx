@@ -12,7 +12,7 @@ type PokemonLearnsetWindowProps = {
     
 }
 
-const TOOLBAR_TYPE: "owner" | "viewer" | "new" | "none" = "new"
+const TOOLBAR_TYPE: "owner" | "viewer" | "new" | "none" = "owner"
 
 export default function PokemonLearnsetWindow({
     learnsetList,

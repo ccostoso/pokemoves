@@ -2,8 +2,6 @@
 
 import SearchPanel from "./pokemon-search/search-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
-import SavePanel from "./pokemon-search/save-panel"
-import { authClient } from "@/lib/auth-client"
 import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
 
 export default function SearchShell() {
@@ -22,7 +20,6 @@ export default function SearchShell() {
         handleRemoveLearnset,
         handleReorderLearnset,
     } = useSearchShellController()
-    const { data: session } = authClient.useSession()
 
     return (
         <>

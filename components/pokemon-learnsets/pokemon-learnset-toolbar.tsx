@@ -19,7 +19,7 @@ export function OwnerPokemonLearnsetToolbar() {
             <form>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
-                        <Field className="flex-1 max-w-1/2">
+                        <Field className="flex-1">
                             <Input id="learnset-name" type="text" placeholder="Learnset Name..." />
                         </Field>
                     </FieldGroup>
@@ -41,18 +41,31 @@ export function OwnerPokemonLearnsetToolbar() {
                             </ButtonGroup>
                         </Field>
                         <Field orientation="horizontal" className="w-auto">
+                            
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button type="button"><Undo className="mr-2" />Revert</Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Discard all unsaved changes</p>
+                                </TooltipContent>
+                            </Tooltip>
+                                
+                            
+                        </Field>
+                        <Field orientation="horizontal" className="w-auto">
                             <ButtonGroup className="flex">
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button type="button"><Undo className="mr-2" />Revert</Button>
+                                        <Button type="button" variant="destructive"><Trash className="mr-2" />Delete</Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>Discard all unsaved changes</p>
+                                        <p>Delete this learnset</p>
                                     </TooltipContent>
                                 </Tooltip>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button><ChevronDownIcon /></Button>
+                                        <Button variant="destructive"><ChevronDownIcon /></Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-auto min-w-44">
                                         <Tooltip>
@@ -66,16 +79,6 @@ export function OwnerPokemonLearnsetToolbar() {
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </ButtonGroup>
-                        </Field>
-                        <Field orientation="horizontal" className="w-auto">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button type="button" variant="destructive"><Trash className="mr-2" />Delete</Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Delete this learnset</p>
-                                </TooltipContent>
-                            </Tooltip>
                         </Field>
                     </FieldGroup>
                 </FieldSet>

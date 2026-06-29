@@ -33,7 +33,7 @@ export default function RootLayout({
             suppressHydrationWarning
         >
             <body className="min-h-full flex flex-col">
-                <TooltipProvider>
+                <TooltipProvider delayDuration={500}>
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"
