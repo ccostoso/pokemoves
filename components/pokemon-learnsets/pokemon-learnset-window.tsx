@@ -1,6 +1,6 @@
 import { LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import PokemonLearnsetPanel from "./pokemon-learnset-panel"
-import { OwnerPokemonLearnsetToolbar, ViewerPokemonLearnsetToolbar, NewPokemonLearnsetToolbar } from "./pokemon-learnset-toolbar"
+import { OwnerLearnsetToolbar, ViewerLearnsetToolbar, NewLearnsetToolbar } from "./toolbars"
 
 type PokemonLearnsetWindowProps = {
     learnsetList: LevelUpLearnset[],
@@ -24,9 +24,9 @@ export default function PokemonLearnsetWindow({
 }: PokemonLearnsetWindowProps) {
     return (
         <div className="flex flex-col border rounded-xl">
-            {TOOLBAR_TYPE === "owner" && <OwnerPokemonLearnsetToolbar />}
-            {TOOLBAR_TYPE === "viewer" && <ViewerPokemonLearnsetToolbar />}
-            {TOOLBAR_TYPE === "new" && <NewPokemonLearnsetToolbar
+            {TOOLBAR_TYPE === "owner" && <OwnerLearnsetToolbar />}
+            {TOOLBAR_TYPE === "viewer" && <ViewerLearnsetToolbar />}
+            {TOOLBAR_TYPE === "new" && <NewLearnsetToolbar
                 learnsetList={learnsetList}
                 handleClearLearnsets={onClearLearnsets}
                 pokemonList={pokemonList}
