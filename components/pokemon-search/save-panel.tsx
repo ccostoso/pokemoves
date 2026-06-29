@@ -1,5 +1,5 @@
 import { SubmitEventHandler, useState } from "react"
-import { LearnsetDeckItemData, LevelUpLearnset } from "@/lib/types"
+import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { authClient } from "@/lib/auth-client"
 import { Input } from "../ui/input"
 import { saveLearnset } from "@/lib/actions/db-actions"
@@ -7,12 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field"
 import { Button } from "../ui/button"
 import { Save } from "lucide-react"
-import { pokemonList } from "@/lib/data/pokemon-list"
 import { Spinner } from "../ui/spinner"
 
 type SavePanelProps = {
     learnsetList: LevelUpLearnset[],
-    pokemonList: typeof pokemonList,
+    pokemonList: PokemonListItem[],
     isSubmitting: boolean
 }
 

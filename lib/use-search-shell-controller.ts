@@ -25,9 +25,10 @@ type SearchShellAction =
     | { type: "pokemonListLoading" }
     | { type: "pokemonListLoaded", pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
-    | { type: "submitStarted" }
-    | { type: "submitSucceeded", learnset: LevelUpLearnset }
-    | { type: "submitFailed", message: string }
+    | { type: "addLearnsetStarted" }
+    | { type: "addLearnsetSucceeded", learnset: LevelUpLearnset }
+    | { type: "addLearnsetFailed", message: string }
+    | { type: "learnsetCleared" }
     | { type: "learnsetRemoved", indexToRemove: number }
     | { type: "learnsetReordered", fromIndex: number, toIndex: number }
 
@@ -50,7 +51,8 @@ type UseSearchShellControllerReturn = {
     setPokemonName: (name: string) => void,
 
     // handlers used by child components
-    handleSubmit: SubmitEventHandler<HTMLFormElement>,
+    handleAddLearnset: SubmitEventHandler<HTMLFormElement>,
+    handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
@@ -94,23 +96,30 @@ function searchShellReducer(
                 isPokemonListLoading: false,
             }
 
-        case "submitStarted":
+        case "addLearnsetStarted":
             return {
                 ...state,
                 requestState: { status: "loading" },
             }
 
-        case "submitSucceeded":
+        case "addLearnsetSucceeded":
             return {
                 ...state,
                 requestState: { status: "idle" },
                 learnsetList: [...state.learnsetList, action.learnset],
             }
 
-        case "submitFailed":
+        case "addLearnsetFailed":
             return {
                 ...state,
                 requestState: { status: "error", message: action.message },
+            }
+
+        case "learnsetCleared":
+            return {
+                ...state,
+                learnsetList: [],
+                requestState: { status: "idle" },
             }
 
         case "learnsetRemoved":
@@ -182,7 +191,7 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
         }
     }, [state.versionGroupName])
 
-    const handleSubmit: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    const handleAddLearnset: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
         const isDuplicate = state.learnsetList.some(
@@ -193,14 +202,13 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
 
         if (isDuplicate) {
             dispatch({
-                type: "submitFailed",
+                type: "addLearnsetFailed",
                 message: `${state.pokemonName} in ${state.versionGroupName} is already in this deck.`,
             })
             return
         }
 
-
-        dispatch({ type: "submitStarted" })
+        dispatch({ type: "addLearnsetStarted" })
 
         try {
             const pokemonMoves =
@@ -221,19 +229,19 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
 
             if (!hasMoves) {
                 dispatch({
-                    type: "submitFailed",
+                    type: "addLearnsetFailed",
                     message: `No level-up moves found for ${state.pokemonName} in ${state.versionGroupName}.`,
                 })
                 return
             }
 
             dispatch({
-                type: "submitSucceeded",
+                type: "addLearnsetSucceeded",
                 learnset: { ...pokemonMoves, id: crypto.randomUUID() },
             })
         } catch {
             dispatch({
-                type: "submitFailed",
+                type: "addLearnsetFailed",
                 message: "An error occurred while searching. Please try again.",
             })
         }
@@ -254,7 +262,8 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
             dispatch({ type: "versionGroupChanged", versionGroupName: name }),
         setPokemonName: (name: string) =>
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
-        handleSubmit,
+        handleAddLearnset,
+        handleClearLearnsets: () => dispatch({ type: "learnsetCleared" }),
         handleRemoveLearnset: (indexToRemove: number) =>
             dispatch({ type: "learnsetRemoved", indexToRemove }),
         handleReorderLearnset: (fromIndex: number, toIndex: number) =>

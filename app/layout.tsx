@@ -4,6 +4,7 @@ import "./globals.css"
 import Navbar from "@/components/navbar/navbar"
 import { ThemeProvider } from "next-themes"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { Toaster } from "@/components/ui/sonner"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -41,6 +42,7 @@ export default function RootLayout({
                     >
                         <Navbar />
                         {children}
+                        <Toaster />
                     </ThemeProvider>
                 </TooltipProvider>
             </body>

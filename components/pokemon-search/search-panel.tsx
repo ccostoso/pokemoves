@@ -18,7 +18,7 @@ type SearchPanelProps = {
     isSubmitting: boolean,
     pokemonListLoading: boolean,
     error: string | null,
-    handleSubmit: SubmitEventHandler<HTMLFormElement>
+    handleAddLearnset: SubmitEventHandler<HTMLFormElement>
 }
 
 export default function SearchPanel({
@@ -30,7 +30,7 @@ export default function SearchPanel({
     isSubmitting,
     pokemonListLoading,
     error,
-    handleSubmit,
+    handleAddLearnset,
 }: SearchPanelProps) {
     return (
 
@@ -39,7 +39,7 @@ export default function SearchPanel({
                 <CardTitle>Enter Pokémon Details</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleAddLearnset}>
                     <FieldGroup>
                         <VersionInput
                             value={versionGroupName}
