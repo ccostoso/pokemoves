@@ -6,7 +6,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import Image from "next/image"
 import TypeSprite from "../type-sprite"
 
 type Move = {
@@ -20,48 +19,19 @@ type Move = {
 }
 
 type PokemonLearnsetTableProps = {
-    pokemonName: string,
-    versionGroupName: string,
-    pokemonMoves: Move[],
-    pokemonSpriteUrl: string
+    pokemonMoves: Move[]
 }
 
 export default function PokemonLearnsetTable({
-    pokemonName,
-    versionGroupName,
     pokemonMoves,
-    pokemonSpriteUrl,
 }: PokemonLearnsetTableProps) {
     return (
         <Table>
-            <TableHeader>
-                <TableRow>
-                    <TableHead colSpan={3} className="text-center">
-                        {pokemonSpriteUrl && (
-                            <Image
-                                src={pokemonSpriteUrl}
-                                alt={pokemonName}
-                                className="mx-auto"
-                                width={96}
-                                height={96}
-                            />
-                        )}
-                    </TableHead>
-                </TableRow>
-                <TableRow>
-                    <TableHead colSpan={3} className="text-center">
-                        <strong>{pokemonName}</strong>
-                    </TableHead>
-                </TableRow>
-                <TableRow>
-                    <TableHead colSpan={3} className="text-center">
-                        <strong>{versionGroupName}</strong>
-                    </TableHead>
-                </TableRow>
-                <TableRow>
-                    <TableHead className="text-center">Level</TableHead>
-                    <TableHead className="text-center">Move</TableHead>
-                    <TableHead className="text-center">Type</TableHead>
+            <TableHeader className="border-t-2">
+                <TableRow className="bg-muted hover:bg-muted">
+                    <TableHead className="text-center font-bold text-xs">LEVEL</TableHead>
+                    <TableHead className="font-bold text-xs">MOVE</TableHead>
+                    <TableHead className="text-center font-bold text-xs">TYPE</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
