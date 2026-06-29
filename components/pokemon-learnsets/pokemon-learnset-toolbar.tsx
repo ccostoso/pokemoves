@@ -5,6 +5,7 @@ import { Input } from "../ui/input"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { ChevronDownIcon, CopyX, Save, Trash, Undo, CopyCheck, BrushCleaning } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip"
+import { cn } from "@/lib/utils"
 
 export function OwnerPokemonLearnsetToolbar() {
     return (
@@ -77,21 +78,27 @@ export function OwnerPokemonLearnsetToolbar() {
     )
 }
 
-export function ViewerPokemonLearnsetToolbar() {
+type PokemonLearnsetToolbarProps = {
+    isLoggedIn?: boolean
+}
+
+export function ViewerPokemonLearnsetToolbar({ isLoggedIn = false }: PokemonLearnsetToolbarProps) {
     return (
         <div className="flex flex-col p-4 border-b">
             <form>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
-                        <Field className="flex-1 max-w-1/2">
+                        <Field className={cn("flex-1", isLoggedIn ? "max-w-full" : "max-w-1/2")}>
                             <Input id="learnset-name" type="text" placeholder="Learnset Name..." disabled />
                         </Field>
                     </FieldGroup>
-                    <FieldGroup className="flex flex-row justify-end gap-2">
-                        <Field orientation="horizontal" className="w-auto">
-                            <Button type="submit"><CopyCheck className="mr-2" />Save as duplicate</Button>
-                        </Field>
-                    </FieldGroup>
+                    {isLoggedIn && (
+                        <FieldGroup className="flex flex-row justify-end gap-2">
+                            <Field orientation="horizontal" className="w-auto">
+                                <Button type="submit"><CopyCheck className="mr-2" />Save as duplicate</Button>
+                            </Field>
+                        </FieldGroup>
+                    )}
                 </FieldSet>
             </form>
         </div>
@@ -110,17 +117,15 @@ export function NewPokemonLearnsetToolbar() {
                     </FieldGroup>
                     <FieldGroup className="flex flex-row justify-end gap-2">
                         <Field orientation="horizontal" className="w-auto">
-                            <ButtonGroup>
-                                <Button type="submit"><Save className="mr-2" />Save</Button>
-                                <Tooltip>
-                                    <TooltipTrigger asChild>
-                                        <Button className="whitespace-nowrap"><BrushCleaning className="mr-2" />Clear</Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>Remove all learnsets from this deck</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            </ButtonGroup>
+                            <Button type="submit"><Save className="mr-2" />Save learnset</Button>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button className="whitespace-nowrap"><BrushCleaning className="mr-2" />Clear</Button>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Remove all learnsets from this deck</p>
+                                </TooltipContent>
+                            </Tooltip>
                         </Field>
                     </FieldGroup>
                 </FieldSet>

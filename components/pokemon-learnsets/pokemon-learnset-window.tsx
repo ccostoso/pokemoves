@@ -8,7 +8,7 @@ type PokemonLearnsetWindowProps = {
     onReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
-const TOOLBAR_TYPE: "owner" | "viewer" | "new" | "none" = "none"
+const TOOLBAR_TYPE: "owner" | "viewer" | "new" | "none" = "new"
 
 export default function PokemonLearnsetWindow({
     learnsetList,
@@ -18,7 +18,7 @@ export default function PokemonLearnsetWindow({
     return (
         <div className="flex flex-col border rounded-xl">
             {TOOLBAR_TYPE === "owner" && <OwnerPokemonLearnsetToolbar />}
-            {TOOLBAR_TYPE === "viewer" && <ViewerPokemonLearnsetToolbar />}
+            {TOOLBAR_TYPE === "viewer" && <ViewerPokemonLearnsetToolbar isLoggedIn={true} />}
             {TOOLBAR_TYPE === "new" && <NewPokemonLearnsetToolbar />}
             <PokemonLearnsetPanel
                 learnsetList={learnsetList}
