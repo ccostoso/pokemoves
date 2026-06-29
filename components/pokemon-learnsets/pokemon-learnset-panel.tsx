@@ -8,10 +8,11 @@ import {
 import { CSS } from "@dnd-kit/utilities"
 import { HTMLAttributes, ReactNode, useEffect, useRef } from "react"
 import PokemonLearnsetCard from "./pokemon-learnset-card"
+import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 
-interface PokemonLearnsetPanelProps {
-    learnsetList: LevelUpLearnset[]
-    onRemoveLearnset: (index: number) => void
+type PokemonLearnsetPanelProps = {
+    learnsetList: LevelUpLearnset[],
+    onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void
 }
 
@@ -19,7 +20,7 @@ function SortableItem({
     id,
     children,
 }: {
-    id: string
+    id: string,
     children: (dragHandleProps: HTMLAttributes<HTMLButtonElement>) => ReactNode
 }) {
     const { attributes, listeners, setNodeRef, transform, transition } =
@@ -47,16 +48,19 @@ export default function PokemonLearnsetPanel({
     onRemoveLearnset,
     onReorderLearnset,
 }: PokemonLearnsetPanelProps) {
-    const scrollContainerRef = useRef<HTMLDivElement>(null)
+    const scrollAreaRef = useRef<HTMLDivElement>(null)
     const previousLengthRef = useRef(learnsetList.length)
 
     useEffect(() => {
         if (learnsetList.length > previousLengthRef.current) {
-            const container = scrollContainerRef.current
-            if (container) {
+            const viewport = scrollAreaRef.current?.querySelector(
+                "[data-slot='scroll-area-viewport']",
+            ) as HTMLDivElement | null
+
+            if (viewport) {
                 requestAnimationFrame(() => {
-                    container.scrollTo({
-                        left: container.scrollWidth,
+                    viewport.scrollTo({
+                        left: viewport.scrollWidth,
                         behavior: "smooth",
                     })
                 })
@@ -77,17 +81,14 @@ export default function PokemonLearnsetPanel({
     }
 
     return (
-        <div
-            ref={scrollContainerRef}
-            className="w-full max-w-full overflow-x-auto"
-        >
+        <ScrollArea ref={scrollAreaRef} className="w-full max-w-full">
             {learnsetList.length > 0 ? (
                 <DndContext onDragEnd={handleDragEnd}>
                     <SortableContext
                         items={learnsetList.map((item) => item.id)}
                         strategy={horizontalListSortingStrategy}
                     >
-                        <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 pb-2">
+                        <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 px-4 pt-4 pb-2">
                             {learnsetList.map((item, index) => (
                                 <SortableItem key={item.id} id={item.id}>
                                     {(dragHandleProps) => (
@@ -113,6 +114,7 @@ export default function PokemonLearnsetPanel({
                     No results to display.
                 </p>
             )}
-        </div>
+            <ScrollBar orientation="horizontal" className="h-2" />
+        </ScrollArea>
     )
 }

@@ -26,10 +26,11 @@ model User {
     username        String?
     displayUsername String?
 
-    role       String?
-    banned     Boolean?  @default(false)
-    banReason  String?
-    banExpires DateTime?
+    role          String?
+    banned        Boolean?       @default(false)
+    banReason     String?
+    banExpires    DateTime?
+    learnsetDecks LearnsetDeck[]
 
     @@unique([email])
     @@unique([username])
@@ -84,4 +85,31 @@ model Verification {
 
     @@index([identifier])
     @@map("verification")
+}
+
+model LearnsetDeck {
+    id        String             @id @default(cuid())
+    userId    String
+    user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+    name      String
+    createdAt DateTime           @default(now())
+    updatedAt DateTime           @updatedAt
+    items     LearnsetDeckItem[]
+
+    @@index([userId])
+    @@map("learnset_deck")
+}
+
+model LearnsetDeckItem {
+    id               String       @id @default(cuid())
+    deckId           String
+    deck             LearnsetDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+    pokemonName      String
+    versionGroupName String
+    sortOrder        Int
+    createdAt        DateTime     @default(now())
+
+    @@unique([deckId, pokemonName, versionGroupName])
+    @@index([deckId])
+    @@map("learnset_deck_item")
 }

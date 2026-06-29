@@ -1,74 +1,74 @@
 export const types = [
     {
         name: "normal",
-        id: 1
+        id: 1,
     },
     {
         name: "fighting",
-        id: 2
+        id: 2,
     },
     {
         name: "flying",
-        id: 3
+        id: 3,
     },
     {
         name: "poison",
-        id: 4
+        id: 4,
     },
     {
         name: "ground",
-        id: 5
+        id: 5,
     },
     {
         name: "rock",
-        id: 6
+        id: 6,
     },
     {
         name: "bug",
-        id: 7
+        id: 7,
     },
     {
         name: "ghost",
-        id: 8
+        id: 8,
     },
     {
         name: "steel",
-        id: 9
+        id: 9,
     },
     {
         name: "fire",
-        id: 10
+        id: 10,
     },
     {
         name: "water",
-        id: 11
+        id: 11,
     },
     {
         name: "grass",
-        id: 12
+        id: 12,
     },
     {
         name: "electric",
-        id: 13
+        id: 13,
     },
     {
         name: "psychic",
-        id: 14
+        id: 14,
     },
     {
         name: "ice",
-        id: 15
+        id: 15,
     },
     {
         name: "dragon",
-        id: 16
+        id: 16,
     },
     {
         name: "dark",
-        id: 17
+        id: 17,
     },
     {
         name: "fairy",
-        id: 18
-    }
+        id: 18,
+    },
 ]

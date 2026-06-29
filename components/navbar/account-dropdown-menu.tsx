@@ -13,11 +13,12 @@ import {
 import NavbarExpandableButton from "./navbar-expandable-button"
 import { authClient } from "@/lib/auth-client"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 type AccountDropdownMenuProps = {
-    activeButton: string | null
-    setActiveButton: (button: string | null) => void
-    isAccountMenuOpen: boolean
+    activeButton: string | null,
+    setActiveButton: (button: string | null) => void,
+    isAccountMenuOpen: boolean,
     handleAccountMenuOpenChange: (open: boolean) => void
 }
 
@@ -52,11 +53,17 @@ export default function AccountDropdownMenu({
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuGroup>
-                    <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
+                    <DropdownMenuLabel>User</DropdownMenuLabel>
+                    <DropdownMenuItem asChild>
+                        <Link href="/account">Account</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem asChild>
+                        <Link href="/account/decks">Decks</Link>
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
+                    <DropdownMenuLabel>Session</DropdownMenuLabel>
                     <DropdownMenuItem onClick={sessionSignOut}>
                         Sign Out
                     </DropdownMenuItem>

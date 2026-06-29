@@ -9,15 +9,16 @@ import VersionInput from "./version-input"
 import { SubmitEventHandler } from "react"
 import { PokemonListItem } from "@/lib/types"
 
-interface SearchPanelProps {
-    pokemonList: PokemonListItem[]
-    versionGroupName: string
-    setVersionGroupName: (name: string) => void
-    pokemonName: string
-    setPokemonName: (name: string) => void
-    isSubmitting: boolean
-    error: string | null
-    handleSubmit: SubmitEventHandler<HTMLFormElement>
+type SearchPanelProps = {
+    pokemonList: PokemonListItem[],
+    versionGroupName: string,
+    setVersionGroupName: (name: string) => void,
+    pokemonName: string,
+    setPokemonName: (name: string) => void,
+    isSubmitting: boolean,
+    pokemonListLoading: boolean,
+    error: string | null,
+    handleAddLearnset: SubmitEventHandler<HTMLFormElement>
 }
 
 export default function SearchPanel({
@@ -27,34 +28,38 @@ export default function SearchPanel({
     pokemonName,
     setPokemonName,
     isSubmitting,
+    pokemonListLoading,
     error,
-    handleSubmit,
+    handleAddLearnset,
 }: SearchPanelProps) {
     return (
+
         <Card className="w-full max-w-md mx-auto">
             <CardHeader className="text-center text-2xl font-bold">
                 <CardTitle>Enter Pokémon Details</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleAddLearnset}>
                     <FieldGroup>
                         <VersionInput
                             value={versionGroupName}
                             onChange={setVersionGroupName}
                         />
                         <PokemonInput
+                            key={versionGroupName}
                             pokemonList={pokemonList}
                             value={pokemonName}
                             onChange={setPokemonName}
+                            pokemonListLoading={pokemonListLoading}
                         />
                         <Button
                             type="submit"
                             variant="default"
                             disabled={
                                 isSubmitting ||
-                                pokemonList.length === 0 ||
-                                !versionGroupName ||
-                                !pokemonName
+                                    pokemonList.length === 0 ||
+                                    !versionGroupName ||
+                                    !pokemonName
                             }
                         >
                             <Plus className="mr-2 h-4 w-4" /> Add to Panel

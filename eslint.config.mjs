@@ -6,12 +6,7 @@ import stylistic from "@stylistic/eslint-plugin"
 const eslintConfig = defineConfig([
     ...nextVitals,
     ...nextTs,
-    globalIgnores([
-        ".next/**",
-        "out/**",
-        "build/**",
-        "next-env.d.ts",
-    ]),
+    globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
     {
         plugins: {
             "@stylistic": stylistic,
@@ -23,11 +18,12 @@ const eslintConfig = defineConfig([
             "@stylistic/member-delimiter-style": [
                 "error",
                 {
-                    multiline: { delimiter: "none", requireLast: false },
+                    multiline: { delimiter: "comma", requireLast: false },
                     singleline: { delimiter: "comma", requireLast: false },
                     multilineDetection: "brackets",
                 },
             ],
+            "@stylistic/indent": ["error", 4],
         },
     },
 ])

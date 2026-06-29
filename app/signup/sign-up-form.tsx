@@ -10,9 +10,9 @@ import { SignUpSchemaType } from "@/lib/schemas"
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
 
 type SignUpFormProps = {
-    form: UseFormReturn<SignUpSchemaType>
-    onSubmit: SubmitHandler<SignUpSchemaType>
-    isLoading: boolean
+    form: UseFormReturn<SignUpSchemaType>,
+    onSubmit: SubmitHandler<SignUpSchemaType>,
+    isLoading: boolean,
     errorMessage?: string
 }
 

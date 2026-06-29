@@ -1,8 +1,8 @@
 "use client"
 
 import SearchPanel from "./pokemon-search/search-panel"
-import PokemonLearnsetPanel from "./pokemon-learnsets/pokemon-learnset-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
+import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
 
 export default function SearchShell() {
     const {
@@ -13,8 +13,10 @@ export default function SearchShell() {
         setPokemonName,
         learnsetList,
         error,
+        pokemonListLoading,
         isSubmitting,
-        handleSubmit,
+        handleAddLearnset,
+        handleClearLearnsets,
         handleRemoveLearnset,
         handleReorderLearnset,
     } = useSearchShellController()
@@ -30,15 +32,19 @@ export default function SearchShell() {
                         pokemonName={pokemonName}
                         setPokemonName={setPokemonName}
                         isSubmitting={isSubmitting}
+                        pokemonListLoading={pokemonListLoading}
                         error={error}
-                        handleSubmit={handleSubmit}
+                        handleAddLearnset={handleAddLearnset}
                     />
                 </aside>
                 <section className="flex-1 min-w-0 overflow-x-hidden">
-                    <PokemonLearnsetPanel
+                    <PokemonLearnsetWindow
                         learnsetList={learnsetList}
+                        onClearLearnsets={handleClearLearnsets}
                         onRemoveLearnset={handleRemoveLearnset}
                         onReorderLearnset={handleReorderLearnset}
+                        pokemonList={pokemonList}
+                        isSubmitting={isSubmitting}
                     />
                 </section>
             </div>

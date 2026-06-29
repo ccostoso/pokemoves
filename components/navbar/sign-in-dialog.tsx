@@ -20,7 +20,7 @@ import Link from "next/link"
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field"
 
 type SignInDialogProps = {
-    open: boolean
+    open: boolean,
     onOpenChange: (open: boolean) => void
 }
 
