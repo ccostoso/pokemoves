@@ -39,13 +39,6 @@ export default function SearchShell() {
                         error={error}
                         handleAddLearnset={handleAddLearnset}
                     />
-                    {session?.user && (
-                        <SavePanel
-                            learnsetList={learnsetList}
-                            pokemonList={pokemonList}
-                            isSubmitting={isSubmitting}
-                        />
-                    )}
                 </aside>
                 <section className="flex-1 min-w-0 overflow-x-hidden">
                     <PokemonLearnsetWindow
