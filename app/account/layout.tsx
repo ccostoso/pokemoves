@@ -9,7 +9,7 @@ export default function AccountLayout({
     return (
         <main className="container mx-auto p-4 flex-1 flex flex-row gap-4 items-stretch">
             <AccountSidebar />
-            {children}
+            { children }
         </main>
     )
 }

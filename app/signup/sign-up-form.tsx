@@ -23,7 +23,7 @@ export default function SignUpForm({
     errorMessage,
 }: SignUpFormProps) {
     return (
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        <form onSubmit={ form.handleSubmit(onSubmit) } className="space-y-4">
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="name">Name</FieldLabel>
@@ -31,13 +31,13 @@ export default function SignUpForm({
                         id="name"
                         type="text"
                         placeholder="Enter your name"
-                        {...form.register("name")}
+                        { ...form.register("name") }
                     />
-                    {form.formState.errors.name && (
+                    { form.formState.errors.name && (
                         <FieldError>
-                            {form.formState.errors.name.message}
+                            { form.formState.errors.name.message }
                         </FieldError>
-                    )}
+                    ) }
                 </Field>
 
                 <Field>
@@ -46,13 +46,13 @@ export default function SignUpForm({
                         id="username"
                         type="text"
                         placeholder="Enter your username"
-                        {...form.register("username")}
+                        { ...form.register("username") }
                     />
-                    {form.formState.errors.username && (
+                    { form.formState.errors.username && (
                         <FieldError>
-                            {form.formState.errors.username.message}
+                            { form.formState.errors.username.message }
                         </FieldError>
-                    )}
+                    ) }
                 </Field>
 
                 <Field>
@@ -61,13 +61,13 @@ export default function SignUpForm({
                         id="email"
                         type="email"
                         placeholder="Enter your email"
-                        {...form.register("email")}
+                        { ...form.register("email") }
                     />
-                    {form.formState.errors.email && (
+                    { form.formState.errors.email && (
                         <FieldError>
-                            {form.formState.errors.email.message}
+                            { form.formState.errors.email.message }
                         </FieldError>
-                    )}
+                    ) }
                 </Field>
 
                 <Field>
@@ -76,13 +76,13 @@ export default function SignUpForm({
                         id="password"
                         type="password"
                         placeholder="Enter your password"
-                        {...form.register("password")}
+                        { ...form.register("password") }
                     />
-                    {form.formState.errors.password && (
+                    { form.formState.errors.password && (
                         <FieldError>
-                            {form.formState.errors.password.message}
+                            { form.formState.errors.password.message }
                         </FieldError>
-                    )}
+                    ) }
                 </Field>
 
                 <Field>
@@ -93,22 +93,22 @@ export default function SignUpForm({
                         id="confirmPassword"
                         type="password"
                         placeholder="Confirm your password"
-                        {...form.register("confirmPassword")}
+                        { ...form.register("confirmPassword") }
                     />
-                    {form.formState.errors.confirmPassword && (
+                    { form.formState.errors.confirmPassword && (
                         <FieldError>
-                            {form.formState.errors.confirmPassword.message}
+                            { form.formState.errors.confirmPassword.message }
                         </FieldError>
-                    )}
+                    ) }
                 </Field>
             </FieldGroup>
 
-            {errorMessage && (
-                <p className="text-sm text-red-600">{errorMessage}</p>
-            )}
+            { errorMessage && (
+                <p className="text-sm text-red-600">{ errorMessage }</p>
+            ) }
 
-            <Button type="submit" disabled={isLoading} className="w-full">
-                {isLoading ? "Signing Up..." : "Sign Up"}
+            <Button type="submit" disabled={ isLoading } className="w-full">
+                { isLoading ? "Signing Up..." : "Sign Up" }
             </Button>
         </form>
     )

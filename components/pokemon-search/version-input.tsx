@@ -18,20 +18,20 @@ export default function VersionInput({ value, onChange }: VersionInputProps) {
     return (
         <Field>
             <FieldLabel htmlFor="include-forms">Game Version</FieldLabel>
-            <Select value={value} onValueChange={onChange}>
+            <Select value={ value } onValueChange={ onChange }>
                 <SelectTrigger>
                     <SelectValue placeholder="Choose a version" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
-                        {versionGroupList.map((version) => (
+                        { versionGroupList.map((version) => (
                             <SelectItem
-                                key={version.id}
-                                value={version.apiName}
+                                key={ version.id }
+                                value={ version.apiName }
                             >
-                                {version.name}
+                                { version.name }
                             </SelectItem>
-                        ))}
+                        )) }
                     </SelectGroup>
                 </SelectContent>
             </Select>

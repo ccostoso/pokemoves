@@ -20,3 +20,24 @@ export async function saveLearnset(userId: string, name: string, learnsetDeck: L
         }
     })
 }
+
+export async function getLearnsetDeckById(deckId: string): Promise<LearnsetDeckItemData[] | null> {
+    const learnsetDeck = await prisma.learnsetDeck.findUnique({
+        where: { id: deckId },
+        include: {
+            items: {
+                orderBy: { sortOrder: 'asc' }
+            }
+        }
+    })
+
+    if (!learnsetDeck) {
+        return null
+    }
+
+    return learnsetDeck.items.map(item => ({
+        pokemonName: item.pokemonName,
+        versionGroupName: item.versionGroupName,
+        sortOrder: item.sortOrder,
+    }))
+}

@@ -26,25 +26,25 @@ export default function SearchShell() {
             <div className="flex gap-6 mt-6">
                 <aside className="w-72 shrink-0">
                     <SearchPanel
-                        pokemonList={pokemonList}
-                        versionGroupName={versionGroupName}
-                        setVersionGroupName={setVersionGroupName}
-                        pokemonName={pokemonName}
-                        setPokemonName={setPokemonName}
-                        isSubmitting={isSubmitting}
-                        pokemonListLoading={pokemonListLoading}
-                        error={error}
-                        handleAddLearnset={handleAddLearnset}
+                        pokemonList={ pokemonList }
+                        versionGroupName={ versionGroupName }
+                        setVersionGroupName={ setVersionGroupName }
+                        pokemonName={ pokemonName }
+                        setPokemonName={ setPokemonName }
+                        isSubmitting={ isSubmitting }
+                        pokemonListLoading={ pokemonListLoading }
+                        error={ error }
+                        handleAddLearnset={ handleAddLearnset }
                     />
                 </aside>
                 <section className="flex-1 min-w-0 overflow-x-hidden">
                     <PokemonLearnsetWindow
-                        learnsetList={learnsetList}
-                        onClearLearnsets={handleClearLearnsets}
-                        onRemoveLearnset={handleRemoveLearnset}
-                        onReorderLearnset={handleReorderLearnset}
-                        pokemonList={pokemonList}
-                        isSubmitting={isSubmitting}
+                        learnsetList={ learnsetList }
+                        onClearLearnsets={ handleClearLearnsets }
+                        onRemoveLearnset={ handleRemoveLearnset }
+                        onReorderLearnset={ handleReorderLearnset }
+                        pokemonList={ pokemonList }
+                        isSubmitting={ isSubmitting }
                     />
                 </section>
             </div>

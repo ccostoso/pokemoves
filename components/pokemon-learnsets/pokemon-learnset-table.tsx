@@ -35,21 +35,21 @@ export default function PokemonLearnsetTable({
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {pokemonMoves.map((move: Move) => (
+                { pokemonMoves.map((move: Move) => (
                     <TableRow
-                        key={`${move.move.movenames[0]?.name}-${move.level}`}
+                        key={ `${move.move.movenames[0]?.name}-${move.level}` }
                     >
                         <TableCell className="text-center">
-                            {move.level}
+                            { move.level }
                         </TableCell>
-                        <TableCell>{move.move.movenames[0]?.name}</TableCell>
+                        <TableCell>{ move.move.movenames[0]?.name }</TableCell>
                         <TableCell>
-                            {move.move.type.name && (
-                                <TypeSprite typeName={move.move.type.name} />
-                            )}
+                            { move.move.type.name && (
+                                <TypeSprite typeName={ move.move.type.name } />
+                            ) }
                         </TableCell>
                     </TableRow>
-                ))}
+                )) }
             </TableBody>
         </Table>
     )

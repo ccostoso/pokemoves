@@ -17,11 +17,11 @@ export default async function UserPage() {
                     You are not signed in. Please sign in to access your
                     dashboard.
                 </p>
-                {authFailed && (
+                { authFailed && (
                     <p className="mt-2 text-lg text-red-500">
                         Error retrieving session data. Please try again.
                     </p>
-                )}
+                ) }
             </main>
         )
     }
@@ -32,7 +32,7 @@ export default async function UserPage() {
         <main className="container mx-auto p-4 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
 
-            <pre>{JSON.stringify(session, null, 2)}</pre>
+            <pre>{ JSON.stringify(session, null, 2) }</pre>
 
             <p className="mt-4 text-lg">
                 Welcome to your dashboard! Here you can manage your account and

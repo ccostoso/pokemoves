@@ -12,17 +12,17 @@ export function ViewerLearnsetToolbar() {
             <form>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
-                        <Field className={cn("flex-1", session?.user ? "max-w-full" : "max-w-1/2")}>
+                        <Field className={ cn("flex-1", session?.user ? "max-w-full" : "max-w-1/2") }>
                             <Input id="learnset-name" type="text" placeholder="Learnset Name..." disabled />
                         </Field>
                     </FieldGroup>
-                    {session?.user && (
+                    { session?.user && (
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
                                 <Button type="submit"><CopyCheck className="mr-2" />Save as duplicate</Button>
                             </Field>
                         </FieldGroup>
-                    )}
+                    ) }
                 </FieldSet>
             </form>
         </div>

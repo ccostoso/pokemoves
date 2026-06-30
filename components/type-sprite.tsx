@@ -11,11 +11,11 @@ export default function TypeSprite({ typeName }: TypeSpriteProps) {
 
     return (
         <Image
-            src={typeSpriteUrl}
-            alt={typeName}
+            src={ typeSpriteUrl }
+            alt={ typeName }
             className="mx-auto"
-            width={48}
-            height={48}
+            width={ 48 }
+            height={ 48 }
         />
     )
 }

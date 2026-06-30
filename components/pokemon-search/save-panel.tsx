@@ -70,14 +70,14 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
                 <CardTitle>Save Learnset</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSaveLearnset}>
+                <form onSubmit={ handleSaveLearnset }>
                     <FieldGroup>
                         <Field>
                             <FieldLabel htmlFor="name">Learnset Name</FieldLabel>
                             <Input
                                 id="name"
-                                value={learnsetName}
-                                onChange={(e) => setLearnsetName(e.target.value)}
+                                value={ learnsetName }
+                                onChange={ (e) => setLearnsetName(e.target.value) }
                             />
                             <FieldDescription>
                                 Enter a name for your learnset.
@@ -93,7 +93,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
                                 !learnsetName 
                             }
                         >
-                            {isSaving ? (
+                            { isSaving ? (
                                 <span className="inline-flex items-center gap-2">
                                     <Spinner className="size-4" />
                                     Loading Pokemon list...
@@ -101,9 +101,9 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
                             ) : (<>
                                 <Save className="mr-2 h-4 w-4" /> Save Learnset
                             </>
-                            )}
+                            ) }
                         </Button>
-                        {error && <p className="text-red-500 mt-2">{error}</p>}
+                        { error && <p className="text-red-500 mt-2">{ error }</p> }
                     </FieldGroup>
                 </form>
             </CardContent>

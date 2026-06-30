@@ -36,17 +36,17 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
         setIsSaving(true)
 
         if (!session?.user) {
-            toast.error("You must be logged in to save a learnset.", {position: "top-center"})
+            toast.error("You must be logged in to save a learnset.", { position: "top-center" })
             setIsSaving(false)
             return
         }
         if (!learnsetName) {
-            toast.error("Please enter a name for your learnset.", {position: "top-center"})
+            toast.error("Please enter a name for your learnset.", { position: "top-center" })
             setIsSaving(false)
             return
         }
         if (learnsetList.length === 0) {
-            toast.error("No learnset to save. Please add a Pokémon first.", {position: "top-center"})
+            toast.error("No learnset to save. Please add a Pokémon first.", { position: "top-center" })
             setIsSaving(false)
             return
         }
@@ -73,7 +73,7 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
 
     return (
         <div className="flex flex-col p-4 border-b">
-            <form onSubmit={handleSaveLearnset}>
+            <form onSubmit={ handleSaveLearnset }>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className="flex-1">
@@ -81,8 +81,8 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
                                 id="learnset-name" 
                                 type="text" 
                                 placeholder="Learnset Name..." 
-                                value={learnsetName} 
-                                onChange={(e) => setLearnsetName(e.target.value)}
+                                value={ learnsetName } 
+                                onChange={ (e) => setLearnsetName(e.target.value) }
                             />
                         </Field>
                     </FieldGroup>
@@ -90,26 +90,26 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
                         <Field orientation="horizontal" className="w-auto">
                             <Button
                                 type="submit"
-                                disabled={isSaving || isSubmitting || !learnsetName || pokemonList.length === 0}
+                                disabled={ isSaving || isSubmitting || !learnsetName || pokemonList.length === 0 }
                             >
-                                {isSaving ? (
+                                { isSaving ? (
                                     <span className="inline-flex items-center gap-2">
                                         <Spinner className="size-4" />
                                         Saving...
                                     </span>
                                 ) : (<>
-                                    <Save className="mr-2" />Save learnset</>)}
+                                    <Save className="mr-2" />Save learnset</>) }
                             </Button>
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button 
                                         className="whitespace-nowrap" 
                                         type="button"
-                                        onClick={() => {
+                                        onClick={ () => {
                                             handleClearLearnsets()
-                                            toast.success("Learnset panel cleared.", {position: "top-center"})
-                                        }}
-                                        disabled={isSaving || isSubmitting || learnsetList.length === 0}
+                                            toast.success("Learnset panel cleared.", { position: "top-center" })
+                                        } }
+                                        disabled={ isSaving || isSubmitting || learnsetList.length === 0 }
                                     ><BrushCleaning className="mr-2" />Clear</Button>
                                 </TooltipTrigger>
                                 <TooltipContent>

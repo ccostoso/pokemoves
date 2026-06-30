@@ -1,8 +1,11 @@
 {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "always"
+        "source.fixAll": true,
+        "source.fixAll.eslint": true
     },
+    "eslint.useFlatConfig": true,
+    "eslint.format.enable": true,
     "eslint.validate": [
         "javascript",
         "javascriptreact",

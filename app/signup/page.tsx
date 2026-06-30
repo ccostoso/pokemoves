@@ -67,20 +67,20 @@ export default function SignUpPage() {
                 </CardHeader>
                 <CardContent>
                     <SignUpForm
-                        form={form}
-                        onSubmit={onSubmit}
-                        isLoading={isLoading}
-                        errorMessage={errorMessage || undefined}
+                        form={ form }
+                        onSubmit={ onSubmit }
+                        isLoading={ isLoading }
+                        errorMessage={ errorMessage || undefined }
                     />
                 </CardContent>
                 <CardFooter>
                     <p className="text-center text-sm text-muted-foreground">
-                        Already have an account? Click on{" "}
+                        Already have an account? Click on{ " " }
                         <User className="inline-block h-4 w-4" /> in the top
                         right corner to sign in.
                     </p>
                 </CardFooter>
-                {/* </div> */}
+                { /* </div> */ }
             </Card>
         </div>
     )

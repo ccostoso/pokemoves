@@ -29,37 +29,37 @@ export default function NavbarExpandableButton({
 }: NavbarExpandableButtonProps) {
     return (
         <Button
-            ref={ref}
+            ref={ ref }
             variant="outline"
             size="icon"
-            onMouseEnter={(event) => {
+            onMouseEnter={ (event) => {
                 onActivate()
                 onMouseEnter?.(event)
-            }}
-            onFocus={(event) => {
+            } }
+            onFocus={ (event) => {
                 if (activateOnFocus) {
                     onActivate()
                 }
 
                 onFocus?.(event)
-            }}
-            className={cn(
+            } }
+            className={ cn(
                 baseClass,
                 isActive
                     ? `${expandedWidthClass} px-4 gap-2`
                     : "w-8 px-0 gap-0",
                 className,
-            )}
-            {...buttonProps}
+            ) }
+            { ...buttonProps }
         >
-            {icon}
+            { icon }
             <span
-                className={cn(
+                className={ cn(
                     "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
                     isActive && "max-w-16",
-                )}
+                ) }
             >
-                {label}
+                { label }
             </span>
         </Button>
     )

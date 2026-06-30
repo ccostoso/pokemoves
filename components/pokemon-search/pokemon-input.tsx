@@ -46,26 +46,26 @@ export default function PokemonInput({
         <Field>
             <FieldLabel htmlFor="name">Pokémon Name</FieldLabel>
             <Combobox
-                items={pokemonList}
-                onValueChange={(canonicalName: string | null) => {
+                items={ pokemonList }
+                onValueChange={ (canonicalName: string | null) => {
                     if (!canonicalName) return
                     setInputText(
                         canonicalToDisplay.get(canonicalName) ?? canonicalName,
                     )
                     onChange(canonicalName)
-                }}
+                } }
             >
                 <ComboboxInput
                     id="name"
                     autoComplete="off"
                     placeholder="Enter Pokémon name"
                     className="w-full"
-                    disabled={pokemonListLoading}
-                    value={inputText}
-                    onChange={(e) => setInputText(e.target.value)}
+                    disabled={ pokemonListLoading }
+                    value={ inputText }
+                    onChange={ (e) => setInputText(e.target.value) }
                 />
                 <ComboboxContent>
-                    {pokemonListLoading ? (
+                    { pokemonListLoading ? (
                         <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
                             <Spinner className="size-4" />
                             Loading Pokemon...
@@ -74,25 +74,25 @@ export default function PokemonInput({
                         <>
                             <ComboboxEmpty>No Pokemon found.</ComboboxEmpty>
                             <ComboboxList>
-                                {(pokemon) => (
-                                    <ComboboxItem key={pokemon.id} value={pokemon.name}>
-                                        {getPokemonDisplayName(pokemon)}
+                                { (pokemon) => (
+                                    <ComboboxItem key={ pokemon.id } value={ pokemon.name }>
+                                        { getPokemonDisplayName(pokemon) }
                                     </ComboboxItem>
-                                )}
+                                ) }
                             </ComboboxList>
                         </>
-                    )}
+                    ) }
                 </ComboboxContent>
             </Combobox>
             <FieldDescription>
-                {pokemonListLoading ? (
+                { pokemonListLoading ? (
                     <span className="inline-flex items-center gap-2">
                         <Spinner className="size-4" />
                         Loading Pokemon list...
                     </span>
                 ) : (
                     "Enter the name of the Pokémon to look up."
-                )}
+                ) }
             </FieldDescription>
         </Field>
     )

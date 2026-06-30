@@ -61,22 +61,22 @@ export default function Navbar() {
     return (
         <nav
             className="bg-background text-foreground p-4 border-b border-foreground/20"
-            onMouseLeave={() => {
+            onMouseLeave={ () => {
                 if (!isThemeMenuOpen && !isAccountMenuOpen) {
                     setActiveButton(null)
                 }
-            }}
+            } }
         >
             <div className="container mx-auto flex justify-between items-center px-4">
                 <div className="text-xl font-bold">
                     <Link href="/">Pokémoves</Link>
                 </div>
                 <div className="flex items-center gap-3 md:gap-4">
-                    {session?.user ? (
+                    { session?.user ? (
                         <AccountDropdownMenu
-                            activeButton={activeButton}
-                            setActiveButton={setActiveButton}
-                            isAccountMenuOpen={isAccountMenuOpen}
+                            activeButton={ activeButton }
+                            setActiveButton={ setActiveButton }
+                            isAccountMenuOpen={ isAccountMenuOpen }
                             handleAccountMenuOpenChange={
                                 handleAccountMenuOpenChange
                             }
@@ -84,34 +84,34 @@ export default function Navbar() {
                     ) : (
                         <NavbarExpandableButton
                             label="Account"
-                            icon={<User className="shrink-0 h-5 w-5" />}
-                            isActive={activeButton === "account"}
-                            onActivate={() => setActiveButton("account")}
-                            onClick={handleAccountClick}
+                            icon={ <User className="shrink-0 h-5 w-5" /> }
+                            isActive={ activeButton === "account" }
+                            onActivate={ () => setActiveButton("account") }
+                            onClick={ handleAccountClick }
                             expandedWidthClass="w-28"
                         />
-                    )}
+                    ) }
 
                     <NavbarExpandableButton
                         label="About"
                         icon={
                             <CircleQuestionMark className="shrink-0 h-5 w-5" />
                         }
-                        isActive={activeButton === "about"}
-                        onActivate={() => setActiveButton("about")}
+                        isActive={ activeButton === "about" }
+                        onActivate={ () => setActiveButton("about") }
                         expandedWidthClass="w-24"
                     />
                     <NavbarExpandableButton
                         label="Contact"
-                        icon={<Pencil className="shrink-0 h-5 w-5" />}
-                        isActive={activeButton === "contact"}
-                        onActivate={() => setActiveButton("contact")}
+                        icon={ <Pencil className="shrink-0 h-5 w-5" /> }
+                        isActive={ activeButton === "contact" }
+                        onActivate={ () => setActiveButton("contact") }
                         expandedWidthClass="w-28"
                     />
                     <ModeToggle
-                        isActive={activeButton === "theme" || isThemeMenuOpen}
-                        onActivate={() => setActiveButton("theme")}
-                        onOpenChange={(open) => {
+                        isActive={ activeButton === "theme" || isThemeMenuOpen }
+                        onActivate={ () => setActiveButton("theme") }
+                        onOpenChange={ (open) => {
                             setIsThemeMenuOpen(open)
 
                             if (open) {
@@ -120,11 +120,11 @@ export default function Navbar() {
                             }
 
                             setActiveButton(null)
-                        }}
+                        } }
                     />
                     <SignInDialog
-                        open={isSignInOpen}
-                        onOpenChange={handleSignInOpenChange}
+                        open={ isSignInOpen }
+                        onOpenChange={ handleSignInOpenChange }
                     />
                 </div>
             </div>

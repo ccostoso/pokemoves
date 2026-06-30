@@ -29,11 +29,11 @@ export default function RootLayout({
     return (
         <html
             lang="en"
-            className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+            className={ `${geistSans.variable} ${geistMono.variable} h-full antialiased` }
             suppressHydrationWarning
         >
             <body className="min-h-full flex flex-col">
-                <TooltipProvider delayDuration={500}>
+                <TooltipProvider delayDuration={ 500 }>
                     <ThemeProvider
                         attribute="class"
                         defaultTheme="system"
@@ -41,7 +41,7 @@ export default function RootLayout({
                         disableTransitionOnChange
                     >
                         <Navbar />
-                        {children}
+                        { children }
                         <Toaster />
                     </ThemeProvider>
                 </TooltipProvider>

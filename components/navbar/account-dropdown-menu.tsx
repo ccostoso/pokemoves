@@ -40,14 +40,14 @@ export default function AccountDropdownMenu({
         })
     }
     return (
-        <DropdownMenu onOpenChange={handleAccountMenuOpenChange}>
+        <DropdownMenu onOpenChange={ handleAccountMenuOpenChange }>
             <DropdownMenuTrigger asChild>
                 <NavbarExpandableButton
                     label="Account"
-                    icon={<User className="shrink-0 h-5 w-5" />}
-                    isActive={activeButton === "account" || isAccountMenuOpen}
-                    onActivate={() => setActiveButton("account")}
-                    activateOnFocus={false}
+                    icon={ <User className="shrink-0 h-5 w-5" /> }
+                    isActive={ activeButton === "account" || isAccountMenuOpen }
+                    onActivate={ () => setActiveButton("account") }
+                    activateOnFocus={ false }
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
@@ -64,7 +64,7 @@ export default function AccountDropdownMenu({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Session</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={sessionSignOut}>
+                    <DropdownMenuItem onClick={ sessionSignOut }>
                         Sign Out
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
