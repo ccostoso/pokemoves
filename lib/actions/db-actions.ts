@@ -21,7 +21,7 @@ export async function saveLearnset(userId: string, name: string, learnsetDeck: L
     })
 }
 
-export async function getLearnsetDeckById(deckId: string): Promise<LearnsetDeckItemData[] | null> {
+export async function getLearnsetDeckItemDataById(deckId: string): Promise<LearnsetDeckItemData[] | null> {
     const learnsetDeck = await prisma.learnsetDeck.findUnique({
         where: { id: deckId },
         include: {
@@ -42,7 +42,7 @@ export async function getLearnsetDeckById(deckId: string): Promise<LearnsetDeckI
     }))
 }
 
-export async function getLearnsetDeckOwnerId(deckId: string): Promise<string | null> {
+export async function getLearnsetDeckUserId(deckId: string): Promise<string | null> {
     const learnsetDeck = await prisma.learnsetDeck.findUnique({
         where: { id: deckId },
         select: { userId: true },

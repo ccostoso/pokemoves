@@ -3,12 +3,14 @@
 import SearchPanel from "./pokemon-search/search-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
+import { LearnsetDeckItemData } from "@/lib/types"
 
 type SearchShellProps = {
-    toolbarType?: "owner" | "viewer" | "new" | "none"
+    toolbarType?: "owner" | "viewer" | "new" | "none",
+    learnsetDeckItemData?: LearnsetDeckItemData[] | null
 }
 
-export default function SearchShell({ toolbarType = "new" }: SearchShellProps) {
+export default function SearchShell({ toolbarType = "new", learnsetDeckItemData }: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
