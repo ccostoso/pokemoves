@@ -5,7 +5,11 @@ import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
 import { CopyCheck } from "lucide-react"
 
-export function ViewerLearnsetToolbar() {
+type ViewerLearnsetToolbarProps = {
+    learnsetDeckName?: string | null
+}
+
+export function ViewerLearnsetToolbar({ learnsetDeckName }: ViewerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     return (
         <div className="flex flex-col p-4 border-b">
@@ -13,7 +17,7 @@ export function ViewerLearnsetToolbar() {
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className={ cn("flex-1", session?.user ? "max-w-full" : "max-w-1/2") }>
-                            <Input id="learnset-name" type="text" placeholder="Learnset Name..." disabled />
+                            <Input id="learnset-name" type="text" placeholder="Learnset Name..." value={ learnsetDeckName ?? "" } disabled />
                         </Field>
                     </FieldGroup>
                     { session?.user && (

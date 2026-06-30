@@ -2,8 +2,8 @@ import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndVersionGroup,
 } from "./actions/qraphql-actions"
-import { LevelUpLearnset, PokemonListItem } from "./types"
-import { SubmitEventHandler, useEffect, useReducer } from "react"
+import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
+import { SubmitEventHandler, useEffect, useReducer, useRef } from "react"
 
 type RequestState =
     | { status: "idle" }
@@ -31,6 +31,9 @@ type SearchShellAction =
     | { type: "learnsetCleared" }
     | { type: "learnsetRemoved", indexToRemove: number }
     | { type: "learnsetReordered", fromIndex: number, toIndex: number }
+    | { type: "learnsetHydrationStarted" }
+    | { type: "learnsetHydrationSucceeded", learnsetList: LevelUpLearnset[] }
+    | { type: "learnsetHydrationFailed", message: string }
 
 type UseSearchShellControllerReturn = {
     // form state
@@ -141,12 +144,33 @@ function searchShellReducer(
             }
         }
 
+        case "learnsetHydrationStarted":
+            return {
+                ...state,
+                requestState: { status: "loading" },
+            }
+
+        case "learnsetHydrationSucceeded":
+            return {
+                ...state,
+                learnsetList: action.learnsetList,
+                requestState: { status: "idle" },
+            }
+
+        case "learnsetHydrationFailed":
+            return {
+                ...state,
+                requestState: { status: "error", message: action.message },
+            }
+
         default:
             return state
     }
 }
 
-export function useSearchShellController(): UseSearchShellControllerReturn {
+export function useSearchShellController(initialLearnsetDeckItemData?: LearnsetDeckItemData[] | null): UseSearchShellControllerReturn {
+    const hydratedDeckKeyRef = useRef<string | null>(null)
+
     const [state, dispatch] = useReducer(searchShellReducer, {
         pokemonList: [],
         versionGroupName: "",
@@ -246,6 +270,68 @@ export function useSearchShellController(): UseSearchShellControllerReturn {
             })
         }
     }
+
+    useEffect(() => {
+        // If there is no initial learnset deck data, or if the length is zero, we don't need to hydrate anything
+        if (!initialLearnsetDeckItemData || initialLearnsetDeckItemData.length === 0) {
+            return
+        }
+
+        // Create a unique key for the initial learnset deck data to avoid rehydrating if it hasn't changed
+        const deckKey = initialLearnsetDeckItemData
+            .map((item) => `${item.pokemonName}:${item.versionGroupName}:${item.sortOrder}`)
+            .join("|")
+
+        if (hydratedDeckKeyRef.current === deckKey) {
+            return
+        }
+
+        hydratedDeckKeyRef.current = deckKey
+
+        // We use a cancelled flag to prevent state updates if the component unmounts before the async 
+        // operation completes
+        let cancelled = false
+
+        // Hydrate the learnsets from the initialLearnsetDeckItemData
+        const hydrateLearnsets = async () => {
+            dispatch({ type: "learnsetHydrationStarted" })
+
+            try {
+                const hydratedLearnsets: LevelUpLearnset[] = await Promise.all(
+                    initialLearnsetDeckItemData.map(async (item) => {
+                        const pokemonMoves =
+                            await getLevelUpMovesByPokemonNameAndVersionGroup(
+                                item.pokemonName,
+                                item.versionGroupName,
+                            )
+
+                        return { ...pokemonMoves, id: crypto.randomUUID() }
+                    }),
+                )
+
+                if (!cancelled) {
+                    dispatch({
+                        type: "learnsetHydrationSucceeded",
+                        learnsetList: hydratedLearnsets,
+                    })
+                }
+            } catch {
+                if (!cancelled) {
+                    dispatch({
+                        type: "learnsetHydrationFailed",
+                        message:
+                            "An error occurred while hydrating the learnsets. Please try again.",
+                    })
+                }
+            }
+        }
+
+        hydrateLearnsets()
+
+        return () => {
+            cancelled = true
+        }
+    }, [initialLearnsetDeckItemData])
 
     return {
         pokemonList: state.pokemonList,

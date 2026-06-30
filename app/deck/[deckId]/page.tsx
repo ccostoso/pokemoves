@@ -1,5 +1,5 @@
 import SearchShell from "@/components/search-shell"
-import { getLearnsetDeckUserId, getLearnsetDeckItemDataById } from "@/lib/actions/db-actions"
+import { getLearnsetDeckMetadata, getLearnsetDeckItemDataById } from "@/lib/actions/db-actions"
 import { getServerSession } from "@/lib/auth-server"
 import { notFound } from "next/navigation"
 
@@ -9,8 +9,8 @@ type DeckPageProps = {
 
 export default async function DeckPage({ params }: DeckPageProps) {
     const { deckId } = await params
-    const [ownerId, learnsetDeckItemData, session] = await Promise.all([
-        getLearnsetDeckUserId(deckId),
+    const [learnsetDeckMetadata, learnsetDeckItemData, session] = await Promise.all([
+        getLearnsetDeckMetadata(deckId),
         getLearnsetDeckItemDataById(deckId),
         getServerSession(),
     ])
@@ -19,16 +19,20 @@ export default async function DeckPage({ params }: DeckPageProps) {
         notFound()
     }
 
-    if (!ownerId) {
+    if (!learnsetDeckMetadata) {
         notFound()
     }
 
     const toolbarType: "owner" | "viewer" =
-        ownerId && session?.user?.id === ownerId ? "owner" : "viewer"
+        learnsetDeckMetadata.userId && session?.user?.id === learnsetDeckMetadata.userId ? "owner" : "viewer"
 
     return (
         <main className="container mx-auto p-4 flex-1">
-            <SearchShell toolbarType={ toolbarType } learnsetDeckItemData={ learnsetDeckItemData } />
+            <SearchShell 
+                toolbarType={ toolbarType } 
+                learnsetDeckItemData={ learnsetDeckItemData }
+                learnsetDeckName={ learnsetDeckMetadata.name } 
+            />
         </main>
     )
 }

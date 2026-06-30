@@ -7,10 +7,11 @@ import { LearnsetDeckItemData } from "@/lib/types"
 
 type SearchShellProps = {
     toolbarType?: "owner" | "viewer" | "new" | "none",
-    learnsetDeckItemData?: LearnsetDeckItemData[] | null
+    learnsetDeckItemData?: LearnsetDeckItemData[] | null,
+    learnsetDeckName?: string | null
 }
 
-export default function SearchShell({ toolbarType = "new", learnsetDeckItemData }: SearchShellProps) {
+export default function SearchShell({ toolbarType = "new", learnsetDeckItemData, learnsetDeckName }: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
@@ -25,7 +26,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckItemData 
         handleClearLearnsets,
         handleRemoveLearnset,
         handleReorderLearnset,
-    } = useSearchShellController()
+    } = useSearchShellController(learnsetDeckItemData)
 
     return (
         <>
@@ -51,6 +52,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckItemData 
                         onRemoveLearnset={ handleRemoveLearnset }
                         onReorderLearnset={ handleReorderLearnset }
                         pokemonList={ pokemonList }
+                        learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }
                     />
                 </section>

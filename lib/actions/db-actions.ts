@@ -42,11 +42,11 @@ export async function getLearnsetDeckItemDataById(deckId: string): Promise<Learn
     }))
 }
 
-export async function getLearnsetDeckUserId(deckId: string): Promise<string | null> {
+export async function getLearnsetDeckMetadata(deckId: string): Promise<{ userId: string, name: string } | null> {
     const learnsetDeck = await prisma.learnsetDeck.findUnique({
         where: { id: deckId },
-        select: { userId: true },
+        select: { userId: true, name: true },
     })
 
-    return learnsetDeck?.userId ?? null
+    return learnsetDeck ?? null
 }

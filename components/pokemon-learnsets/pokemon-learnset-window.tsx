@@ -9,8 +9,8 @@ type PokemonLearnsetWindowProps = {
     onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void,
     pokemonList: PokemonListItem[],
-    isSubmitting: boolean
-    
+    isSubmitting: boolean,
+    learnsetDeckName?: string | null
 }
 
 export default function PokemonLearnsetWindow({
@@ -20,7 +20,8 @@ export default function PokemonLearnsetWindow({
     onRemoveLearnset,
     onReorderLearnset,
     pokemonList,
-    isSubmitting
+    isSubmitting,
+    learnsetDeckName
 }: PokemonLearnsetWindowProps) {
     if (toolbarType === "none") {
         return null
@@ -28,8 +29,8 @@ export default function PokemonLearnsetWindow({
 
     return (
         <div className="flex flex-col border rounded-xl">
-            { toolbarType === "owner" && <OwnerLearnsetToolbar /> }
-            { toolbarType === "viewer" && <ViewerLearnsetToolbar /> }
+            { toolbarType === "owner" && <OwnerLearnsetToolbar learnsetDeckName={ learnsetDeckName } /> }
+            { toolbarType === "viewer" && <ViewerLearnsetToolbar learnsetDeckName={ learnsetDeckName } /> }
             { toolbarType === "new" && <NewLearnsetToolbar
                 learnsetList={ learnsetList }
                 handleClearLearnsets={ onClearLearnsets }
