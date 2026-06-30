@@ -41,3 +41,12 @@ export async function getLearnsetDeckById(deckId: string): Promise<LearnsetDeckI
         sortOrder: item.sortOrder,
     }))
 }
+
+export async function getLearnsetDeckOwnerId(deckId: string): Promise<string | null> {
+    const learnsetDeck = await prisma.learnsetDeck.findUnique({
+        where: { id: deckId },
+        select: { userId: true },
+    })
+
+    return learnsetDeck?.userId ?? null
+}

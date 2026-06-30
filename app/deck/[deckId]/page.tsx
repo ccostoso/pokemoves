@@ -1,12 +1,29 @@
 import SearchShell from "@/components/search-shell"
-import { authClient } from "@/lib/auth-client"
+import { getLearnsetDeckOwnerId } from "@/lib/actions/db-actions"
+import { getServerSession } from "@/lib/auth-server"
+import { notFound } from "next/navigation"
 
-export default function DeckPage() {
-    const { data: session } = authClient.useSession()
+type DeckPageProps = {
+    params: Promise<{ deckId: string }>
+}
+
+export default async function DeckPage({ params }: DeckPageProps) {
+    const { deckId } = await params
+    const [ownerId, session] = await Promise.all([
+        getLearnsetDeckOwnerId(deckId),
+        getServerSession(),
+    ])
+
+    if (!ownerId) {
+        notFound()
+    }
+
+    const toolbarType: "owner" | "viewer" =
+        ownerId && session?.user?.id === ownerId ? "owner" : "viewer"
 
     return (
         <main className="container mx-auto p-4 flex-1">
-            <SearchShell />
+            <SearchShell toolbarType={ toolbarType } />
         </main>
     )
 }

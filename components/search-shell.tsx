@@ -4,7 +4,11 @@ import SearchPanel from "./pokemon-search/search-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
 
-export default function SearchShell() {
+type SearchShellProps = {
+    toolbarType?: "owner" | "viewer" | "new" | "none"
+}
+
+export default function SearchShell({ toolbarType = "new" }: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
@@ -39,6 +43,7 @@ export default function SearchShell() {
                 </aside>
                 <section className="flex-1 min-w-0 overflow-x-hidden">
                     <PokemonLearnsetWindow
+                        toolbarType={ toolbarType }
                         learnsetList={ learnsetList }
                         onClearLearnsets={ handleClearLearnsets }
                         onRemoveLearnset={ handleRemoveLearnset }
