@@ -24,7 +24,7 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
     const [learnsetNameError, setLearnsetNameError] = useState<string | null>(null)
     const [isSaving, setIsSaving] = useState(false)
 
-    const mapLevelUpLearsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
+    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
         return learnset.map((item, index) => ({
             pokemonName: item.pokemonName,
             versionGroupName: item.versionGroupName,
@@ -59,7 +59,7 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
         }
 
         try {
-            const formattedLearnset = mapLevelUpLearsetToDbFormat(learnsetList)
+            const formattedLearnset = mapLevelUpLearnsetToDbFormat(learnsetList)
             await saveLearnset(session.user.id, learnsetTitleResult.data, formattedLearnset)
 
             setLearnsetName("")

@@ -3,6 +3,8 @@
 import { prisma } from "@/lib/prisma"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
 import { LearnsetDeckItemData } from "@/lib/types"
+import { getServerSession } from "@/lib/auth-server"
+
 
 export async function saveLearnset(userId: string, name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<string> {
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
@@ -57,4 +59,51 @@ export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ use
     })
 
     return learnsetDeck ?? null
+}
+
+export async function updateLearnsetDeck(
+    deckId: string,
+    name: string,
+    learnsetDeck: LearnsetDeckItemData[]
+): Promise<string> {
+    const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
+
+    try {
+        const session = await getServerSession()
+        if (!session?.user?.id) {
+            throw new Error("User is not authenticated.")
+        }
+
+        const updatedDeck = await prisma.$transaction(async (tx) => {
+            const deck = await tx.learnsetDeck.findUniqueOrThrow({
+                where: { id: deckId },
+                select: { userId: true },
+            })
+
+            if (deck.userId !== session.user.id) {
+                throw new Error("User does not have permission to update this learnset deck.")
+            }
+
+            await tx.learnsetDeckItem.deleteMany({ where: { deckId } })
+
+            await tx.learnsetDeckItem.createMany({
+                data: learnsetDeck.map((item, index) => ({
+                    deckId,
+                    pokemonName: item.pokemonName,
+                    versionGroupName: item.versionGroupName,
+                    sortOrder: index,
+                })),
+            })
+
+            return tx.learnsetDeck.update({
+                where: { id: deckId },
+                data: { name: validatedLearnsetName },
+                select: { id: true },
+            })
+        })
+
+        return updatedDeck.id
+    } catch (error) {
+        throw error
+    }
 }

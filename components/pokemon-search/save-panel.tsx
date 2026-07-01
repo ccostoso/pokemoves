@@ -21,7 +21,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const mapLevelUpLearsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
+    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
         return learnset.map((item, index) => ({
             pokemonName: item.pokemonName,
             versionGroupName: item.versionGroupName,
@@ -50,7 +50,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
         }
 
         try {
-            const formattedLearnset = mapLevelUpLearsetToDbFormat(learnsetList)
+            const formattedLearnset = mapLevelUpLearnsetToDbFormat(learnsetList)
             const response = await saveLearnset(session.user.id, learnsetName, formattedLearnset)
 
             setLearnsetName("")

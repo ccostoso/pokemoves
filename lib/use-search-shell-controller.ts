@@ -2,7 +2,7 @@ import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndVersionGroup,
 } from "./actions/qraphql-actions"
-import { saveLearnset } from "./actions/db-actions"
+import { saveLearnset, updateLearnsetDeck } from "./actions/db-actions"
 import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
 import {
     countLearnsetPairOccurrences,
@@ -63,6 +63,7 @@ type UseSearchShellControllerReturn = {
     // handlers used by child components
     handleAddLearnset: SubmitEventHandler<HTMLFormElement>,
     handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
+    handleSaveChanges: (name: string) => Promise<string>,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
@@ -318,7 +319,7 @@ export function useSearchShellController(
         }
     }
 
-    const mapLevelUpLearsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
+    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
         return learnset.map((item, index) => ({
             pokemonName: item.pokemonName,
             versionGroupName: item.versionGroupName,
@@ -341,10 +342,33 @@ export function useSearchShellController(
             throw new Error("No learnset to duplicate.")
         }
 
-        const formattedLearnset = mapLevelUpLearsetToDbFormat(state.learnsetList)
+        const formattedLearnset = mapLevelUpLearnsetToDbFormat(state.learnsetList)
         const duplicatedDeckId = await saveLearnset(userId, trimmedLearnsetName, formattedLearnset)
 
         return duplicatedDeckId
+    }
+
+    const handleSaveChanges = async (name: string): Promise<string> => {
+        const trimmedLearnsetName = name.trim()
+        const deckId = initialLearnsetDeckId
+
+        if (!deckId) {
+            throw new Error("Invalid deck ID.")
+        }
+
+        if (!trimmedLearnsetName) {
+            throw new Error("Please enter a name for the learnset deck.")
+        }
+
+        const formattedLearnset = mapLevelUpLearnsetToDbFormat(state.learnsetList)
+
+        if (formattedLearnset.length === 0) {
+            throw new Error("No learnset to save.")
+        }
+
+        const updatedDeckId = await updateLearnsetDeck(deckId, trimmedLearnsetName, formattedLearnset)
+
+        return updatedDeckId
     }
 
     useEffect(() => {
@@ -449,6 +473,7 @@ export function useSearchShellController(
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleAddLearnset,
         handleSaveAsDuplicate,
+        handleSaveChanges,
         handleClearLearnsets: () => dispatch({ type: "learnsetCleared" }),
         handleRemoveLearnset: (indexToRemove: number) =>
             dispatch({ type: "learnsetRemoved", indexToRemove }),

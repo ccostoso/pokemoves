@@ -4,11 +4,13 @@ import { OwnerLearnsetToolbar, ViewerLearnsetToolbar, NewLearnsetToolbar } from 
 
 type PokemonLearnsetWindowProps = {
     toolbarType: "owner" | "viewer" | "new" | "none",
+    learnsetDeckId?: string,
     learnsetList: LevelUpLearnset[],
     onClearLearnsets: () => void,
     onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
+    onSaveChanges: (learnsetName: string) => Promise<string>,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean,
     learnsetDeckName?: string | null,
@@ -17,11 +19,13 @@ type PokemonLearnsetWindowProps = {
 
 export default function PokemonLearnsetWindow({
     toolbarType,
+    learnsetDeckId,
     learnsetList,
     onClearLearnsets,
     onRemoveLearnset,
     onReorderLearnset,
     onSaveAsDuplicate,
+    onSaveChanges,
     pokemonList,
     isSubmitting,
     learnsetDeckName,
@@ -33,9 +37,10 @@ export default function PokemonLearnsetWindow({
 
     return (
         <div className="flex flex-col border rounded-xl">
-            { toolbarType === "owner" && (
+            { toolbarType === "owner" && learnsetDeckId && (
                 <OwnerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
+                    onSaveChanges={ onSaveChanges }
                     hasUnsavedChanges={ hasUnsavedChanges }
                 />
             ) }
