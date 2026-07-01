@@ -51,7 +51,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
 
         try {
             const formattedLearnset = mapLevelUpLearnsetToDbFormat(learnsetList)
-            const response = await saveLearnset(session.user.id, learnsetName, formattedLearnset)
+            await saveLearnset(session.user.id, learnsetName, formattedLearnset)
 
             setLearnsetName("")
             setError(null)

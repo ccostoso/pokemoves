@@ -41,6 +41,7 @@ export default function PokemonLearnsetWindow({
                 <OwnerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
                     onSaveChanges={ onSaveChanges }
+                    onSaveAsDuplicate={ onSaveAsDuplicate }
                     hasUnsavedChanges={ hasUnsavedChanges }
                 />
             ) }

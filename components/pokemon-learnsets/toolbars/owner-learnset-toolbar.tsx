@@ -6,15 +6,20 @@ import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { BrushCleaning, ChevronDownIcon, CopyCheck, CopyX, Save, Trash, Undo } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
+import { authClient } from "@/lib/auth-client"
+import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
 
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
     onSaveChanges: (name: string) => Promise<string>,
+    onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     hasUnsavedChanges: boolean
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, hasUnsavedChanges }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, hasUnsavedChanges }: OwnerLearnsetToolbarProps) {
+    const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
+    const [ isOpen, setIsOpen ] = useState(false)
     const hasNameChanges = inputValue.trim() !== (learnsetDeckName ?? "").trim()
     const hasAnyUnsavedChanges = hasUnsavedChanges || hasNameChanges
 
@@ -24,7 +29,6 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, hasUnsav
         const submitter = (e.nativeEvent as SubmitEvent).submitter as HTMLButtonElement | null
         const intent = submitter?.value as
             | "save-changes"
-            | "save-duplicate"
             | "duplicate-initial"
             | undefined
 
@@ -34,13 +38,21 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, hasUnsav
             case "save-changes":
                 await onSaveChanges(inputValue)
                 break
-            case "save-duplicate":
-                throw new Error("Save as duplicate is not implemented yet.")
             case "duplicate-initial":
                 throw new Error(
                     "Duplicate without unsaved changes is not implemented yet.",
                 )
         }
+    }
+
+    const handleSaveAsDuplicate = async (learnsetName: string): Promise<string> => {
+        const userId = session?.user?.id
+
+        if (!userId) {
+            throw new Error("You must be logged in to duplicate this learnset.")
+        }
+
+        return onSaveAsDuplicate(userId, learnsetName)
     }
 
     return (
@@ -74,23 +86,22 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, hasUnsav
                                         <Button><ChevronDownIcon /></Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-auto min-w-44">
-                                        <DropdownMenuItem asChild disabled={ !hasAnyUnsavedChanges }>
-                                            <button
-                                                type="submit"
-                                                form="owner-learnset-toolbar-form"
-                                                name="intent" 
-                                                value="save-as-duplicate"
-                                                className="whitespace-nowrap"
-                                            >
-                                                <CopyCheck className="mr-2" />Save as duplicate
-                                            </button>
+                                        <DropdownMenuItem
+                                            className="whitespace-nowrap"
+                                            disabled={ !hasUnsavedChanges }
+                                            onSelect={ (event) => {
+                                                event.preventDefault()
+                                                setIsOpen(true)
+                                            } }
+                                        >
+                                            <CopyCheck className="mr-2" />Save as duplicate
                                         </DropdownMenuItem>
                                         <DropdownMenuItem asChild>
                                             <button
                                                 type="submit"
                                                 form="owner-learnset-toolbar-form"
-                                                name="intent" 
-                                                value="duplicate-without-unsaved-changes"
+                                                name="intent"
+                                                value="duplicate-initial"
                                                 className="whitespace-nowrap"
                                             >
                                                 <CopyX className="mr-2" />Duplicate without unsaved changes
@@ -142,6 +153,11 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, hasUnsav
                     </FieldGroup>
                 </FieldSet>
             </form>
+            <SaveAsDuplicateDialog
+                open={ isOpen }
+                onOpenChange={ setIsOpen }
+                onSaveAsDuplicate={ handleSaveAsDuplicate }
+            />
         </div>
     )
 }

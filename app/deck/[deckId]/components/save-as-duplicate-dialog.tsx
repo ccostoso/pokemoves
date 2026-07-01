@@ -9,7 +9,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
 } from "@/components/ui/dialog"
 import { Field, FieldError, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
@@ -17,19 +16,19 @@ import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { SaveAsDuplicateSchema, SaveAsDuplicateSchemaType } from "@/lib/schemas"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { CopyCheck } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 type SaveAsDuplicateDialogProps = {
+    open: boolean,
+    onOpenChange: (open: boolean) => void,
     onSaveAsDuplicate: (learnsetName: string) => Promise<string>
 }
 
-export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDuplicateDialogProps) {
+export default function SaveAsDuplicateDialog({ open, onOpenChange, onSaveAsDuplicate }: SaveAsDuplicateDialogProps) {
     const router = useRouter()
-    const [isOpen, setIsOpen] = useState(false)
     const [isSaving, setIsSaving] = useState(false)
 
     const form = useForm<SaveAsDuplicateSchemaType>({
@@ -48,7 +47,7 @@ export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDupli
             toast.success("Duplicate learnset saved successfully!", {
                 position: "top-center",
             })
-            setIsOpen(false)
+            onOpenChange(false)
             form.reset()
             router.push(`/deck/${duplicatedDeckId}`)
         } catch (error) {
@@ -63,17 +62,14 @@ export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDupli
 
     return (
         <Dialog
-            open={ isOpen }
+            open={ open }
             onOpenChange={ (open) => {
-                setIsOpen(open)
+                onOpenChange(open)
                 if (!open) {
                     form.reset()
                 }
             } }
         >
-            <DialogTrigger asChild>
-                <Button><CopyCheck className="mr-2" />Save as duplicate</Button>
-            </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Save as duplicate</DialogTitle>
@@ -116,7 +112,7 @@ export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDupli
                                 ) }
                             </Button>
                             <DialogClose asChild>
-                                <Button variant="outline" disabled={ isSaving }>Cancel</Button>
+                                <Button variant="outline" disabled={ isSaving } onClick={ () => onOpenChange(false) }>Cancel</Button>
                             </DialogClose>
                         </DialogFooter>
                     </FieldSet>

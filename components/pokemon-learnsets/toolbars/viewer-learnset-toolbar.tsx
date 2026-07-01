@@ -2,6 +2,9 @@ import { Field, FieldGroup, FieldSet, } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { CopyCheck } from "lucide-react"
 
 type ViewerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
@@ -10,6 +13,7 @@ type ViewerLearnsetToolbarProps = {
 
 export function ViewerLearnsetToolbar({ learnsetDeckName, onSaveAsDuplicate }: ViewerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
+    const [isOpen, setIsOpen] = useState(false)
 
     const handleSaveAsDuplicate = async (learnsetName: string): Promise<string> => {
         const userId = session?.user?.id
@@ -19,6 +23,11 @@ export function ViewerLearnsetToolbar({ learnsetDeckName, onSaveAsDuplicate }: V
         }
 
         return onSaveAsDuplicate(userId, learnsetName)
+    }
+
+    const handleOnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.preventDefault()
+        setIsOpen(true)
     }
 
     return (
@@ -33,7 +42,8 @@ export function ViewerLearnsetToolbar({ learnsetDeckName, onSaveAsDuplicate }: V
                     { session?.user && (
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
-                                <SaveAsDuplicateDialog onSaveAsDuplicate={ handleSaveAsDuplicate } />
+                                <Button type="button" onClick={ handleOnClick }><CopyCheck className="mr-2" />Save as duplicate</Button>
+                                <SaveAsDuplicateDialog open={ isOpen } onOpenChange={ setIsOpen } onSaveAsDuplicate={ handleSaveAsDuplicate } />
                             </Field>
                         </FieldGroup>
                     ) }
