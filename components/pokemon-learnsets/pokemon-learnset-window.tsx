@@ -10,6 +10,7 @@ type PokemonLearnsetWindowProps = {
     onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
+    onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     onSaveChanges: (learnsetName: string) => Promise<string>,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean,
@@ -25,6 +26,7 @@ export default function PokemonLearnsetWindow({
     onRemoveLearnset,
     onReorderLearnset,
     onSaveAsDuplicate,
+    onDuplicateOriginalWithoutSaving,
     onSaveChanges,
     pokemonList,
     isSubmitting,
@@ -42,6 +44,7 @@ export default function PokemonLearnsetWindow({
                     learnsetDeckName={ learnsetDeckName }
                     onSaveChanges={ onSaveChanges }
                     onSaveAsDuplicate={ onSaveAsDuplicate }
+                    onDuplicateOriginalWithoutSaving={ onDuplicateOriginalWithoutSaving }
                     hasUnsavedChanges={ hasUnsavedChanges }
                 />
             ) }

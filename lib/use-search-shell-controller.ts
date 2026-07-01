@@ -62,8 +62,9 @@ type UseSearchShellControllerReturn = {
 
     // handlers used by child components
     handleAddLearnset: SubmitEventHandler<HTMLFormElement>,
-    handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     handleSaveChanges: (name: string) => Promise<string>,
+    handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
+    handleDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
@@ -193,26 +194,41 @@ export function useSearchShellController(
         isPokemonListLoading: false,
     })
 
+    const originalLearnsetDeckSnapshot = useMemo<LearnsetDeckItemData[]>(() => {
+        if (initialLearnsetDeckItemData && initialLearnsetDeckItemData.length > 0) {
+            return initialLearnsetDeckItemData
+                .slice()
+                .sort((a, b) => a.sortOrder - b.sortOrder)
+                .map((item, index) => ({
+                    pokemonName: item.pokemonName,
+                    versionGroupName: item.versionGroupName,
+                    sortOrder: index,
+                }))
+        }
+
+        if (initialHydratedLearnsetList && initialHydratedLearnsetList.length > 0) {
+            return initialHydratedLearnsetList.map((item, index) => ({
+                pokemonName: item.pokemonName,
+                versionGroupName: item.versionGroupName,
+                sortOrder: index,
+            }))
+        }
+
+        return []
+    }, [initialLearnsetDeckItemData, initialHydratedLearnsetList])
+
     const toLearnsetSignature = (learnsetList: LevelUpLearnset[]): string =>
         learnsetList
             .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
             .join("|")
 
-    const initialLearnsetSignature = useMemo(() => {
-        if (initialHydratedLearnsetList) {
-            return toLearnsetSignature(initialHydratedLearnsetList)
-        }
-
-        if (!initialLearnsetDeckItemData || initialLearnsetDeckItemData.length === 0) {
-            return ""
-        }
-
-        return initialLearnsetDeckItemData
-            .slice()
-            .sort((a, b) => a.sortOrder - b.sortOrder)
-            .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
-            .join("|")
-    }, [initialHydratedLearnsetList, initialLearnsetDeckItemData])
+    const initialLearnsetSignature = useMemo(
+        () =>
+            originalLearnsetDeckSnapshot
+                .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
+                .join("|"),
+        [originalLearnsetDeckSnapshot],
+    )
 
     const hasUnsavedChanges =
         toLearnsetSignature(state.learnsetList) !== initialLearnsetSignature
@@ -327,27 +343,6 @@ export function useSearchShellController(
         }))
     }
 
-    const handleSaveAsDuplicate = async (userId: string, learnsetName: string): Promise<string> => {
-        const trimmedLearnsetName = learnsetName.trim()
-
-        if (!userId) {
-            throw new Error("You must be logged in to save a duplicate learnset.")
-        }
-
-        if (!trimmedLearnsetName) {
-            throw new Error("Please enter a name for the duplicate learnset.")
-        }
-
-        if (state.learnsetList.length === 0) {
-            throw new Error("No learnset to duplicate.")
-        }
-
-        const formattedLearnset = mapLevelUpLearnsetToDbFormat(state.learnsetList)
-        const duplicatedDeckId = await saveLearnset(userId, trimmedLearnsetName, formattedLearnset)
-
-        return duplicatedDeckId
-    }
-
     const handleSaveChanges = async (name: string): Promise<string> => {
         const trimmedLearnsetName = name.trim()
         const deckId = initialLearnsetDeckId
@@ -369,6 +364,29 @@ export function useSearchShellController(
         const updatedDeckId = await updateLearnsetDeck(deckId, trimmedLearnsetName, formattedLearnset)
 
         return updatedDeckId
+    }
+
+    const duplicateFromSource = async (
+        userId: string,
+        learnsetName: string,
+        sourceDeck: LearnsetDeckItemData[],
+    ): Promise<string> => {
+        const trimmedLearnsetName = learnsetName.trim()
+
+        if (!userId) throw new Error("You must be logged in to duplicate this learnset.")
+        if (!trimmedLearnsetName) throw new Error("Please enter a name for the duplicate learnset.")
+        if (sourceDeck.length === 0) throw new Error("No learnset to duplicate.")
+
+        return saveLearnset(userId, trimmedLearnsetName, sourceDeck)
+    }
+
+    const handleSaveAsDuplicate = async (userId: string, learnsetName: string): Promise<string> => {
+        return duplicateFromSource(userId, learnsetName, mapLevelUpLearnsetToDbFormat(state.learnsetList))
+    }
+
+
+    const handleDuplicateOriginalWithoutSaving = async (userId: string, learnsetName: string): Promise<string> => {
+        return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)
     }
 
     useEffect(() => {
@@ -473,6 +491,7 @@ export function useSearchShellController(
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleAddLearnset,
         handleSaveAsDuplicate,
+        handleDuplicateOriginalWithoutSaving,
         handleSaveChanges,
         handleClearLearnsets: () => dispatch({ type: "learnsetCleared" }),
         handleRemoveLearnset: (indexToRemove: number) =>
