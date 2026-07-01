@@ -177,6 +177,24 @@ export function useSearchShellController(
 ): UseSearchShellControllerReturn {
     const hydratedDeckKeyRef = useRef<string | null>(null)
 
+    const createLearnsetInstanceId = (
+        pokemonName: string,
+        versionGroupName: string,
+        occurrence: number,
+    ): string => `${pokemonName}:${versionGroupName}:${occurrence}`
+
+    const getPairOccurrenceCount = (
+        learnsetList: LevelUpLearnset[],
+        pokemonName: string,
+        versionGroupName: string,
+    ): number => {
+        return learnsetList.filter(
+            (learnset) =>
+                learnset.pokemonName === pokemonName &&
+                learnset.versionGroupName === versionGroupName,
+        ).length
+    }
+
     const [state, dispatch] = useReducer(searchShellReducer, {
         pokemonList: [],
         versionGroupName: "",
@@ -267,7 +285,18 @@ export function useSearchShellController(
 
             dispatch({
                 type: "addLearnsetSucceeded",
-                learnset: { ...pokemonMoves, id: crypto.randomUUID() },
+                learnset: {
+                    ...pokemonMoves,
+                    id: createLearnsetInstanceId(
+                        pokemonMoves.pokemonName,
+                        pokemonMoves.versionGroupName,
+                        getPairOccurrenceCount(
+                            state.learnsetList,
+                            pokemonMoves.pokemonName,
+                            pokemonMoves.versionGroupName,
+                        ) + 1,
+                    ),
+                },
             })
         } catch {
             dispatch({
@@ -339,6 +368,8 @@ export function useSearchShellController(
             dispatch({ type: "learnsetHydrationStarted" })
 
             try {
+                const occurrenceMap = new Map<string, number>()
+
                 const hydratedLearnsets: LevelUpLearnset[] = await Promise.all(
                     initialLearnsetDeckItemData.map(async (item) => {
                         const pokemonMoves =
@@ -347,7 +378,18 @@ export function useSearchShellController(
                                 item.versionGroupName,
                             )
 
-                        return { ...pokemonMoves, id: crypto.randomUUID() }
+                        const key = `${item.pokemonName}:${item.versionGroupName}`
+                        const nextOccurrence = (occurrenceMap.get(key) ?? 0) + 1
+                        occurrenceMap.set(key, nextOccurrence)
+
+                        return {
+                            ...pokemonMoves,
+                            id: createLearnsetInstanceId(
+                                item.pokemonName,
+                                item.versionGroupName,
+                                nextOccurrence,
+                            ),
+                        }
                     }),
                 )
 

@@ -27,6 +27,8 @@ export default async function DeckPage({ params }: DeckPageProps) {
     const toolbarType: "owner" | "viewer" =
         learnsetDeckMetadata.userId && session?.user?.id === learnsetDeckMetadata.userId ? "owner" : "viewer"
 
+    const occurrenceMap = new Map<string, number>()
+
     const initialHydratedLearnsetList = await Promise.all(
         learnsetDeckItemData.map(async (item) => {
             const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
@@ -34,9 +36,13 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 item.versionGroupName,
             )
 
+            const key = `${item.pokemonName}:${item.versionGroupName}`
+            const nextOccurrence = (occurrenceMap.get(key) ?? 0) + 1
+            occurrenceMap.set(key, nextOccurrence)
+
             return {
                 ...pokemonMoves,
-                id: crypto.randomUUID(),
+                id: `${item.pokemonName}:${item.versionGroupName}:${nextOccurrence}`,
             }
         }),
     )

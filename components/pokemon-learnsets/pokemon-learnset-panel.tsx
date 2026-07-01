@@ -83,7 +83,7 @@ export default function PokemonLearnsetPanel({
     return (
         <ScrollArea ref={ scrollAreaRef } className="w-full max-w-full">
             { learnsetList.length > 0 ? (
-                <DndContext onDragEnd={ handleDragEnd }>
+                <DndContext id="learnset-dnd-context" onDragEnd={ handleDragEnd }>
                     <SortableContext
                         items={ learnsetList.map((item) => item.id) }
                         strategy={ horizontalListSortingStrategy }
