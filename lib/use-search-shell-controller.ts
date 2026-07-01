@@ -4,6 +4,11 @@ import {
 } from "./actions/qraphql-actions"
 import { saveLearnset } from "./actions/db-actions"
 import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
+import {
+    countLearnsetPairOccurrences,
+    createLearnsetInstanceId,
+    getNextLearnsetOccurrence,
+} from "./utils"
 import { SubmitEventHandler, useEffect, useReducer, useRef } from "react"
 
 type RequestState =
@@ -177,24 +182,6 @@ export function useSearchShellController(
 ): UseSearchShellControllerReturn {
     const hydratedDeckKeyRef = useRef<string | null>(null)
 
-    const createLearnsetInstanceId = (
-        pokemonName: string,
-        versionGroupName: string,
-        occurrence: number,
-    ): string => `${pokemonName}:${versionGroupName}:${occurrence}`
-
-    const getPairOccurrenceCount = (
-        learnsetList: LevelUpLearnset[],
-        pokemonName: string,
-        versionGroupName: string,
-    ): number => {
-        return learnsetList.filter(
-            (learnset) =>
-                learnset.pokemonName === pokemonName &&
-                learnset.versionGroupName === versionGroupName,
-        ).length
-    }
-
     const [state, dispatch] = useReducer(searchShellReducer, {
         pokemonList: [],
         versionGroupName: "",
@@ -290,7 +277,7 @@ export function useSearchShellController(
                     id: createLearnsetInstanceId(
                         pokemonMoves.pokemonName,
                         pokemonMoves.versionGroupName,
-                        getPairOccurrenceCount(
+                        countLearnsetPairOccurrences(
                             state.learnsetList,
                             pokemonMoves.pokemonName,
                             pokemonMoves.versionGroupName,
@@ -378,9 +365,11 @@ export function useSearchShellController(
                                 item.versionGroupName,
                             )
 
-                        const key = `${item.pokemonName}:${item.versionGroupName}`
-                        const nextOccurrence = (occurrenceMap.get(key) ?? 0) + 1
-                        occurrenceMap.set(key, nextOccurrence)
+                        const nextOccurrence = getNextLearnsetOccurrence(
+                            occurrenceMap,
+                            item.pokemonName,
+                            item.versionGroupName,
+                        )
 
                         return {
                             ...pokemonMoves,

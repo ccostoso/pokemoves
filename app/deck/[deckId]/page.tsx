@@ -2,6 +2,7 @@ import SearchShell from "@/components/search-shell"
 import { getLearnsetDeckMetadataById, getLearnsetDeckItemDataById } from "@/lib/actions/db-actions"
 import { getLevelUpMovesByPokemonNameAndVersionGroup } from "@/lib/actions/qraphql-actions"
 import { getServerSession } from "@/lib/auth-server"
+import { createLearnsetInstanceId, getNextLearnsetOccurrence } from "@/lib/utils"
 import { notFound } from "next/navigation"
 
 type DeckPageProps = {
@@ -36,13 +37,19 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 item.versionGroupName,
             )
 
-            const key = `${item.pokemonName}:${item.versionGroupName}`
-            const nextOccurrence = (occurrenceMap.get(key) ?? 0) + 1
-            occurrenceMap.set(key, nextOccurrence)
+            const nextOccurrence = getNextLearnsetOccurrence(
+                occurrenceMap,
+                item.pokemonName,
+                item.versionGroupName,
+            )
 
             return {
                 ...pokemonMoves,
-                id: `${item.pokemonName}:${item.versionGroupName}:${nextOccurrence}`,
+                id: createLearnsetInstanceId(
+                    item.pokemonName,
+                    item.versionGroupName,
+                    nextOccurrence,
+                ),
             }
         }),
     )

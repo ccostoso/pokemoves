@@ -19,7 +19,11 @@ type AccountDropdownMenuProps = {
     activeButton: string | null,
     setActiveButton: (button: string | null) => void,
     isAccountMenuOpen: boolean,
-    handleAccountMenuOpenChange: (open: boolean) => void
+    handleAccountMenuOpenChange: (open: boolean) => void,
+    user: {
+        name: string | null,
+        username: string | null
+    } | null
 }
 
 export default function AccountDropdownMenu({
@@ -27,6 +31,7 @@ export default function AccountDropdownMenu({
     setActiveButton,
     isAccountMenuOpen,
     handleAccountMenuOpenChange,
+    user
 }: AccountDropdownMenuProps) {
     const router = useRouter()
 
@@ -52,6 +57,17 @@ export default function AccountDropdownMenu({
                 />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+                <DropdownMenuGroup className="whitespace-nowrap">
+                    <div className="px-1.5 py-1.5">
+                        <p className="text-sm font-semibold">
+                            @{ user?.username }
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                            { user?.name }
+                        </p>
+                    </div>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>User</DropdownMenuLabel>
                     <DropdownMenuItem asChild>

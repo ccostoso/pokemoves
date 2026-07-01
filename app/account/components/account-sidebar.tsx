@@ -50,13 +50,13 @@ const SidebarOptions: { href: string, icon: ReactNode, label: string }[] = [
 
 export default function AccountSidebar() {
     const pathname = usePathname()
-    const {data: session} = authClient.useSession()
+    const { data: session } = authClient.useSession()
 
     return (
         <aside className="w-56 shrink-0 self-stretch p-4 flex flex-col gap-4">
             <div className="px-2">
-                <p className="font-semibold">{ session?.user?.name }</p>
-                <p className="text-sm text-muted-foreground">@{ session?.user?.username }</p>
+                <p className="text-sm font-semibold">@{ session?.user?.username }</p>
+                <p className="text-muted-foreground">{ session?.user?.name }</p>
             </div>
 
             <nav className="flex flex-col gap-4">

@@ -7,15 +7,6 @@ import SignInDialog from "./sign-in-dialog"
 import { authClient } from "@/lib/auth-client"
 import NavbarExpandableButton from "./navbar-expandable-button"
 import Link from "next/link"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuGroup,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 import AccountDropdownMenu from "./account-dropdown-menu"
 
 export default function Navbar() {
@@ -58,6 +49,11 @@ export default function Navbar() {
         }
     }
 
+    const navbarUser: { name: string | null, username: string | null } = {
+        name: session?.user?.name ?? null,
+        username: session?.user?.username ?? null,
+    }
+
     return (
         <nav
             className="bg-background text-foreground p-4 border-b border-foreground/20"
@@ -80,6 +76,7 @@ export default function Navbar() {
                             handleAccountMenuOpenChange={
                                 handleAccountMenuOpenChange
                             }
+                            user={ navbarUser }
                         />
                     ) : (
                         <NavbarExpandableButton
