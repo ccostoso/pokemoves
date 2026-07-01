@@ -24,6 +24,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         error,
         pokemonListLoading,
         isSubmitting,
+        hasUnsavedChanges,
         handleAddLearnset,
         handleSaveAsDuplicate,
         handleClearLearnsets,
@@ -64,6 +65,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                         pokemonList={ pokemonList }
                         learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }
+                        hasUnsavedChanges={ hasUnsavedChanges }
                     />
                 </section>
             </div>

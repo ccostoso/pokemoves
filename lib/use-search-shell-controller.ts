@@ -9,7 +9,7 @@ import {
     createLearnsetInstanceId,
     getNextLearnsetOccurrence,
 } from "./utils"
-import { SubmitEventHandler, useEffect, useReducer, useRef } from "react"
+import { SubmitEventHandler, useEffect, useMemo, useReducer, useRef } from "react"
 
 type RequestState =
     | { status: "idle" }
@@ -54,6 +54,7 @@ type UseSearchShellControllerReturn = {
     isSubmitting: boolean,
     pokemonListLoading: boolean,
     error: string | null,
+    hasUnsavedChanges: boolean,
 
     // setters used by SearchPanel inputs
     setVersionGroupName: (name: string) => void,
@@ -190,6 +191,30 @@ export function useSearchShellController(
         requestState: { status: "idle" },
         isPokemonListLoading: false,
     })
+
+    const toLearnsetSignature = (learnsetList: LevelUpLearnset[]): string =>
+        learnsetList
+            .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
+            .join("|")
+
+    const initialLearnsetSignature = useMemo(() => {
+        if (initialHydratedLearnsetList) {
+            return toLearnsetSignature(initialHydratedLearnsetList)
+        }
+
+        if (!initialLearnsetDeckItemData || initialLearnsetDeckItemData.length === 0) {
+            return ""
+        }
+
+        return initialLearnsetDeckItemData
+            .slice()
+            .sort((a, b) => a.sortOrder - b.sortOrder)
+            .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
+            .join("|")
+    }, [initialHydratedLearnsetList, initialLearnsetDeckItemData])
+
+    const hasUnsavedChanges =
+        toLearnsetSignature(state.learnsetList) !== initialLearnsetSignature
 
     useEffect(() => {
         if (!state.versionGroupName) {
@@ -417,6 +442,7 @@ export function useSearchShellController(
             state.requestState.status === "error"
                 ? state.requestState.message
                 : null,
+        hasUnsavedChanges,
         setVersionGroupName: (name: string) =>
             dispatch({ type: "versionGroupChanged", versionGroupName: name }),
         setPokemonName: (name: string) =>

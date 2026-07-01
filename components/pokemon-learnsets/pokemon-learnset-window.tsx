@@ -11,7 +11,8 @@ type PokemonLearnsetWindowProps = {
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean,
-    learnsetDeckName?: string | null
+    learnsetDeckName?: string | null,
+    hasUnsavedChanges: boolean
 }
 
 export default function PokemonLearnsetWindow({
@@ -23,7 +24,8 @@ export default function PokemonLearnsetWindow({
     onSaveAsDuplicate,
     pokemonList,
     isSubmitting,
-    learnsetDeckName
+    learnsetDeckName,
+    hasUnsavedChanges,
 }: PokemonLearnsetWindowProps) {
     if (toolbarType === "none") {
         return null
@@ -31,7 +33,12 @@ export default function PokemonLearnsetWindow({
 
     return (
         <div className="flex flex-col border rounded-xl">
-            { toolbarType === "owner" && <OwnerLearnsetToolbar learnsetDeckName={ learnsetDeckName } /> }
+            { toolbarType === "owner" && (
+                <OwnerLearnsetToolbar
+                    learnsetDeckName={ learnsetDeckName }
+                    hasUnsavedChanges={ hasUnsavedChanges }
+                />
+            ) }
             { toolbarType === "viewer" && (
                 <ViewerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }

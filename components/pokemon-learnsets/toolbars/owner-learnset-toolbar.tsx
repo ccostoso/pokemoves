@@ -8,11 +8,14 @@ import { BrushCleaning, ChevronDownIcon, CopyCheck, CopyX, Save, Trash, Undo } f
 import { useState } from "react"
 
 type OwnerLearnsetToolbarProps = {
-    learnsetDeckName?: string | null
+    learnsetDeckName?: string | null,
+    hasUnsavedChanges: boolean
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, hasUnsavedChanges }: OwnerLearnsetToolbarProps) {
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
+    const hasNameChanges = inputValue.trim() !== (learnsetDeckName ?? "").trim()
+    const hasAnyUnsavedChanges = hasUnsavedChanges || hasNameChanges
 
     return (
         <div className="flex flex-col p-4 border-b">
@@ -31,7 +34,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName }: OwnerLearnsetToolbarP
                     <FieldGroup className="flex flex-row justify-end gap-2">
                         <Field orientation="horizontal" className="w-auto">
                             <ButtonGroup className="flex justify-end">
-                                <Button type="submit" variant="default">
+                                <Button type="submit" variant="default" disabled={ !hasAnyUnsavedChanges }>
                                     <Save className="mr-2" /> Save changes
                                 </Button>
                                 <DropdownMenu>
@@ -40,7 +43,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName }: OwnerLearnsetToolbarP
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-auto min-w-44">
                                         <DropdownMenuItem className="whitespace-nowrap"><CopyCheck className="mr-2" />Save as duplicate</DropdownMenuItem>
-                                        <DropdownMenuItem className="whitespace-nowrap"><CopyX className="mr-2" />Duplicate without unsaved changes</DropdownMenuItem>
+                                        <DropdownMenuItem className="whitespace-nowrap" disabled={ !hasAnyUnsavedChanges }><CopyX className="mr-2" />Duplicate without unsaved changes</DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </ButtonGroup>
@@ -48,7 +51,9 @@ export function OwnerLearnsetToolbar({ learnsetDeckName }: OwnerLearnsetToolbarP
                         <Field orientation="horizontal" className="w-auto">
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button type="button"><Undo className="mr-2" />Revert</Button>
+                                    <Button type="button" disabled={ !hasAnyUnsavedChanges }>
+                                        <Undo className="mr-2" />Revert
+                                    </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Discard all unsaved changes</p>
