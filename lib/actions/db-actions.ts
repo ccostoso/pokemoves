@@ -3,8 +3,8 @@
 import { prisma } from "@/lib/prisma"
 import { LearnsetDeckItemData } from "@/lib/types"
 
-export async function saveLearnset(userId: string, name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<void> {
-    await prisma.learnsetDeck.create({
+export async function saveLearnset(userId: string, name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<string> {
+    const createdLearnsetDeck = await prisma.learnsetDeck.create({
         data: {
             userId,
             name,
@@ -17,8 +17,13 @@ export async function saveLearnset(userId: string, name: string, learnsetDeck: L
                     }))
                 }
             }
-        }
+        },
+        select: {
+            id: true,
+        },
     })
+
+    return createdLearnsetDeck.id
 }
 
 export async function getLearnsetDeckItemDataById(deckId: string): Promise<LearnsetDeckItemData[] | null> {

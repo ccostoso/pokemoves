@@ -2,6 +2,7 @@ import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndVersionGroup,
 } from "./actions/qraphql-actions"
+import { saveLearnset } from "./actions/db-actions"
 import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
 import { SubmitEventHandler, useEffect, useReducer, useRef } from "react"
 
@@ -55,6 +56,7 @@ type UseSearchShellControllerReturn = {
 
     // handlers used by child components
     handleAddLearnset: SubmitEventHandler<HTMLFormElement>,
+    handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
@@ -271,6 +273,35 @@ export function useSearchShellController(initialLearnsetDeckItemData?: LearnsetD
         }
     }
 
+    const mapLevelUpLearsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
+        return learnset.map((item, index) => ({
+            pokemonName: item.pokemonName,
+            versionGroupName: item.versionGroupName,
+            sortOrder: index,
+        }))
+    }
+
+    const handleSaveAsDuplicate = async (userId: string, learnsetName: string): Promise<string> => {
+        const trimmedLearnsetName = learnsetName.trim()
+
+        if (!userId) {
+            throw new Error("You must be logged in to save a duplicate learnset.")
+        }
+
+        if (!trimmedLearnsetName) {
+            throw new Error("Please enter a name for the duplicate learnset.")
+        }
+
+        if (state.learnsetList.length === 0) {
+            throw new Error("No learnset to duplicate.")
+        }
+
+        const formattedLearnset = mapLevelUpLearsetToDbFormat(state.learnsetList)
+        const duplicatedDeckId = await saveLearnset(userId, trimmedLearnsetName, formattedLearnset)
+
+        return duplicatedDeckId
+    }
+
     useEffect(() => {
         // If there is no initial learnset deck data, or if the length is zero, we don't need to hydrate anything
         if (!initialLearnsetDeckItemData || initialLearnsetDeckItemData.length === 0) {
@@ -349,6 +380,7 @@ export function useSearchShellController(initialLearnsetDeckItemData?: LearnsetD
         setPokemonName: (name: string) =>
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleAddLearnset,
+        handleSaveAsDuplicate,
         handleClearLearnsets: () => dispatch({ type: "learnsetCleared" }),
         handleRemoveLearnset: (indexToRemove: number) =>
             dispatch({ type: "learnsetRemoved", indexToRemove }),

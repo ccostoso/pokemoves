@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import SignUpForm from "./sign-up-form"
+import SignUpForm from "./components/sign-up-form"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { User } from "lucide-react"
 

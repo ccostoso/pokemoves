@@ -23,6 +23,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckItemData,
         pokemonListLoading,
         isSubmitting,
         handleAddLearnset,
+        handleSaveAsDuplicate,
         handleClearLearnsets,
         handleRemoveLearnset,
         handleReorderLearnset,
@@ -31,19 +32,21 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckItemData,
     return (
         <>
             <div className="flex gap-6 mt-6">
-                <aside className="w-72 shrink-0">
-                    <SearchPanel
-                        pokemonList={ pokemonList }
-                        versionGroupName={ versionGroupName }
-                        setVersionGroupName={ setVersionGroupName }
-                        pokemonName={ pokemonName }
-                        setPokemonName={ setPokemonName }
-                        isSubmitting={ isSubmitting }
-                        pokemonListLoading={ pokemonListLoading }
-                        error={ error }
-                        handleAddLearnset={ handleAddLearnset }
-                    />
-                </aside>
+                { toolbarType !== "viewer" && 
+                    <aside className="w-72 shrink-0">
+                        <SearchPanel
+                            pokemonList={ pokemonList }
+                            versionGroupName={ versionGroupName }
+                            setVersionGroupName={ setVersionGroupName }
+                            pokemonName={ pokemonName }
+                            setPokemonName={ setPokemonName }
+                            isSubmitting={ isSubmitting }
+                            pokemonListLoading={ pokemonListLoading }
+                            error={ error }
+                            handleAddLearnset={ handleAddLearnset }
+                        />
+                    </aside>
+                }
                 <section className="flex-1 min-w-0 overflow-x-hidden">
                     <PokemonLearnsetWindow
                         toolbarType={ toolbarType }
@@ -51,6 +54,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckItemData,
                         onClearLearnsets={ handleClearLearnsets }
                         onRemoveLearnset={ handleRemoveLearnset }
                         onReorderLearnset={ handleReorderLearnset }
+                        onSaveAsDuplicate={ handleSaveAsDuplicate }
                         pokemonList={ pokemonList }
                         learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }
