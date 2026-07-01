@@ -170,14 +170,18 @@ function searchShellReducer(
     }
 }
 
-export function useSearchShellController(initialLearnsetDeckItemData?: LearnsetDeckItemData[] | null): UseSearchShellControllerReturn {
+export function useSearchShellController(
+    initialLearnsetDeckItemData?: LearnsetDeckItemData[] | null,
+    initialLearnsetDeckId?: string,
+    initialHydratedLearnsetList?: LevelUpLearnset[] | null,
+): UseSearchShellControllerReturn {
     const hydratedDeckKeyRef = useRef<string | null>(null)
 
     const [state, dispatch] = useReducer(searchShellReducer, {
         pokemonList: [],
         versionGroupName: "",
         pokemonName: "",
-        learnsetList: [],
+        learnsetList: initialHydratedLearnsetList ?? [],
         requestState: { status: "idle" },
         isPokemonListLoading: false,
     })
@@ -303,15 +307,22 @@ export function useSearchShellController(initialLearnsetDeckItemData?: LearnsetD
     }
 
     useEffect(() => {
+        if (initialHydratedLearnsetList) {
+            return
+        }
+
         // If there is no initial learnset deck data, or if the length is zero, we don't need to hydrate anything
         if (!initialLearnsetDeckItemData || initialLearnsetDeckItemData.length === 0) {
+            dispatch({ type: "learnsetHydrationSucceeded", learnsetList: [] })
             return
         }
 
         // Create a unique key for the initial learnset deck data to avoid rehydrating if it hasn't changed
-        const deckKey = initialLearnsetDeckItemData
+        const learnsetContentKey = initialLearnsetDeckItemData
             .map((item) => `${item.pokemonName}:${item.versionGroupName}:${item.sortOrder}`)
             .join("|")
+
+        const deckKey = `${initialLearnsetDeckId ?? "unknown"}|${learnsetContentKey}`
 
         if (hydratedDeckKeyRef.current === deckKey) {
             return
@@ -362,7 +373,7 @@ export function useSearchShellController(initialLearnsetDeckItemData?: LearnsetD
         return () => {
             cancelled = true
         }
-    }, [initialLearnsetDeckItemData])
+    }, [initialLearnsetDeckId, initialLearnsetDeckItemData, initialHydratedLearnsetList])
 
     return {
         pokemonList: state.pokemonList,

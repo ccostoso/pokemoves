@@ -1,5 +1,6 @@
 import SearchShell from "@/components/search-shell"
-import { getLearnsetDeckMetadata, getLearnsetDeckItemDataById } from "@/lib/actions/db-actions"
+import { getLearnsetDeckMetadataById, getLearnsetDeckItemDataById } from "@/lib/actions/db-actions"
+import { getLevelUpMovesByPokemonNameAndVersionGroup } from "@/lib/actions/qraphql-actions"
 import { getServerSession } from "@/lib/auth-server"
 import { notFound } from "next/navigation"
 
@@ -10,7 +11,7 @@ type DeckPageProps = {
 export default async function DeckPage({ params }: DeckPageProps) {
     const { deckId } = await params
     const [learnsetDeckMetadata, learnsetDeckItemData, session] = await Promise.all([
-        getLearnsetDeckMetadata(deckId),
+        getLearnsetDeckMetadataById(deckId),
         getLearnsetDeckItemDataById(deckId),
         getServerSession(),
     ])
@@ -26,11 +27,28 @@ export default async function DeckPage({ params }: DeckPageProps) {
     const toolbarType: "owner" | "viewer" =
         learnsetDeckMetadata.userId && session?.user?.id === learnsetDeckMetadata.userId ? "owner" : "viewer"
 
+    const initialHydratedLearnsetList = await Promise.all(
+        learnsetDeckItemData.map(async (item) => {
+            const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
+                item.pokemonName,
+                item.versionGroupName,
+            )
+
+            return {
+                ...pokemonMoves,
+                id: crypto.randomUUID(),
+            }
+        }),
+    )
+
     return (
         <main className="container mx-auto p-4 flex-1">
             <SearchShell 
+                key={ deckId }
                 toolbarType={ toolbarType } 
+                learnsetDeckId={ deckId }
                 learnsetDeckItemData={ learnsetDeckItemData }
+                initialHydratedLearnsetList={ initialHydratedLearnsetList }
                 learnsetDeckName={ learnsetDeckMetadata.name } 
             />
         </main>

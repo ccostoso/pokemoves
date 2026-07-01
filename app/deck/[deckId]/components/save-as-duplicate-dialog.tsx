@@ -11,13 +11,16 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldGroup, FieldSet } from "@/components/ui/field"
+import { Field, FieldError, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
+import { SaveAsDuplicateSchema, SaveAsDuplicateSchemaType } from "@/lib/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { CopyCheck } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 type SaveAsDuplicateDialogProps = {
@@ -27,28 +30,26 @@ type SaveAsDuplicateDialogProps = {
 export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDuplicateDialogProps) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
-    const [learnsetName, setLearnsetName] = useState("")
     const [isSaving, setIsSaving] = useState(false)
 
-    const handleSave = async () => {
-        const trimmedLearnsetName = learnsetName.trim()
+    const form = useForm<SaveAsDuplicateSchemaType>({
+        resolver: zodResolver(SaveAsDuplicateSchema),
+        defaultValues: {
+            learnsetName: "",
+        },
+    })
 
-        if (!trimmedLearnsetName) {
-            toast.error("Please enter a name for the duplicate learnset.", {
-                position: "top-center",
-            })
-            return
-        }
+    const handleSave = async ({ learnsetName }: SaveAsDuplicateSchemaType) => {
+        setIsSaving(true)
 
         try {
-            setIsSaving(true)
-            const duplicatedDeckId = await onSaveAsDuplicate(trimmedLearnsetName)
+            const duplicatedDeckId = await onSaveAsDuplicate(learnsetName)
 
             toast.success("Duplicate learnset saved successfully!", {
                 position: "top-center",
             })
             setIsOpen(false)
-            setLearnsetName("")
+            form.reset()
             router.push(`/deck/${duplicatedDeckId}`)
         } catch (error) {
             toast.error("Failed to save duplicate learnset.", {
@@ -61,7 +62,15 @@ export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDupli
     }
 
     return (
-        <Dialog open={ isOpen } onOpenChange={ setIsOpen }>
+        <Dialog
+            open={ isOpen }
+            onOpenChange={ (open) => {
+                setIsOpen(open)
+                if (!open) {
+                    form.reset()
+                }
+            } }
+        >
             <DialogTrigger asChild>
                 <Button><CopyCheck className="mr-2" />Save as duplicate</Button>
             </DialogTrigger>
@@ -72,38 +81,46 @@ export default function SaveAsDuplicateDialog({ onSaveAsDuplicate }: SaveAsDupli
                         Enter a name for the duplicate learnset.
                     </DialogDescription>
                 </DialogHeader>
-                <FieldSet>
-                    <FieldGroup className="space-y-4 py-2 pb-4">
-                        <Field orientation="vertical">
-                            <Label htmlFor="duplicate-learnset-name">
-                                Duplicate Learnset Name
-                            </Label>
-                            <Input
-                                id="duplicate-learnset-name"
-                                type="text"
-                                placeholder="Enter a name for the duplicate learnset"
-                                value={ learnsetName }
-                                onChange={ (e) => setLearnsetName(e.target.value) }
-                                disabled={ isSaving }
-                            />
-                        </Field>
-                    </FieldGroup>
-                    <DialogFooter>
-                        <Button type="button" onClick={ handleSave } disabled={ isSaving }>
-                            { isSaving ? (
-                                <span className="inline-flex items-center gap-2">
-                                    <Spinner className="size-4" />
-                                    Saving...
-                                </span>
-                            ) : (
-                                "Save"
-                            ) }
-                        </Button>
-                        <DialogClose asChild>
-                            <Button variant="outline" disabled={ isSaving }>Cancel</Button>
-                        </DialogClose>
-                    </DialogFooter>
-                </FieldSet>
+                <form onSubmit={ form.handleSubmit(handleSave) }>
+                    <FieldSet>
+                        <FieldGroup className="space-y-4 py-2 pb-4">
+                            <Field orientation="vertical">
+                                <Label htmlFor="duplicate-learnset-name">
+                                    Duplicate Learnset Name
+                                </Label>
+                                <Input
+                                    id="duplicate-learnset-name"
+                                    type="text"
+                                    placeholder="Enter a name for the duplicate learnset"
+                                    maxLength={ 50 }
+                                    aria-invalid={ form.formState.errors.learnsetName ? true : undefined }
+                                    { ...form.register("learnsetName") }
+                                    disabled={ isSaving }
+                                />
+                                { form.formState.errors.learnsetName && (
+                                    <FieldError>
+                                        { form.formState.errors.learnsetName.message }
+                                    </FieldError>
+                                ) }
+                            </Field>
+                        </FieldGroup>
+                        <DialogFooter>
+                            <Button type="submit" disabled={ isSaving }>
+                                { isSaving ? (
+                                    <span className="inline-flex items-center gap-2">
+                                        <Spinner className="size-4" />
+                                        Saving...
+                                    </span>
+                                ) : (
+                                    "Save"
+                                ) }
+                            </Button>
+                            <DialogClose asChild>
+                                <Button variant="outline" disabled={ isSaving }>Cancel</Button>
+                            </DialogClose>
+                        </DialogFooter>
+                    </FieldSet>
+                </form>
             </DialogContent>
         </Dialog>
     )

@@ -5,6 +5,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { saveLearnset } from "@/lib/actions/db-actions"
 import { authClient } from "@/lib/auth-client"
+import { LearnsetDeckTitleSchema } from "@/lib/schemas"
 import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { BrushCleaning, Save } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
@@ -20,6 +21,7 @@ type NewLearnsetToolbarProps = {
 export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetName, setLearnsetName] = useState("")
+    const [learnsetNameError, setLearnsetNameError] = useState<string | null>(null)
     const [isSaving, setIsSaving] = useState(false)
 
     const mapLevelUpLearsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
@@ -32,19 +34,24 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
 
     const handleSaveLearnset: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
-        console.log("Learnset list length:", learnsetList.length)
         setIsSaving(true)
+        setLearnsetNameError(null)
 
         if (!session?.user) {
             toast.error("You must be logged in to save a learnset.", { position: "top-center" })
             setIsSaving(false)
             return
         }
-        if (!learnsetName) {
-            toast.error("Please enter a name for your learnset.", { position: "top-center" })
+
+        const learnsetTitleResult = LearnsetDeckTitleSchema.safeParse(learnsetName)
+        if (!learnsetTitleResult.success) {
+            const titleError = learnsetTitleResult.error.issues[0]?.message ?? "Invalid learnset name"
+            setLearnsetNameError(titleError)
+            toast.error(titleError, { position: "top-center" })
             setIsSaving(false)
             return
         }
+
         if (learnsetList.length === 0) {
             toast.error("No learnset to save. Please add a Pokémon first.", { position: "top-center" })
             setIsSaving(false)
@@ -53,9 +60,10 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
 
         try {
             const formattedLearnset = mapLevelUpLearsetToDbFormat(learnsetList)
-            await saveLearnset(session.user.id, learnsetName, formattedLearnset)
+            await saveLearnset(session.user.id, learnsetTitleResult.data, formattedLearnset)
 
             setLearnsetName("")
+            setLearnsetNameError(null)
             toast.success("Learnset saved successfully!", {
                 description: "You can view your saved learnsets in your profile.",
                 position: "top-center"
@@ -82,15 +90,25 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
                                 type="text" 
                                 placeholder="Learnset Name..." 
                                 value={ learnsetName } 
-                                onChange={ (e) => setLearnsetName(e.target.value) }
+                                maxLength={ 50 }
+                                aria-invalid={ learnsetNameError ? true : undefined }
+                                onChange={ (e) => {
+                                    setLearnsetName(e.target.value)
+                                    if (learnsetNameError) {
+                                        setLearnsetNameError(null)
+                                    }
+                                } }
                             />
+                            { learnsetNameError && (
+                                <p className="text-sm text-destructive mt-1">{ learnsetNameError }</p>
+                            ) }
                         </Field>
                     </FieldGroup>
                     <FieldGroup className="flex flex-row justify-end gap-2">
                         <Field orientation="horizontal" className="w-auto">
                             <Button
                                 type="submit"
-                                disabled={ isSaving || isSubmitting || !learnsetName || pokemonList.length === 0 }
+                                disabled={ isSaving || isSubmitting || !learnsetName.trim() || pokemonList.length === 0 }
                             >
                                 { isSaving ? (
                                     <span className="inline-flex items-center gap-2">

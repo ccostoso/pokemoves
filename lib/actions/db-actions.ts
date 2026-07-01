@@ -1,13 +1,16 @@
 "use server"
 
 import { prisma } from "@/lib/prisma"
+import { LearnsetDeckTitleSchema } from "@/lib/schemas"
 import { LearnsetDeckItemData } from "@/lib/types"
 
 export async function saveLearnset(userId: string, name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<string> {
+    const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
+
     const createdLearnsetDeck = await prisma.learnsetDeck.create({
         data: {
             userId,
-            name,
+            name: validatedLearnsetName,
             items: {
                 createMany: {
                     data: learnsetDeck.map((learnset, index) => ({
@@ -47,7 +50,7 @@ export async function getLearnsetDeckItemDataById(deckId: string): Promise<Learn
     }))
 }
 
-export async function getLearnsetDeckMetadata(deckId: string): Promise<{ userId: string, name: string } | null> {
+export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ userId: string, name: string } | null> {
     const learnsetDeck = await prisma.learnsetDeck.findUnique({
         where: { id: deckId },
         select: { userId: true, name: true },
