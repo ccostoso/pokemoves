@@ -6,8 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { BrushCleaning, ChevronDownIcon, CopyCheck, CopyX, Save, Trash, Undo } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
+import { useRouter } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
+import ConfirmDeleteLearnsetDeckDialog from "@/app/deck/[deckId]/components/confirm-delete-learnset-deck-dialog"
 import { toast } from "sonner"
 
 type OwnerLearnsetToolbarProps = {
@@ -17,11 +19,12 @@ type OwnerLearnsetToolbarProps = {
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChanges: () => void,
     onClearLearnsets: () => void,
+    onDeleteLearnsetDeck: () => Promise<void>,
     hasUnsavedChanges: boolean,
     learnsetListLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, hasUnsavedChanges, learnsetListLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetListLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -33,11 +36,23 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
     const hasNameChanges = inputValue.trim() !== savedDeckName.trim()
     const hasAnyUnsavedChanges = hasUnsavedChanges || hasNameChanges
 
+    const router = useRouter()
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
+
     const handleSaveChanges: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
-        await onSaveChanges(inputValue)
-        setSavedDeckName(inputValue)
-        toast.success("Deck changes saved", { position: "top-center" })
+
+        try {
+            await onSaveChanges(inputValue)
+            setSavedDeckName(inputValue)
+            toast.success("Deck changes saved", { position: "top-center" })
+        } catch (error) {
+            toast.error("Failed to save deck changes", {
+                description: error instanceof Error ? error.message : "Unknown error",
+                position: "top-center",
+            })
+        }
     }
 
     const handleSaveAsDuplicate = async (learnsetName: string): Promise<string> => {
@@ -72,6 +87,31 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
         toast.success("Learnset panel cleared", { 
             description: "Click on \"Save changes\" to apply this change to the learnset deck",
             position: "top-center" })
+    }
+
+    const handleConfirmDeleteLearnsetDeck = async () => {
+        const userId = session?.user?.id
+
+        if (!userId) {
+            toast.error("You must be logged in to delete this learnset deck.", { position: "top-center" })
+            return
+        }
+
+        setIsDeleting(true)
+
+        try {
+            await onDeleteLearnsetDeck()
+            setIsDeleteDialogOpen(false)
+            toast.success("Learnset deck deleted successfully!", { position: "top-center" })
+            router.push("/account/decks")
+        } catch (error) {
+            toast.error("Failed to delete learnset deck.", {
+                description: error instanceof Error ? error.message : "Unknown error",
+                position: "top-center",
+            })
+        } finally {
+            setIsDeleting(false)
+        }
     }
 
     return (
@@ -139,10 +179,14 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                             <ButtonGroup className="flex">
                                 <Tooltip>
                                     <TooltipTrigger asChild>
-                                        <Button type="button" variant="destructive"><Trash className="mr-2" />Delete</Button>
+                                        <Button 
+                                            type="button" 
+                                            variant="destructive" 
+                                            onClick={ () => setIsDeleteDialogOpen(true) }
+                                        ><Trash className="mr-2" />Delete</Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>Delete this learnset</p>
+                                        <p>Delete this learnset deck</p>
                                     </TooltipContent>
                                 </Tooltip>
                                 <DropdownMenu>
@@ -173,6 +217,12 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                 open={ isDuplicateDialogOpen }
                 onOpenChange={ setIsDuplicateDialogOpen }
                 onSaveAsDuplicate={ handleSaveAsDuplicate }
+            />
+            <ConfirmDeleteLearnsetDeckDialog
+                open={ isDeleteDialogOpen }
+                isDeleting={ isDeleting }
+                onOpenChange={ setIsDeleteDialogOpen }
+                onConfirmDeleteLearnsetDeck={ handleConfirmDeleteLearnsetDeck }
             />
         </div>
     )

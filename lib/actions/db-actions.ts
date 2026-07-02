@@ -4,9 +4,17 @@ import { prisma } from "@/lib/prisma"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
 import { LearnsetDeckItemData } from "@/lib/types"
 import { getServerSession } from "@/lib/auth-server"
+import { revalidatePath } from "next/cache"
 
 
-export async function saveLearnset(userId: string, name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<string> {
+export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<string> {
+    const session = await getServerSession()
+    if (!session?.user?.id) {
+        throw new Error("User is not authenticated.")
+    }
+
+    const userId = session.user.id
+    
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 
     const createdLearnsetDeck = await prisma.learnsetDeck.create({
@@ -68,42 +76,66 @@ export async function updateLearnsetDeck(
 ): Promise<string> {
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 
-    try {
-        const session = await getServerSession()
-        if (!session?.user?.id) {
-            throw new Error("User is not authenticated.")
-        }
+    const session = await getServerSession()
+    if (!session?.user?.id) {
+        throw new Error("User is not authenticated.")
+    }
 
-        const updatedDeck = await prisma.$transaction(async (tx) => {
-            const deck = await tx.learnsetDeck.findUniqueOrThrow({
-                where: { id: deckId },
-                select: { userId: true },
-            })
-
-            if (deck.userId !== session.user.id) {
-                throw new Error("User does not have permission to update this learnset deck.")
-            }
-
-            await tx.learnsetDeckItem.deleteMany({ where: { deckId } })
-
-            await tx.learnsetDeckItem.createMany({
-                data: learnsetDeck.map((item, index) => ({
-                    deckId,
-                    pokemonName: item.pokemonName,
-                    versionGroupName: item.versionGroupName,
-                    sortOrder: index,
-                })),
-            })
-
-            return tx.learnsetDeck.update({
-                where: { id: deckId },
-                data: { name: validatedLearnsetName },
-                select: { id: true },
-            })
+    const updatedDeck = await prisma.$transaction(async (tx) => {
+        const deck = await tx.learnsetDeck.findUniqueOrThrow({
+            where: { id: deckId },
+            select: { userId: true },
         })
 
-        return updatedDeck.id
-    } catch (error) {
-        throw error
+        if (deck.userId !== session.user.id) {
+            throw new Error("User does not have permission to update this learnset deck.")
+        }
+
+        await tx.learnsetDeckItem.deleteMany({ where: { deckId } })
+
+        await tx.learnsetDeckItem.createMany({
+            data: learnsetDeck.map((item, index) => ({
+                deckId,
+                pokemonName: item.pokemonName,
+                versionGroupName: item.versionGroupName,
+                sortOrder: index,
+            })),
+        })
+
+        return tx.learnsetDeck.update({
+            where: { id: deckId },
+            data: { name: validatedLearnsetName },
+            select: { id: true },
+        })
+    })
+
+    return updatedDeck.id
+}
+
+export async function deleteLearnsetDeck(deckId: string): Promise<void> {
+    if (!deckId) {
+        throw new Error("Invalid deck ID.")
     }
+    
+    const session = await getServerSession()
+    if (!session?.user?.id) {
+        throw new Error("User is not authenticated.")
+    }
+
+    const deck = await prisma.learnsetDeck.findUniqueOrThrow({
+        where: { id: deckId },
+        select: { userId: true },
+    })
+
+    if (deck.userId !== session.user.id) {
+        throw new Error("User does not have permission to delete this learnset deck.")
+    }
+
+    await prisma.$transaction([
+        prisma.learnsetDeckItem.deleteMany({ where: { deckId } }),
+        prisma.learnsetDeck.delete({ where: { id: deckId } }),
+    ])
+
+    revalidatePath("/account/decks")
+
 }

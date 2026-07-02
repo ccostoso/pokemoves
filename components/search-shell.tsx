@@ -31,6 +31,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         handleSaveChanges,
         handleRevertChanges,
         handleClearLearnsets,
+        handleDeleteLearnsetDeck,
         handleRemoveLearnset,
         handleReorderLearnset,
     } = useSearchShellController(
@@ -73,6 +74,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                         learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }
                         hasUnsavedChanges={ hasUnsavedChanges }
+                        onDeleteLearnsetDeck={ handleDeleteLearnsetDeck }
                     />
                 </section>
             </div>

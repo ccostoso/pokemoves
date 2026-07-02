@@ -2,7 +2,7 @@ import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndVersionGroup,
 } from "./actions/qraphql-actions"
-import { saveLearnset, updateLearnsetDeck } from "./actions/db-actions"
+import { createLearnsetDeck, updateLearnsetDeck, deleteLearnsetDeck } from "./actions/db-actions"
 import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
 import {
     countLearnsetPairOccurrences,
@@ -69,6 +69,7 @@ type UseSearchShellControllerReturn = {
     handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     handleDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     handleRevertChanges: () => void,
+    handleDeleteLearnsetDeck: () => Promise<void>,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
@@ -386,7 +387,7 @@ export function useSearchShellController(
         if (!trimmedLearnsetName) throw new Error("Please enter a name for the duplicate learnset.")
         if (sourceDeck.length === 0) throw new Error("No learnset to duplicate.")
 
-        return saveLearnset(userId, trimmedLearnsetName, sourceDeck)
+        return createLearnsetDeck(trimmedLearnsetName, sourceDeck)
     }
 
     const handleSaveAsDuplicate = async (userId: string, learnsetName: string): Promise<string> => {
@@ -395,6 +396,18 @@ export function useSearchShellController(
 
     const handleDuplicateOriginalWithoutSaving = async (userId: string, learnsetName: string): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)
+    }
+
+    const handleDeleteLearnsetDeck = async () => {
+        const deckId = initialLearnsetDeckId
+
+        if (!deckId) {
+            throw new Error("Invalid deck ID.")
+        }
+
+        await deleteLearnsetDeck(deckId)
+        dispatch({ type: "learnsetCleared" })
+        dispatch({ type: "savedBaselineSynced", signature: "" })
     }
 
     useEffect(() => {
@@ -515,6 +528,7 @@ export function useSearchShellController(
         handleRevertChanges: () => {
             dispatch({ type: "learnsetHydrationSucceeded", learnsetList: revertBaselineLearnsetListRef.current ?? [] })
         },
+        handleDeleteLearnsetDeck,
         handleClearLearnsets: () => dispatch({ type: "learnsetCleared" }),
         handleRemoveLearnset: (indexToRemove: number) =>
             dispatch({ type: "learnsetRemoved", indexToRemove }),
