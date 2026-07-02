@@ -8,6 +8,7 @@ import { BrushCleaning, ChevronDownIcon, CopyCheck, CopyX, Save, Trash, Undo } f
 import { SubmitEventHandler, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
+import { toast } from "sonner"
 
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
@@ -15,10 +16,12 @@ type OwnerLearnsetToolbarProps = {
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChanges: () => void,
-    hasUnsavedChanges: boolean
+    onClearLearnsets: () => void,
+    hasUnsavedChanges: boolean,
+    learnsetListLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, hasUnsavedChanges }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, hasUnsavedChanges, learnsetListLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     
@@ -52,6 +55,19 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
     const handleRevertChanges = () => {
         setInputValue(learnsetDeckName ?? "")
         onRevertChanges()
+        toast.success("All unsaved changes reverted", { position: "top-center" })
+    }
+
+    const handleDuplicateMenuItemSelect = (mode: DuplicateMode) => {
+        setDuplicateMode(mode)
+        setIsDuplicateDialogOpen(true)
+    }
+
+    const handleClearLearnsets = () => {
+        onClearLearnsets()
+        toast.success("Learnset panel cleared", { 
+            description: "Click on \"Save changes\" to apply this change to the learnset deck",
+            position: "top-center" })
     }
 
     return (
@@ -88,21 +104,13 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                         <DropdownMenuItem
                                             className="whitespace-nowrap"
                                             disabled={ !hasUnsavedChanges }
-                                            onSelect={ (event) => {
-                                                event.preventDefault()
-                                                setDuplicateMode("current")
-                                                setIsDuplicateDialogOpen(true)
-                                            } }
+                                            onSelect={ () => handleDuplicateMenuItemSelect("current") }
                                         >
                                             <CopyCheck className="mr-2" />Save as duplicate
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="whitespace-nowrap"
-                                            onSelect={ (event) => {
-                                                event.preventDefault()
-                                                setDuplicateMode("original")
-                                                setIsDuplicateDialogOpen(true)
-                                            } }
+                                            onSelect={ () => handleDuplicateMenuItemSelect("original") }
                                         >
                                             <CopyX className="mr-2" />Duplicate without unsaved changes
                                         </DropdownMenuItem>
@@ -139,7 +147,11 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                     <DropdownMenuContent align="end" className="w-auto min-w-44">
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <DropdownMenuItem className="whitespace-nowrap"><BrushCleaning className="mr-2" />Clear</DropdownMenuItem>
+                                                <DropdownMenuItem 
+                                                    className="whitespace-nowrap" 
+                                                    onSelect={ handleClearLearnsets }
+                                                    disabled={ learnsetListLength === 0 }
+                                                ><BrushCleaning className="mr-2" />Clear</DropdownMenuItem>
                                             </TooltipTrigger>
                                             <TooltipContent side="left">
                                                 <p>Remove all learnsets from this deck</p>

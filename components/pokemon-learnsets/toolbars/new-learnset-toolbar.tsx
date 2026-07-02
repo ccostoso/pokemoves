@@ -13,12 +13,12 @@ import { toast } from "sonner"
 
 type NewLearnsetToolbarProps = {
     learnsetList: LevelUpLearnset[],
-    handleClearLearnsets: () => void,
+    onClearLearnsets: () => void,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean
 }
 
-export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
+export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetName, setLearnsetName] = useState("")
     const [learnsetNameError, setLearnsetNameError] = useState<string | null>(null)
@@ -79,6 +79,12 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
         }
     }
 
+    const handleClearLearnsets = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event?.preventDefault()
+        onClearLearnsets()
+        toast.success("Learnset panel cleared.", { position: "top-center" })
+    }
+
     return (
         <div className="flex flex-col p-4 border-b">
             <form onSubmit={ handleSaveLearnset }>
@@ -123,9 +129,8 @@ export function NewLearnsetToolbar({ learnsetList, handleClearLearnsets, pokemon
                                     <Button 
                                         className="whitespace-nowrap" 
                                         type="button"
-                                        onClick={ () => {
-                                            handleClearLearnsets()
-                                            toast.success("Learnset panel cleared.", { position: "top-center" })
+                                        onClick={ (event) => {
+                                            handleClearLearnsets(event)
                                         } }
                                         disabled={ isSaving || isSubmitting || learnsetList.length === 0 }
                                     ><BrushCleaning className="mr-2" />Clear</Button>

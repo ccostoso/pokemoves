@@ -48,7 +48,9 @@ export default function PokemonLearnsetWindow({
                     onSaveAsDuplicate={ onSaveAsDuplicate }
                     onDuplicateOriginalWithoutSaving={ onDuplicateOriginalWithoutSaving }
                     onRevertChanges={ onRevertChanges }
+                    onClearLearnsets={ onClearLearnsets }
                     hasUnsavedChanges={ hasUnsavedChanges }
+                    learnsetListLength={ learnsetList.length }
                 />
             ) }
             { toolbarType === "viewer" && (
@@ -59,7 +61,7 @@ export default function PokemonLearnsetWindow({
             ) }
             { toolbarType === "new" && <NewLearnsetToolbar
                 learnsetList={ learnsetList }
-                handleClearLearnsets={ onClearLearnsets }
+                onClearLearnsets={ onClearLearnsets }
                 pokemonList={ pokemonList }
                 isSubmitting={ isSubmitting } /> }
             <PokemonLearnsetPanel
