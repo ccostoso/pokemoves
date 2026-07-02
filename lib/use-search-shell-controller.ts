@@ -8,6 +8,7 @@ import {
     countLearnsetPairOccurrences,
     createLearnsetInstanceId,
     getNextLearnsetOccurrence,
+    mapLearnsetsToDeckItems,
 } from "./utils"
 import { SubmitEventHandler, useEffect, useMemo, useReducer, useRef } from "react"
 
@@ -340,14 +341,6 @@ export function useSearchShellController(
         }
     }
 
-    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
-        return learnset.map((item, index) => ({
-            pokemonName: item.pokemonName,
-            versionGroupName: item.versionGroupName,
-            sortOrder: index,
-        }))
-    }
-
     const handleSaveChanges = async (name: string): Promise<string> => {
         const trimmedLearnsetName = name.trim()
         const deckId = initialLearnsetDeckId
@@ -360,7 +353,7 @@ export function useSearchShellController(
             throw new Error("Please enter a name for the learnset deck.")
         }
 
-        const formattedLearnset = mapLevelUpLearnsetToDbFormat(state.learnsetList)
+        const formattedLearnset = mapLearnsetsToDeckItems(state.learnsetList)
 
         if (formattedLearnset.length === 0) {
             throw new Error("No learnset to save.")
@@ -387,9 +380,8 @@ export function useSearchShellController(
     }
 
     const handleSaveAsDuplicate = async (userId: string, learnsetName: string): Promise<string> => {
-        return duplicateFromSource(userId, learnsetName, mapLevelUpLearnsetToDbFormat(state.learnsetList))
+        return duplicateFromSource(userId, learnsetName, mapLearnsetsToDeckItems(state.learnsetList))
     }
-
 
     const handleDuplicateOriginalWithoutSaving = async (userId: string, learnsetName: string): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)

@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { versionGroupList } from "./data/versiongroup-list"
 import { types } from "./data/type-list"
-import { LevelUpLearnset, PokemonListItem } from "./types"
+import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -80,4 +80,14 @@ export function countLearnsetPairOccurrences(
             learnset.pokemonName === pokemonName &&
             learnset.versionGroupName === versionGroupName,
     ).length
+}
+
+export function mapLearnsetsToDeckItems(
+    learnsetList: LevelUpLearnset[],
+): LearnsetDeckItemData[] {
+    return learnsetList.map((item, index) => ({
+        pokemonName: item.pokemonName,
+        versionGroupName: item.versionGroupName,
+        sortOrder: index,
+    }))
 }
