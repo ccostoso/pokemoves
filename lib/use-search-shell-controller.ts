@@ -220,10 +220,12 @@ export function useSearchShellController(
         return []
     }, [initialLearnsetDeckItemData, initialHydratedLearnsetList])
 
-    const initialLearnsetSignature =
-        originalLearnsetDeckSnapshot
+    const initialLearnsetSignature = useMemo(
+        () => originalLearnsetDeckSnapshot
             .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
-            .join("|")
+            .join("|"),
+        [originalLearnsetDeckSnapshot]
+    )
 
     const [state, dispatch] = useReducer(searchShellReducer, {
         pokemonList: [],
