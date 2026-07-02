@@ -29,6 +29,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         handleSaveAsDuplicate,
         handleDuplicateOriginalWithoutSaving,
         handleSaveChanges,
+        handleRevertChanges,
         handleClearLearnsets,
         handleRemoveLearnset,
         handleReorderLearnset,
@@ -64,9 +65,10 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                         onClearLearnsets={ handleClearLearnsets }
                         onRemoveLearnset={ handleRemoveLearnset }
                         onReorderLearnset={ handleReorderLearnset }
+                        onSaveChanges={ handleSaveChanges }
                         onSaveAsDuplicate={ handleSaveAsDuplicate }
                         onDuplicateOriginalWithoutSaving={ handleDuplicateOriginalWithoutSaving }
-                        onSaveChanges={ handleSaveChanges }
+                        onRevertChanges={ handleRevertChanges }
                         pokemonList={ pokemonList }
                         learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }

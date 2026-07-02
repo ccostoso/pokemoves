@@ -14,10 +14,11 @@ type OwnerLearnsetToolbarProps = {
     onSaveChanges: (name: string) => Promise<string>,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
+    onRevertChanges: () => void,
     hasUnsavedChanges: boolean
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, hasUnsavedChanges }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, hasUnsavedChanges }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     
@@ -46,6 +47,11 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
             case "original":
                 return onDuplicateOriginalWithoutSaving(userId, learnsetName)
         }
+    }
+
+    const handleRevertChanges = () => {
+        setInputValue(learnsetDeckName ?? "")
+        onRevertChanges()
     }
 
     return (
@@ -107,7 +113,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                         <Field orientation="horizontal" className="w-auto">
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button type="button" disabled={ !hasAnyUnsavedChanges }>
+                                    <Button type="button" disabled={ !hasAnyUnsavedChanges } onClick={ handleRevertChanges }>
                                         <Undo className="mr-2" />Revert
                                     </Button>
                                 </TooltipTrigger>

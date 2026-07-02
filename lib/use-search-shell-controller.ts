@@ -65,6 +65,7 @@ type UseSearchShellControllerReturn = {
     handleSaveChanges: (name: string) => Promise<string>,
     handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     handleDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
+    handleRevertChanges: () => void,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
     handleReorderLearnset: (fromIndex: number, toIndex: number) => void
@@ -217,6 +218,10 @@ export function useSearchShellController(
         return []
     }, [initialLearnsetDeckItemData, initialHydratedLearnsetList])
 
+    const revertBaselineLearnsetListRef = useRef<LevelUpLearnset[]>(
+        initialHydratedLearnsetList ?? [],
+    )
+
     const toLearnsetSignature = (learnsetList: LevelUpLearnset[]): string =>
         learnsetList
             .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
@@ -362,6 +367,7 @@ export function useSearchShellController(
         }
 
         const updatedDeckId = await updateLearnsetDeck(deckId, trimmedLearnsetName, formattedLearnset)
+        revertBaselineLearnsetListRef.current = [...state.learnsetList]
 
         return updatedDeckId
     }
@@ -388,6 +394,12 @@ export function useSearchShellController(
     const handleDuplicateOriginalWithoutSaving = async (userId: string, learnsetName: string): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)
     }
+
+    useEffect(() => {
+        if (initialHydratedLearnsetList) {
+            revertBaselineLearnsetListRef.current = initialHydratedLearnsetList
+        }
+    }, [initialHydratedLearnsetList])
 
     useEffect(() => {
         if (initialHydratedLearnsetList) {
@@ -450,6 +462,7 @@ export function useSearchShellController(
                 )
 
                 if (!cancelled) {
+                    revertBaselineLearnsetListRef.current = hydratedLearnsets
                     dispatch({
                         type: "learnsetHydrationSucceeded",
                         learnsetList: hydratedLearnsets,
@@ -490,9 +503,12 @@ export function useSearchShellController(
         setPokemonName: (name: string) =>
             dispatch({ type: "pokemonNameChanged", pokemonName: name }),
         handleAddLearnset,
+        handleSaveChanges,
         handleSaveAsDuplicate,
         handleDuplicateOriginalWithoutSaving,
-        handleSaveChanges,
+        handleRevertChanges: () => {
+            dispatch({ type: "learnsetHydrationSucceeded", learnsetList: revertBaselineLearnsetListRef.current ?? [] })
+        },
         handleClearLearnsets: () => dispatch({ type: "learnsetCleared" }),
         handleRemoveLearnset: (indexToRemove: number) =>
             dispatch({ type: "learnsetRemoved", indexToRemove }),
