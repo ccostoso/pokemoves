@@ -22,6 +22,7 @@ type SearchShellState = {
     versionGroupName: string,
     pokemonName: string,
     learnsetList: LevelUpLearnset[],
+    savedLearnsetSignature: string,
     requestState: RequestState,
     isPokemonListLoading: boolean
 }
@@ -41,6 +42,7 @@ type SearchShellAction =
     | { type: "learnsetHydrationStarted" }
     | { type: "learnsetHydrationSucceeded", learnsetList: LevelUpLearnset[] }
     | { type: "learnsetHydrationFailed", message: string }
+    | { type: "savedBaselineSynced", signature: string }
 
 type UseSearchShellControllerReturn = {
     // form state
@@ -175,6 +177,12 @@ function searchShellReducer(
                 requestState: { status: "error", message: action.message },
             }
 
+        case "savedBaselineSynced":
+            return {
+                ...state,
+                savedLearnsetSignature: action.signature,
+            }
+
         default:
             return state
     }
@@ -186,15 +194,6 @@ export function useSearchShellController(
     initialHydratedLearnsetList?: LevelUpLearnset[] | null,
 ): UseSearchShellControllerReturn {
     const hydratedDeckKeyRef = useRef<string | null>(null)
-
-    const [state, dispatch] = useReducer(searchShellReducer, {
-        pokemonList: [],
-        versionGroupName: "",
-        pokemonName: "",
-        learnsetList: initialHydratedLearnsetList ?? [],
-        requestState: { status: "idle" },
-        isPokemonListLoading: false,
-    })
 
     const originalLearnsetDeckSnapshot = useMemo<LearnsetDeckItemData[]>(() => {
         if (initialLearnsetDeckItemData && initialLearnsetDeckItemData.length > 0) {
@@ -219,6 +218,21 @@ export function useSearchShellController(
         return []
     }, [initialLearnsetDeckItemData, initialHydratedLearnsetList])
 
+    const initialLearnsetSignature =
+        originalLearnsetDeckSnapshot
+            .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
+            .join("|")
+
+    const [state, dispatch] = useReducer(searchShellReducer, {
+        pokemonList: [],
+        versionGroupName: "",
+        pokemonName: "",
+        learnsetList: initialHydratedLearnsetList ?? [],
+        savedLearnsetSignature: initialLearnsetSignature,
+        requestState: { status: "idle" },
+        isPokemonListLoading: false,
+    })
+
     const revertBaselineLearnsetListRef = useRef<LevelUpLearnset[]>(
         initialHydratedLearnsetList ?? [],
     )
@@ -228,16 +242,8 @@ export function useSearchShellController(
             .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
             .join("|")
 
-    const initialLearnsetSignature = useMemo(
-        () =>
-            originalLearnsetDeckSnapshot
-                .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
-                .join("|"),
-        [originalLearnsetDeckSnapshot],
-    )
-
     const hasUnsavedChanges =
-        toLearnsetSignature(state.learnsetList) !== initialLearnsetSignature
+        toLearnsetSignature(state.learnsetList) !== state.savedLearnsetSignature
 
     useEffect(() => {
         if (!state.versionGroupName) {
@@ -361,6 +367,10 @@ export function useSearchShellController(
 
         const updatedDeckId = await updateLearnsetDeck(deckId, trimmedLearnsetName, formattedLearnset)
         revertBaselineLearnsetListRef.current = [...state.learnsetList]
+        dispatch({
+            type: "savedBaselineSynced",
+            signature: toLearnsetSignature(state.learnsetList),
+        })
 
         return updatedDeckId
     }
@@ -455,6 +465,10 @@ export function useSearchShellController(
 
                 if (!cancelled) {
                     revertBaselineLearnsetListRef.current = hydratedLearnsets
+                    dispatch({
+                        type: "savedBaselineSynced",
+                        signature: toLearnsetSignature(hydratedLearnsets),
+                    })
                     dispatch({
                         type: "learnsetHydrationSucceeded",
                         learnsetList: hydratedLearnsets,
