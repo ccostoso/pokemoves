@@ -91,3 +91,6 @@ export function mapLearnsetsToDeckItems(
         sortOrder: index,
     }))
 }
+
+export const toLearnsetSignature = (learnsetList: LevelUpLearnset[]): string =>
+    learnsetList.map((item) => `${item.pokemonName}:${item.versionGroupName}`).join("|")

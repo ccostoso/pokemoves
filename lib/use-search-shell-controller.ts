@@ -9,6 +9,7 @@ import {
     createLearnsetInstanceId,
     getNextLearnsetOccurrence,
     mapLearnsetsToDeckItems,
+    toLearnsetSignature,
 } from "./utils"
 import { SubmitEventHandler, useEffect, useMemo, useReducer, useRef } from "react"
 
@@ -237,11 +238,6 @@ export function useSearchShellController(
     const revertBaselineLearnsetListRef = useRef<LevelUpLearnset[]>(
         initialHydratedLearnsetList ?? [],
     )
-
-    const toLearnsetSignature = (learnsetList: LevelUpLearnset[]): string =>
-        learnsetList
-            .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
-            .join("|")
 
     const hasUnsavedChanges =
         toLearnsetSignature(state.learnsetList) !== state.savedLearnsetSignature
