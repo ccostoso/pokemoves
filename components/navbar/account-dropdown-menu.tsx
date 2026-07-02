@@ -19,7 +19,11 @@ type AccountDropdownMenuProps = {
     activeButton: string | null,
     setActiveButton: (button: string | null) => void,
     isAccountMenuOpen: boolean,
-    handleAccountMenuOpenChange: (open: boolean) => void
+    handleAccountMenuOpenChange: (open: boolean) => void,
+    user: {
+        name: string | null,
+        username: string | null
+    } | null
 }
 
 export default function AccountDropdownMenu({
@@ -27,6 +31,7 @@ export default function AccountDropdownMenu({
     setActiveButton,
     isAccountMenuOpen,
     handleAccountMenuOpenChange,
+    user
 }: AccountDropdownMenuProps) {
     const router = useRouter()
 
@@ -40,18 +45,29 @@ export default function AccountDropdownMenu({
         })
     }
     return (
-        <DropdownMenu onOpenChange={handleAccountMenuOpenChange}>
+        <DropdownMenu onOpenChange={ handleAccountMenuOpenChange }>
             <DropdownMenuTrigger asChild>
                 <NavbarExpandableButton
                     label="Account"
-                    icon={<User className="shrink-0 h-5 w-5" />}
-                    isActive={activeButton === "account" || isAccountMenuOpen}
-                    onActivate={() => setActiveButton("account")}
-                    activateOnFocus={false}
+                    icon={ <User className="shrink-0 h-5 w-5" /> }
+                    isActive={ activeButton === "account" || isAccountMenuOpen }
+                    onActivate={ () => setActiveButton("account") }
+                    activateOnFocus={ false }
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
+                <DropdownMenuGroup className="whitespace-nowrap">
+                    <div className="px-1.5 py-1.5">
+                        <p className="text-sm font-semibold">
+                            @{ user?.username }
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                            { user?.name }
+                        </p>
+                    </div>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>User</DropdownMenuLabel>
                     <DropdownMenuItem asChild>
@@ -64,7 +80,7 @@ export default function AccountDropdownMenu({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Session</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={sessionSignOut}>
+                    <DropdownMenuItem onClick={ sessionSignOut }>
                         Sign Out
                     </DropdownMenuItem>
                 </DropdownMenuGroup>

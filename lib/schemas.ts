@@ -54,3 +54,20 @@ export const SignUpSchema = z
     })
 
 export type SignUpSchemaType = z.infer<typeof SignUpSchema>
+
+export const LearnsetDeckTitleSchema = z
+    .string()
+    .trim()
+    .min(1, { message: "Learnset name is required" })
+    .max(50, {
+        message: "Learnset name must be at most 50 characters long",
+    })
+    .refine((value) => !/[\u0000-\u001F\u007F]/.test(value), {
+        message: "Learnset name contains invalid characters",
+    })
+
+export const SaveAsDuplicateSchema = z.object({
+    learnsetName: LearnsetDeckTitleSchema,
+})
+
+export type SaveAsDuplicateSchemaType = z.infer<typeof SaveAsDuplicateSchema>

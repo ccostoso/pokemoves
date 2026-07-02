@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { versionGroupList } from "./data/versiongroup-list"
 import { types } from "./data/type-list"
-import { PokemonListItem } from "./types"
+import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -39,4 +39,55 @@ export function getPokemonDisplayName(pokemon: PokemonListItem): string {
         pokemon.pokemonspecy.pokemonspeciesnames[0]?.name ?? pokemon.name
 
     return region ? `${regionlessName} (${region})` : regionlessName
+}
+
+
+// Learnset Pair Utilities
+export function getLearnsetPairKey(
+    pokemonName: string,
+    versionGroupName: string,
+): string {
+    return `${pokemonName}:${versionGroupName}`
+}
+
+export function getNextLearnsetOccurrence(
+    occurrenceMap: Map<string, number>,
+    pokemonName: string,
+    versionGroupName: string,
+): number {
+    const key = getLearnsetPairKey(pokemonName, versionGroupName)
+    const nextOccurrence = (occurrenceMap.get(key) ?? 0) + 1
+    occurrenceMap.set(key, nextOccurrence)
+
+    return nextOccurrence
+}
+
+export function createLearnsetInstanceId(
+    pokemonName: string,
+    versionGroupName: string,
+    occurrence: number,
+): string {
+    return `${getLearnsetPairKey(pokemonName, versionGroupName)}:${occurrence}`
+}
+
+export function countLearnsetPairOccurrences(
+    learnsetList: LevelUpLearnset[],
+    pokemonName: string,
+    versionGroupName: string,
+): number {
+    return learnsetList.filter(
+        (learnset) =>
+            learnset.pokemonName === pokemonName &&
+            learnset.versionGroupName === versionGroupName,
+    ).length
+}
+
+export function mapLearnsetsToDeckItems(
+    learnsetList: LevelUpLearnset[],
+): LearnsetDeckItemData[] {
+    return learnsetList.map((item, index) => ({
+        pokemonName: item.pokemonName,
+        versionGroupName: item.versionGroupName,
+        sortOrder: index,
+    }))
 }

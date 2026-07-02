@@ -24,6 +24,14 @@ const eslintConfig = defineConfig([
                 },
             ],
             "@stylistic/indent": ["error", 4],
+            "@stylistic/object-curly-spacing": ["error", "always"],
+            "@stylistic/jsx-curly-spacing": [
+                "error",
+                {
+                    when: "always",
+                    children: true,
+                },
+            ],
         },
     },
 ])

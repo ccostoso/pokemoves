@@ -37,8 +37,8 @@ function SortableItem({
     } as HTMLAttributes<HTMLButtonElement>
 
     return (
-        <div ref={setNodeRef} style={style}>
-            {children(dragHandleProps)}
+        <div ref={ setNodeRef } style={ style }>
+            { children(dragHandleProps) }
         </div>
     )
 }
@@ -81,21 +81,21 @@ export default function PokemonLearnsetPanel({
     }
 
     return (
-        <ScrollArea ref={scrollAreaRef} className="w-full max-w-full">
-            {learnsetList.length > 0 ? (
-                <DndContext onDragEnd={handleDragEnd}>
+        <ScrollArea ref={ scrollAreaRef } className="w-full max-w-full">
+            { learnsetList.length > 0 ? (
+                <DndContext id="learnset-dnd-context" onDragEnd={ handleDragEnd }>
                     <SortableContext
-                        items={learnsetList.map((item) => item.id)}
-                        strategy={horizontalListSortingStrategy}
+                        items={ learnsetList.map((item) => item.id) }
+                        strategy={ horizontalListSortingStrategy }
                     >
                         <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 px-4 pt-4 pb-2">
-                            {learnsetList.map((item, index) => (
-                                <SortableItem key={item.id} id={item.id}>
-                                    {(dragHandleProps) => (
+                            { learnsetList.map((item, index) => (
+                                <SortableItem key={ item.id } id={ item.id }>
+                                    { (dragHandleProps) => (
                                         <div className="mb-8">
                                             <PokemonLearnsetCard
-                                                item={item}
-                                                onRemove={() =>
+                                                item={ item }
+                                                onRemove={ () =>
                                                     onRemoveLearnset(index)
                                                 }
                                                 dragHandleProps={
@@ -103,9 +103,9 @@ export default function PokemonLearnsetPanel({
                                                 }
                                             />
                                         </div>
-                                    )}
+                                    ) }
                                 </SortableItem>
-                            ))}
+                            )) }
                         </div>
                     </SortableContext>
                 </DndContext>
@@ -113,7 +113,7 @@ export default function PokemonLearnsetPanel({
                 <p className="text-center text-gray-500">
                     No results to display.
                 </p>
-            )}
+            ) }
             <ScrollBar orientation="horizontal" className="h-2" />
         </ScrollArea>
     )

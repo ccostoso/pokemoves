@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod/dist/zod.js"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import SignUpForm from "./sign-up-form"
+import SignUpForm from "./components/sign-up-form"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { User } from "lucide-react"
 
@@ -67,20 +67,20 @@ export default function SignUpPage() {
                 </CardHeader>
                 <CardContent>
                     <SignUpForm
-                        form={form}
-                        onSubmit={onSubmit}
-                        isLoading={isLoading}
-                        errorMessage={errorMessage || undefined}
+                        form={ form }
+                        onSubmit={ onSubmit }
+                        isLoading={ isLoading }
+                        errorMessage={ errorMessage || undefined }
                     />
                 </CardContent>
                 <CardFooter>
                     <p className="text-center text-sm text-muted-foreground">
-                        Already have an account? Click on{" "}
+                        Already have an account? Click on{ " " }
                         <User className="inline-block h-4 w-4" /> in the top
                         right corner to sign in.
                     </p>
                 </CardFooter>
-                {/* </div> */}
+                { /* </div> */ }
             </Card>
         </div>
     )
