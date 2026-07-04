@@ -3,11 +3,10 @@ import { deleteLearnsetDeck, getAllLearnsetDecksWithLearnsetDeckItemsByUserId } 
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
-import { Item } from "@/components/ui/item"
-import Image from "next/image"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, X } from "lucide-react"
+import { DeckItemsPreview } from "./components/deck-items-preview"
 
 async function handleDeleteDeck(formData: FormData) {
     "use server"
@@ -91,24 +90,7 @@ export default async function LearnsetDecks() {
                             </CardHeader>
                             <Separator />
                             <CardContent className="relative min-h-36">
-                                <div className="relative">
-                                    <ul className="flex gap-2 overflow-hidden pr-10">
-                                        { deck.items.map((item) => (
-                                            <li key={ item.sortOrder } className="shrink-0">
-                                                <Item variant="outline" className="flex flex-col items-center gap-2 p-2">
-                                                    <Image
-                                                        src={ `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.pokemonId}.png` }
-                                                        alt={ item.pokemonDisplayName }
-                                                        width={ 96 }
-                                                        height={ 96 }
-                                                    />
-                                                    <p className="text-sm text-muted-foreground">{ item.versionGroupDisplayName }</p>
-                                                </Item>
-                                            </li>
-                                        )) }
-                                    </ul>
-                                    <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-card to-transparent" />
-                                </div>
+                                <DeckItemsPreview items={ deck.items } />
                             </CardContent>
                             <CardFooter className="justify-end gap-2">
                                 <Button asChild variant="outline" size="sm">
