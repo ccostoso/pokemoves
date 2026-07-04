@@ -110,9 +110,10 @@ export default function PokemonLearnsetPanel({
                     </SortableContext>
                 </DndContext>
             ) : (
-                <p className="text-center text-gray-500">
-                    No results to display.
-                </p>
+                <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                    <h1 className="text-2xl font-bold">No results to display.</h1>
+                    <p className="text-muted-foreground">Add a learnset to get started.</p>
+                </div>
             ) }
             <ScrollBar orientation="horizontal" className="h-2" />
         </ScrollArea>

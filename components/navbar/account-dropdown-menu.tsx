@@ -1,6 +1,6 @@
 "use client"
 
-import { User } from "lucide-react"
+import { Columns3, User } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -71,10 +71,16 @@ export default function AccountDropdownMenu({
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>User</DropdownMenuLabel>
                     <DropdownMenuItem asChild>
-                        <Link href="/account">Account</Link>
+                        <Link href="/account" className="flex items-center gap-2">
+                            <User size={ 16 } />
+                            <span>Account</span>
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href="/account/decks">Decks</Link>
+                        <Link href="/account/decks" className="flex items-center gap-2">
+                            <Columns3 size={ 16 } />
+                            <span>Decks</span>
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
