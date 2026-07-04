@@ -11,12 +11,12 @@ import { Spinner } from "../ui/spinner"
 import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type SavePanelProps = {
-    learnsetList: LevelUpLearnset[],
+    learnsets: LevelUpLearnset[],
     pokemonList: PokemonListItem[],
     isSubmitting: boolean
 }
 
-export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: SavePanelProps) {
+export default function SavePanel({ learnsets, pokemonList, isSubmitting }: SavePanelProps) {
     const { data: session } = authClient.useSession()
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [isSaving, setIsSaving] = useState(false)
@@ -43,7 +43,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
         }
 
         try {
-            const formattedLearnset = mapLearnsetsToDeckItems(learnsetList)
+            const formattedLearnset = mapLearnsetsToDeckItems(learnsets)
             await createLearnsetDeck(learnsetDeckName, formattedLearnset)
 
             setLearnsetDeckName("")

@@ -30,7 +30,7 @@ export default async function DeckPage({ params }: DeckPageProps) {
 
     const occurrenceMap = new Map<string, number>()
 
-    const initialHydratedLearnsetList = await Promise.all(
+    const initialHydratedLearnsets = await Promise.all(
         learnsetDeckItem.map(async (item) => {
             const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
                 item.pokemonName,
@@ -61,7 +61,7 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 toolbarType={ toolbarType } 
                 learnsetDeckId={ deckId }
                 learnsetDeckItem={ learnsetDeckItem }
-                initialHydratedLearnsetList={ initialHydratedLearnsetList }
+                initialHydratedLearnsets={ initialHydratedLearnsets }
                 learnsetDeckName={ learnsetDeckMetadata.name } 
             />
         </main>

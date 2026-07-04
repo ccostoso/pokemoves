@@ -21,10 +21,10 @@ type OwnerLearnsetToolbarProps = {
     onClearLearnsets: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     hasUnsavedChanges: boolean,
-    learnsetListLength: number
+    learnsetsLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetListLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -134,7 +134,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                 <Button 
                                     type="submit" 
                                     variant="default" 
-                                    disabled={ !hasAnyUnsavedChanges || learnsetListLength === 0 }
+                                    disabled={ !hasAnyUnsavedChanges || learnsetsLength === 0 }
                                     name="intent"
                                     value="save-changes"
                                 >
@@ -142,19 +142,19 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                 </Button>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button disabled={ learnsetListLength === 0 }><ChevronDownIcon /></Button>
+                                        <Button disabled={ learnsetsLength === 0 }><ChevronDownIcon /></Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-auto min-w-44">
                                         <DropdownMenuItem
                                             className="whitespace-nowrap"
-                                            disabled={ !hasUnsavedChanges || learnsetListLength === 0 }
+                                            disabled={ !hasUnsavedChanges || learnsetsLength === 0 }
                                             onSelect={ () => handleDuplicateMenuItemSelect("current") }
                                         >
                                             <CopyCheck className="mr-2" />Save as duplicate
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="whitespace-nowrap"
-                                            disabled={ learnsetListLength === 0 }
+                                            disabled={ learnsetsLength === 0 }
                                             onSelect={ () => handleDuplicateMenuItemSelect("original") }
                                         >
                                             <CopyX className="mr-2" />Duplicate without unsaved changes
@@ -199,7 +199,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                                 <DropdownMenuItem 
                                                     className="whitespace-nowrap" 
                                                     onSelect={ handleClearLearnsets }
-                                                    disabled={ learnsetListLength === 0 }
+                                                    disabled={ learnsetsLength === 0 }
                                                 ><BrushCleaning className="mr-2" />Clear</DropdownMenuItem>
                                             </TooltipTrigger>
                                             <TooltipContent side="left">

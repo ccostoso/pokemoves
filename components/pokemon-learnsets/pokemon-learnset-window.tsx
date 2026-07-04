@@ -5,7 +5,7 @@ import { OwnerLearnsetToolbar, ViewerLearnsetToolbar, NewLearnsetToolbar } from 
 type PokemonLearnsetWindowProps = {
     toolbarType: "owner" | "viewer" | "new" | "none",
     learnsetDeckId?: string,
-    learnsetList: LevelUpLearnset[],
+    learnsets: LevelUpLearnset[],
     onClearLearnsets: () => void,
     onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void,
@@ -23,7 +23,7 @@ type PokemonLearnsetWindowProps = {
 export default function PokemonLearnsetWindow({
     toolbarType,
     learnsetDeckId,
-    learnsetList,
+    learnsets,
     onClearLearnsets,
     onRemoveLearnset,
     onReorderLearnset,
@@ -53,7 +53,7 @@ export default function PokemonLearnsetWindow({
                     onClearLearnsets={ onClearLearnsets }
                     onDeleteLearnsetDeck={ onDeleteLearnsetDeck }
                     hasUnsavedChanges={ hasUnsavedChanges }
-                    learnsetListLength={ learnsetList.length }
+                    learnsetsLength={ learnsets.length }
                 />
             ) }
             { toolbarType === "viewer" && (
@@ -63,12 +63,12 @@ export default function PokemonLearnsetWindow({
                 />
             ) }
             { toolbarType === "new" && <NewLearnsetToolbar
-                learnsetList={ learnsetList }
+                learnsets={ learnsets }
                 onClearLearnsets={ onClearLearnsets }
                 pokemonList={ pokemonList }
                 isSubmitting={ isSubmitting } /> }
             <PokemonLearnsetPanel
-                learnsetList={ learnsetList }
+                learnsets={ learnsets }
                 onRemoveLearnset={ onRemoveLearnset }
                 onReorderLearnset={ onReorderLearnset }
             />

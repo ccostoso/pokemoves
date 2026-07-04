@@ -6,20 +6,20 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
 import { authClient } from "@/lib/auth-client"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
-import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "@/lib/types"
+import { LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { BrushCleaning, Save } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
 import { toast } from "sonner"
 import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type NewLearnsetToolbarProps = {
-    learnsetList: LevelUpLearnset[],
+    learnsets: LevelUpLearnset[],
     onClearLearnsets: () => void,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean
 }
 
-export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
+export function NewLearnsetToolbar({ learnsets, onClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
@@ -45,14 +45,14 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
             return
         }
 
-        if (learnsetList.length === 0) {
+        if (learnsets.length === 0) {
             toast.error("No learnset deck to save. Please add a Pokémon first.", { position: "top-center" })
             setIsSaving(false)
             return
         }
 
         try {
-            const formattedLearnset = mapLearnsetsToDeckItems(learnsetList)
+            const formattedLearnset = mapLearnsetsToDeckItems(learnsets)
             await createLearnsetDeck(learnsetTitleResult.data, formattedLearnset)
 
             setLearnsetDeckName("")
@@ -125,7 +125,7 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
                                         onClick={ (event) => {
                                             handleClearLearnsets(event)
                                         } }
-                                        disabled={ isSaving || isSubmitting || learnsetList.length === 0 }
+                                        disabled={ isSaving || isSubmitting || learnsets.length === 0 }
                                     ><BrushCleaning className="mr-2" />Clear</Button>
                                 </TooltipTrigger>
                                 <TooltipContent>

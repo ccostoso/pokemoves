@@ -9,18 +9,18 @@ type SearchShellProps = {
     toolbarType?: "owner" | "viewer" | "new" | "none",
     learnsetDeckId?: string,
     learnsetDeckItem?: LearnsetDeckItem[] | null,
-    initialHydratedLearnsetList?: LevelUpLearnset[] | null,
+    initialHydratedLearnsets?: LevelUpLearnset[] | null,
     learnsetDeckName?: string | null
 }
 
-export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItem, initialHydratedLearnsetList, learnsetDeckName }: SearchShellProps) {
+export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItem, initialHydratedLearnsets, learnsetDeckName }: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
         setVersionGroupName,
         pokemonName,
         setPokemonName,
-        learnsetList,
+        learnsets,
         error,
         pokemonListLoading,
         isSubmitting,
@@ -37,7 +37,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
     } = useSearchShellController(
         learnsetDeckItem,
         learnsetDeckId,
-        initialHydratedLearnsetList,
+        initialHydratedLearnsets,
     )
 
     return (
@@ -62,7 +62,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                     <PokemonLearnsetWindow
                         toolbarType={ toolbarType }
                         learnsetDeckId={ learnsetDeckId }
-                        learnsetList={ learnsetList }
+                        learnsets={ learnsets }
                         onClearLearnsets={ handleClearLearnsets }
                         onRemoveLearnset={ handleRemoveLearnset }
                         onReorderLearnset={ handleReorderLearnset }
