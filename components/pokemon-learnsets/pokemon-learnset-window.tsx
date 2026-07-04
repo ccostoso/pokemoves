@@ -9,7 +9,7 @@ type PokemonLearnsetWindowProps = {
     onClearLearnsets: () => void,
     onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void,
-    onSaveChanges: (learnsetName: string) => Promise<string>,
+    onUpdateLearnsetDeck: (learnsetName: string) => Promise<string>,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChanges: () => void,
@@ -27,7 +27,7 @@ export default function PokemonLearnsetWindow({
     onClearLearnsets,
     onRemoveLearnset,
     onReorderLearnset,
-    onSaveChanges,
+    onUpdateLearnsetDeck,
     onSaveAsDuplicate,
     onDuplicateOriginalWithoutSaving,
     onRevertChanges,
@@ -46,7 +46,7 @@ export default function PokemonLearnsetWindow({
             { toolbarType === "owner" && learnsetDeckId && (
                 <OwnerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
-                    onSaveChanges={ onSaveChanges }
+                    onUpdateLearnsetDeck={ onUpdateLearnsetDeck }
                     onSaveAsDuplicate={ onSaveAsDuplicate }
                     onDuplicateOriginalWithoutSaving={ onDuplicateOriginalWithoutSaving }
                     onRevertChanges={ onRevertChanges }

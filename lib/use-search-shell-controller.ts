@@ -52,7 +52,7 @@ type UseSearchShellControllerReturn = {
     versionGroupName: string,
     pokemonName: string,
 
-    // learnset list state
+    // learnsets state
     learnsets: LevelUpLearnset[],
 
     // request/derived UI state
@@ -67,7 +67,7 @@ type UseSearchShellControllerReturn = {
 
     // handlers used by child components
     handleAddLearnset: SubmitEventHandler<HTMLFormElement>,
-    handleSaveChanges: (name: string) => Promise<string>,
+    handleUpdateLearnsetDeck: (name: string) => Promise<string>,
     handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     handleDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     handleRevertChanges: () => void,
@@ -360,7 +360,7 @@ export function useSearchShellController(
         }
     }
 
-    const handleSaveChanges = async (name: string): Promise<string> => {
+    const handleUpdateLearnsetDeck = async (name: string): Promise<string> => {
         const trimmedLearnsetName = name.trim()
         const deckId = initialLearnsetDeckId
 
@@ -544,7 +544,7 @@ export function useSearchShellController(
         setVersionGroupName,
         setPokemonName,
         handleAddLearnset,
-        handleSaveChanges,
+        handleUpdateLearnsetDeck,
         handleSaveAsDuplicate,
         handleDuplicateOriginalWithoutSaving,
         handleRevertChanges,

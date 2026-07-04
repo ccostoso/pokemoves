@@ -14,7 +14,7 @@ import { toast } from "sonner"
 
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
-    onSaveChanges: (name: string) => Promise<string>,
+    onUpdateLearnsetDeck: (name: string) => Promise<string>,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChanges: () => void,
@@ -24,7 +24,7 @@ type OwnerLearnsetToolbarProps = {
     learnsetsLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -40,11 +40,11 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
 
-    const handleSaveChanges: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    const handleUpdateLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
         try {
-            await onSaveChanges(inputValue)
+            await onUpdateLearnsetDeck(inputValue)
             setSavedDeckName(inputValue)
             toast.success("Deck changes saved", { position: "top-center" })
         } catch (error) {
@@ -116,7 +116,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
 
     return (
         <div className="flex flex-col p-4 border-b">
-            <form id="owner-learnset-toolbar-form" onSubmit={ handleSaveChanges }>
+            <form id="owner-learnset-toolbar-form" onSubmit={ handleUpdateLearnsetDeck }>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className="flex-1">

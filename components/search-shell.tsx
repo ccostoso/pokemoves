@@ -28,7 +28,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         handleAddLearnset,
         handleSaveAsDuplicate,
         handleDuplicateOriginalWithoutSaving,
-        handleSaveChanges,
+        handleUpdateLearnsetDeck,
         handleRevertChanges,
         handleClearLearnsets,
         handleDeleteLearnsetDeck,
@@ -66,7 +66,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                         onClearLearnsets={ handleClearLearnsets }
                         onRemoveLearnset={ handleRemoveLearnset }
                         onReorderLearnset={ handleReorderLearnset }
-                        onSaveChanges={ handleSaveChanges }
+                        onUpdateLearnsetDeck={ handleUpdateLearnsetDeck }
                         onSaveAsDuplicate={ handleSaveAsDuplicate }
                         onDuplicateOriginalWithoutSaving={ handleDuplicateOriginalWithoutSaving }
                         onRevertChanges={ handleRevertChanges }
