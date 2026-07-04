@@ -33,7 +33,6 @@ export default function SearchPanel({
     handleAddLearnsetToLearnsetDeck,
 }: SearchPanelProps) {
     return (
-
         <Card className="w-full max-w-md mx-auto">
             <CardHeader className="text-center text-2xl font-bold">
                 <CardTitle>Enter Pokémon Details</CardTitle>
@@ -41,10 +40,7 @@ export default function SearchPanel({
             <CardContent>
                 <form onSubmit={ handleAddLearnsetToLearnsetDeck }>
                     <FieldGroup>
-                        <VersionInput
-                            value={ versionGroupName }
-                            onChange={ setVersionGroupName }
-                        />
+                        <VersionInput value={ versionGroupName } onChange={ setVersionGroupName } />
                         <PokemonInput
                             key={ versionGroupName }
                             pokemonList={ pokemonList }
@@ -55,12 +51,7 @@ export default function SearchPanel({
                         <Button
                             type="submit"
                             variant="default"
-                            disabled={
-                                isSubmitting ||
-                                    pokemonList.length === 0 ||
-                                    !versionGroupName ||
-                                    !pokemonName
-                            }
+                            disabled={ isSubmitting || pokemonList.length === 0 || !versionGroupName || !pokemonName }
                         >
                             <Plus className="mr-2 h-4 w-4" /> Add to Panel
                         </Button>
@@ -69,8 +60,7 @@ export default function SearchPanel({
                 </form>
                 { pokemonName && versionGroupName && (
                     <p className="mt-4 text-sm text-gray-600">
-                        Searching for moves of <strong>{ pokemonName }</strong> in{ " " }
-                        <strong>{ versionGroupName }</strong>.
+                        Searching for moves of <strong>{ pokemonName }</strong> in <strong>{ versionGroupName }</strong>.
                     </p>
                 ) }
             </CardContent>

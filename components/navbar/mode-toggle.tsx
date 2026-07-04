@@ -5,12 +5,7 @@ import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 type ModeToggleProps = {
     isActive?: boolean,
@@ -18,11 +13,7 @@ type ModeToggleProps = {
     onOpenChange?: (open: boolean) => void
 }
 
-export function ModeToggle({
-    isActive = false,
-    onActivate,
-    onOpenChange,
-}: ModeToggleProps) {
+export function ModeToggle({ isActive = false, onActivate, onOpenChange }: ModeToggleProps) {
     const { setTheme } = useTheme()
 
     return (
@@ -52,15 +43,9 @@ export function ModeToggle({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={ () => setTheme("light") }>
-                    Light
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={ () => setTheme("dark") }>
-                    Dark
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={ () => setTheme("system") }>
-                    System
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={ () => setTheme("light") }>Light</DropdownMenuItem>
+                <DropdownMenuItem onClick={ () => setTheme("dark") }>Dark</DropdownMenuItem>
+                <DropdownMenuItem onClick={ () => setTheme("system") }>System</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

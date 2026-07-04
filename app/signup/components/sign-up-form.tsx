@@ -1,10 +1,5 @@
 import { Button } from "@/components/ui/button"
-import {
-    Field,
-    FieldError,
-    FieldGroup,
-    FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { SignUpSchemaType } from "@/lib/schemas"
 import { SubmitHandler, UseFormReturn } from "react-hook-form"
@@ -16,58 +11,28 @@ type SignUpFormProps = {
     errorMessage?: string
 }
 
-export default function SignUpForm({
-    form,
-    onSubmit,
-    isLoading,
-    errorMessage,
-}: SignUpFormProps) {
+export default function SignUpForm({ form, onSubmit, isLoading, errorMessage }: SignUpFormProps) {
     return (
         <form onSubmit={ form.handleSubmit(onSubmit) } className="space-y-4">
             <FieldGroup>
                 <Field>
                     <FieldLabel htmlFor="name">Name</FieldLabel>
-                    <Input
-                        id="name"
-                        type="text"
-                        placeholder="Enter your name"
-                        { ...form.register("name") }
-                    />
-                    { form.formState.errors.name && (
-                        <FieldError>
-                            { form.formState.errors.name.message }
-                        </FieldError>
-                    ) }
+                    <Input id="name" type="text" placeholder="Enter your name" { ...form.register("name") } />
+                    { form.formState.errors.name && <FieldError>{ form.formState.errors.name.message }</FieldError> }
                 </Field>
 
                 <Field>
                     <FieldLabel htmlFor="username">Username</FieldLabel>
-                    <Input
-                        id="username"
-                        type="text"
-                        placeholder="Enter your username"
-                        { ...form.register("username") }
-                    />
+                    <Input id="username" type="text" placeholder="Enter your username" { ...form.register("username") } />
                     { form.formState.errors.username && (
-                        <FieldError>
-                            { form.formState.errors.username.message }
-                        </FieldError>
+                        <FieldError>{ form.formState.errors.username.message }</FieldError>
                     ) }
                 </Field>
 
                 <Field>
                     <FieldLabel htmlFor="email">Email</FieldLabel>
-                    <Input
-                        id="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        { ...form.register("email") }
-                    />
-                    { form.formState.errors.email && (
-                        <FieldError>
-                            { form.formState.errors.email.message }
-                        </FieldError>
-                    ) }
+                    <Input id="email" type="email" placeholder="Enter your email" { ...form.register("email") } />
+                    { form.formState.errors.email && <FieldError>{ form.formState.errors.email.message }</FieldError> }
                 </Field>
 
                 <Field>
@@ -79,16 +44,12 @@ export default function SignUpForm({
                         { ...form.register("password") }
                     />
                     { form.formState.errors.password && (
-                        <FieldError>
-                            { form.formState.errors.password.message }
-                        </FieldError>
+                        <FieldError>{ form.formState.errors.password.message }</FieldError>
                     ) }
                 </Field>
 
                 <Field>
-                    <FieldLabel htmlFor="confirmPassword">
-                        Confirm Password
-                    </FieldLabel>
+                    <FieldLabel htmlFor="confirmPassword">Confirm Password</FieldLabel>
                     <Input
                         id="confirmPassword"
                         type="password"
@@ -96,16 +57,12 @@ export default function SignUpForm({
                         { ...form.register("confirmPassword") }
                     />
                     { form.formState.errors.confirmPassword && (
-                        <FieldError>
-                            { form.formState.errors.confirmPassword.message }
-                        </FieldError>
+                        <FieldError>{ form.formState.errors.confirmPassword.message }</FieldError>
                     ) }
                 </Field>
             </FieldGroup>
 
-            { errorMessage && (
-                <p className="text-sm text-red-600">{ errorMessage }</p>
-            ) }
+            { errorMessage && <p className="text-sm text-red-600">{ errorMessage }</p> }
 
             <Button type="submit" disabled={ isLoading } className="w-full">
                 { isLoading ? "Signing Up..." : "Sign Up" }

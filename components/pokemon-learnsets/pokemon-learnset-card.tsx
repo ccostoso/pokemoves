@@ -13,15 +13,8 @@ type PokemonLearnsetCardProps = {
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
 
-export default function PokemonLearnsetCard({
-    item,
-    onRemove,
-    dragHandleProps,
-}: PokemonLearnsetCardProps) {
-    const pokemonName =
-        item?.pokemon?.[0]?.species?.names?.[0]?.name ||
-        item?.pokemon?.[0]?.name ||
-        "Unknown"
+export default function PokemonLearnsetCard({ item, onRemove, dragHandleProps }: PokemonLearnsetCardProps) {
+    const pokemonName = item?.pokemon?.[0]?.species?.names?.[0]?.name || item?.pokemon?.[0]?.name || "Unknown"
     const pokemonMoves = item?.pokemon?.[0]?.pokemonmoves || []
 
     // Get display name for version group
@@ -66,18 +59,13 @@ export default function PokemonLearnsetCard({
                         ) }
                         <div className="flex flex-col items-center justify-center gap-1">
                             <h3 className="text-lg font-semibold">{ pokemonName }</h3>
-                            <p className="text-sm text-muted-foreground">
-                                { versionGroupName }
-                            </p>
+                            <p className="text-sm text-muted-foreground">{ versionGroupName }</p>
                         </div>
                     </div>
-
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="overflow-hidden">
-                        <PokemonLearnsetTable
-                            pokemonMoves={ pokemonMoves }
-                        />
+                        <PokemonLearnsetTable pokemonMoves={ pokemonMoves } />
                     </div>
                 </CardContent>
             </Card>

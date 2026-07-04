@@ -31,7 +31,7 @@ export default function AccountDropdownMenu({
     setActiveButton,
     isAccountMenuOpen,
     handleAccountMenuOpenChange,
-    user
+    user,
 }: AccountDropdownMenuProps) {
     const router = useRouter()
 
@@ -59,12 +59,8 @@ export default function AccountDropdownMenu({
             <DropdownMenuContent>
                 <DropdownMenuGroup className="whitespace-nowrap">
                     <div className="px-1.5 py-1.5">
-                        <p className="text-sm font-semibold">
-                            @{ user?.username }
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            { user?.name }
-                        </p>
+                        <p className="text-sm font-semibold">@{ user?.username }</p>
+                        <p className="text-sm text-muted-foreground">{ user?.name }</p>
                     </div>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
@@ -86,9 +82,7 @@ export default function AccountDropdownMenu({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Session</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={ sessionSignOut }>
-                        Sign Out
-                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={ sessionSignOut }>Sign Out</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

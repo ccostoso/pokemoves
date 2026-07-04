@@ -62,11 +62,14 @@ export default function PokemonLearnsetWindow({
                     onCreateDuplicateLearnsetDeckWithChanges={ onCreateDuplicateLearnsetDeckWithChanges }
                 />
             ) }
-            { toolbarType === "new" && <NewLearnsetToolbar
-                learnsets={ learnsets }
-                onClearLearnsetsFromDeck={ onClearLearnsetsFromDeck }
-                pokemonList={ pokemonList }
-                isSubmitting={ isSubmitting } /> }
+            { toolbarType === "new" && (
+                <NewLearnsetToolbar
+                    learnsets={ learnsets }
+                    onClearLearnsetsFromDeck={ onClearLearnsetsFromDeck }
+                    pokemonList={ pokemonList }
+                    isSubmitting={ isSubmitting }
+                />
+            ) }
             <PokemonLearnsetPanel
                 learnsets={ learnsets }
                 onRemoveLearnsetFromDeck={ onRemoveLearnsetFromDeck }

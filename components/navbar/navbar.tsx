@@ -92,9 +92,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
                             activeButton={ activeButton }
                             setActiveButton={ setActiveButton }
                             isAccountMenuOpen={ isAccountMenuOpen }
-                            handleAccountMenuOpenChange={
-                                handleAccountMenuOpenChange
-                            }
+                            handleAccountMenuOpenChange={ handleAccountMenuOpenChange }
                             user={ effectiveUser }
                         />
                     ) : (
@@ -110,9 +108,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
 
                     <NavbarExpandableButton
                         label="About"
-                        icon={
-                            <CircleQuestionMark className="shrink-0 h-5 w-5" />
-                        }
+                        icon={ <CircleQuestionMark className="shrink-0 h-5 w-5" /> }
                         isActive={ activeButton === "about" }
                         onActivate={ () => setActiveButton("about") }
                         expandedWidthClass="w-24"
@@ -138,10 +134,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
                             setActiveButton(null)
                         } }
                     />
-                    <SignInDialog
-                        open={ isSignInOpen }
-                        onOpenChange={ handleSignInOpenChange }
-                    />
+                    <SignInDialog open={ isSignInOpen } onOpenChange={ handleSignInOpenChange } />
                 </div>
             </div>
         </nav>

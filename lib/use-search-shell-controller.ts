@@ -1,7 +1,4 @@
-import {
-    getAllPokemonByVersionGroupName,
-    getLevelUpMovesByPokemonNameAndVersionGroup,
-} from "./actions/graphql-actions"
+import { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndVersionGroup } from "./actions/graphql-actions"
 import { createLearnsetDeck, updateLearnsetDeck, deleteLearnsetDeck } from "./actions/db-actions"
 import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "./types"
 import {
@@ -13,10 +10,7 @@ import {
 } from "./utils"
 import { SubmitEventHandler, useEffect, useMemo, useReducer, useRef } from "react"
 
-type RequestState =
-    | { status: "idle" }
-    | { status: "loading" }
-    | { status: "error", message: string }
+type RequestState = { status: "idle" } | { status: "loading" } | { status: "error", message: string }
 
 type SearchShellState = {
     pokemonList: PokemonListItem[],
@@ -77,10 +71,7 @@ type UseSearchShellControllerReturn = {
     handleReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
-function searchShellReducer(
-    state: SearchShellState,
-    action: SearchShellAction,
-): SearchShellState {
+function searchShellReducer(state: SearchShellState, action: SearchShellAction): SearchShellState {
     switch (action.type) {
         case "versionGroupChanged":
             return {
@@ -95,7 +86,7 @@ function searchShellReducer(
                 ...state,
                 pokemonName: action.pokemonName,
             }
-        
+
         case "pokemonListLoading":
             return {
                 ...state,
@@ -145,9 +136,7 @@ function searchShellReducer(
         case "learnsetRemovedFromDeck":
             return {
                 ...state,
-                learnsets: state.learnsets.filter(
-                    (_, index) => index !== action.indexToRemove,
-                ),
+                learnsets: state.learnsets.filter((_, index) => index !== action.indexToRemove),
             }
 
         case "learnsetDeckReordered": {
@@ -187,10 +176,10 @@ function searchShellReducer(
             }
 
         case "learnsetReverted":
-            return { 
-                ...state, 
-                learnsets: action.learnsets, 
-                requestState: { status: "idle" } 
+            return {
+                ...state,
+                learnsets: action.learnsets,
+                requestState: { status: "idle" },
             }
 
         default:
@@ -229,10 +218,8 @@ export function useSearchShellController(
     }, [initialLearnsetDeckItem, initialHydratedLearnsets])
 
     const initialLearnsetSignature = useMemo(
-        () => originalLearnsetDeckSnapshot
-            .map((item) => `${item.pokemonName}:${item.versionGroupName}`)
-            .join("|"),
-        [originalLearnsetDeckSnapshot]
+        () => originalLearnsetDeckSnapshot.map((item) => `${item.pokemonName}:${item.versionGroupName}`).join("|"),
+        [originalLearnsetDeckSnapshot],
     )
 
     const [state, dispatch] = useReducer(searchShellReducer, {
@@ -245,12 +232,9 @@ export function useSearchShellController(
         isPokemonListLoading: false,
     })
 
-    const revertBaselineLearnsetsRef = useRef<LevelUpLearnset[]>(
-        initialHydratedLearnsets ?? [],
-    )
+    const revertBaselineLearnsetsRef = useRef<LevelUpLearnset[]>(initialHydratedLearnsets ?? [])
 
-    const hasUnsavedChanges =
-        toLearnsetSignature(state.learnsets) !== state.savedLearnsetSignature
+    const hasUnsavedChanges = toLearnsetSignature(state.learnsets) !== state.savedLearnsetSignature
 
     useEffect(() => {
         if (!state.versionGroupName) {
@@ -264,9 +248,7 @@ export function useSearchShellController(
             dispatch({ type: "pokemonListLoading" })
 
             try {
-                const pokemon = await getAllPokemonByVersionGroupName(
-                    state.versionGroupName,
-                )
+                const pokemon = await getAllPokemonByVersionGroupName(state.versionGroupName)
                 if (!cancelled) {
                     dispatch({
                         type: "pokemonListLoaded",
@@ -287,19 +269,16 @@ export function useSearchShellController(
         }
     }, [state.versionGroupName])
 
-    const setVersionGroupName = (name: string) =>
-        dispatch({ type: "versionGroupChanged", versionGroupName: name })
+    const setVersionGroupName = (name: string) => dispatch({ type: "versionGroupChanged", versionGroupName: name })
 
-    const setPokemonName = (name: string) =>
-        dispatch({ type: "pokemonNameChanged", pokemonName: name })
+    const setPokemonName = (name: string) => dispatch({ type: "pokemonNameChanged", pokemonName: name })
 
     const handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
         const isDuplicate = state.learnsets.some(
             (learnset) =>
-                learnset.pokemonName === state.pokemonName &&
-            learnset.versionGroupName === state.versionGroupName
+                learnset.pokemonName === state.pokemonName && learnset.versionGroupName === state.versionGroupName,
         )
 
         if (isDuplicate) {
@@ -313,21 +292,15 @@ export function useSearchShellController(
         dispatch({ type: "addLearnsetToLearnsetDeckStarted" })
 
         try {
-            const pokemonMoves =
-                await getLevelUpMovesByPokemonNameAndVersionGroup(
-                    state.pokemonName,
-                    state.versionGroupName,
-                )
+            const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
+                state.pokemonName,
+                state.versionGroupName,
+            )
 
             console.log("pokemonMoves", pokemonMoves)
-            console.log(
-                "pokemonMoves.pokemon.length",
-                pokemonMoves.pokemon.length,
-            )
+            console.log("pokemonMoves.pokemon.length", pokemonMoves.pokemon.length)
 
-            const hasMoves = pokemonMoves.pokemon.some(
-                (p) => p.pokemonmoves.length > 0,
-            )
+            const hasMoves = pokemonMoves.pokemon.some((p) => p.pokemonmoves.length > 0)
 
             if (!hasMoves) {
                 dispatch({
@@ -402,7 +375,10 @@ export function useSearchShellController(
         return createLearnsetDeck(trimmedLearnsetName, sourceDeck)
     }
 
-    const handleCreateDuplicateLearnsetDeckWithChanges = async (userId: string, learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (
+        userId: string,
+        learnsetName: string,
+    ): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, mapLearnsetsToDeckItems(state.learnsets))
     }
 
@@ -413,8 +389,7 @@ export function useSearchShellController(
     const handleRevertChangesToLearnsetDeck = () =>
         dispatch({ type: "learnsetReverted", learnsets: revertBaselineLearnsetsRef.current ?? [] })
 
-    const handleClearLearnsetsFromDeck = () => 
-        dispatch({ type: "learnsetsClearedFromDeck" })
+    const handleClearLearnsetsFromDeck = () => dispatch({ type: "learnsetsClearedFromDeck" })
 
     const handleDeleteLearnsetDeck = async () => {
         const deckId = initialLearnsetDeckId
@@ -464,7 +439,7 @@ export function useSearchShellController(
 
         hydratedDeckKeyRef.current = deckKey
 
-        // We use a cancelled flag to prevent state updates if the component unmounts before the async 
+        // We use a cancelled flag to prevent state updates if the component unmounts before the async
         // operation completes
         let cancelled = false
 
@@ -477,11 +452,10 @@ export function useSearchShellController(
 
                 const hydratedLearnsets: LevelUpLearnset[] = await Promise.all(
                     initialLearnsetDeckItem.map(async (item) => {
-                        const pokemonMoves =
-                            await getLevelUpMovesByPokemonNameAndVersionGroup(
-                                item.pokemonName,
-                                item.versionGroupName,
-                            )
+                        const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
+                            item.pokemonName,
+                            item.versionGroupName,
+                        )
 
                         const nextOccurrence = getNextLearnsetOccurrence(
                             occurrenceMap,
@@ -491,11 +465,7 @@ export function useSearchShellController(
 
                         return {
                             ...pokemonMoves,
-                            id: createLearnsetInstanceId(
-                                item.pokemonName,
-                                item.versionGroupName,
-                                nextOccurrence,
-                            ),
+                            id: createLearnsetInstanceId(item.pokemonName, item.versionGroupName, nextOccurrence),
                         }
                     }),
                 )
@@ -515,8 +485,7 @@ export function useSearchShellController(
                 if (!cancelled) {
                     dispatch({
                         type: "learnsetHydrationFailed",
-                        message:
-                            "An error occurred while hydrating the learnsets. Please try again.",
+                        message: "An error occurred while hydrating the learnsets. Please try again.",
                     })
                 }
             }
@@ -536,10 +505,7 @@ export function useSearchShellController(
         learnsets: state.learnsets,
         isSubmitting: state.requestState.status === "loading",
         pokemonListLoading: state.isPokemonListLoading,
-        error:
-            state.requestState.status === "error"
-                ? state.requestState.message
-                : null,
+        error: state.requestState.status === "error" ? state.requestState.message : null,
         hasUnsavedChanges,
         setVersionGroupName,
         setPokemonName,

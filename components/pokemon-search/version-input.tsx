@@ -1,12 +1,5 @@
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { versionGroupList } from "@/lib/data/versiongroup-list"
 
 type VersionInputProps = {
@@ -25,19 +18,14 @@ export default function VersionInput({ value, onChange }: VersionInputProps) {
                 <SelectContent>
                     <SelectGroup>
                         { versionGroupList.map((version) => (
-                            <SelectItem
-                                key={ version.id }
-                                value={ version.apiName }
-                            >
+                            <SelectItem key={ version.id } value={ version.apiName }>
                                 { version.name }
                             </SelectItem>
                         )) }
                     </SelectGroup>
                 </SelectContent>
             </Select>
-            <FieldDescription>
-                Toggle to include different game versions in the search results.
-            </FieldDescription>
+            <FieldDescription>Toggle to include different game versions in the search results.</FieldDescription>
         </Field>
     )
 }

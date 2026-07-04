@@ -13,7 +13,13 @@ type SearchShellProps = {
     learnsetDeckName?: string | null
 }
 
-export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItem, initialHydratedLearnsets, learnsetDeckName }: SearchShellProps) {
+export default function SearchShell({
+    toolbarType = "new",
+    learnsetDeckId,
+    learnsetDeckItem,
+    initialHydratedLearnsets,
+    learnsetDeckName,
+}: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
@@ -34,16 +40,12 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         handleDeleteLearnsetDeck,
         handleRemoveLearnsetFromDeck,
         handleReorderLearnsetDeck,
-    } = useSearchShellController(
-        learnsetDeckItem,
-        learnsetDeckId,
-        initialHydratedLearnsets,
-    )
+    } = useSearchShellController(learnsetDeckItem, learnsetDeckId, initialHydratedLearnsets)
 
     return (
         <>
             <div className="flex gap-6 mt-6">
-                { (toolbarType === "new" || toolbarType === "owner") && 
+                { (toolbarType === "new" || toolbarType === "owner") && (
                     <aside className="w-72 shrink-0">
                         <SearchPanel
                             pokemonList={ pokemonList }
@@ -57,7 +59,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                             handleAddLearnsetToLearnsetDeck={ handleAddLearnsetToLearnsetDeck }
                         />
                     </aside>
-                }
+                ) }
                 <section className="flex-1 min-w-0 overflow-x-hidden">
                     <PokemonLearnsetWindow
                         toolbarType={ toolbarType }

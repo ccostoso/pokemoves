@@ -42,11 +42,7 @@ export default function SignUpPage() {
             setIsLoading(false)
 
             if (error) {
-                setErrorMessage(
-                    error.message
-                        ? error.message
-                        : "An unknown error occurred.",
-                )
+                setErrorMessage(error.message ? error.message : "An unknown error occurred.")
                 return
             }
         } catch (error) {
@@ -75,9 +71,8 @@ export default function SignUpPage() {
                 </CardContent>
                 <CardFooter>
                     <p className="text-center text-sm text-muted-foreground">
-                        Already have an account? Click on{ " " }
-                        <User className="inline-block h-4 w-4" /> in the top
-                        right corner to sign in.
+                        Already have an account? Click on <User className="inline-block h-4 w-4" /> in the top right
+                        corner to sign in.
                     </p>
                 </CardFooter>
                 { /* </div> */ }

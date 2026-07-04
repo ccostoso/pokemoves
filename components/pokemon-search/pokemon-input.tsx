@@ -21,26 +21,13 @@ type PokemonInputProps = {
     pokemonListLoading?: boolean
 }
 
-export default function PokemonInput({
-    pokemonList,
-    value,
-    onChange,
-    pokemonListLoading = false,
-}: PokemonInputProps) {
+export default function PokemonInput({ pokemonList, value, onChange, pokemonListLoading = false }: PokemonInputProps) {
     const canonicalToDisplay = useMemo(
-        () =>
-            new Map(
-                pokemonList.map((pokemon) => [
-                    pokemon.name,
-                    getPokemonDisplayName(pokemon),
-                ]),
-            ),
+        () => new Map(pokemonList.map((pokemon) => [pokemon.name, getPokemonDisplayName(pokemon)])),
         [pokemonList],
     )
 
-    const [inputText, setInputText] = useState(
-        canonicalToDisplay.get(value) ?? value,
-    )
+    const [inputText, setInputText] = useState(canonicalToDisplay.get(value) ?? value)
 
     return (
         <Field>
@@ -49,9 +36,7 @@ export default function PokemonInput({
                 items={ pokemonList }
                 onValueChange={ (canonicalName: string | null) => {
                     if (!canonicalName) return
-                    setInputText(
-                        canonicalToDisplay.get(canonicalName) ?? canonicalName,
-                    )
+                    setInputText(canonicalToDisplay.get(canonicalName) ?? canonicalName)
                     onChange(canonicalName)
                 } }
             >

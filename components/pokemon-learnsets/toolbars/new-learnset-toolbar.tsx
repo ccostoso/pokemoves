@@ -19,7 +19,12 @@ type NewLearnsetToolbarProps = {
     isSubmitting: boolean
 }
 
-export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
+export function NewLearnsetToolbar({
+    learnsets,
+    onClearLearnsetsFromDeck,
+    pokemonList,
+    isSubmitting,
+}: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
@@ -59,13 +64,13 @@ export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, pokemo
             setLearnsetDeckNameError(null)
             toast.success("Learnset deck saved successfully!", {
                 description: "You can view your saved learnset decks in your profile.",
-                position: "top-center"
+                position: "top-center",
             })
         } catch (error) {
             console.error(error)
             toast.error("Failed to save learnset deck. Please try again.", {
                 description: error instanceof Error ? error.message : "Unknown error",
-                position: "top-center"
+                position: "top-center",
             })
         } finally {
             setIsSaving(false)
@@ -84,11 +89,11 @@ export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, pokemo
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className="flex-1">
-                            <Input 
-                                id="learnset-deck-name" 
-                                type="text" 
-                                placeholder="Learnset Deck Name..." 
-                                value={ learnsetDeckName } 
+                            <Input
+                                id="learnset-deck-name"
+                                type="text"
+                                placeholder="Learnset Deck Name..."
+                                value={ learnsetDeckName }
                                 maxLength={ 50 }
                                 aria-invalid={ learnsetDeckNameError ? true : undefined }
                                 onChange={ (e) => {
@@ -107,26 +112,35 @@ export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, pokemo
                         <Field orientation="horizontal" className="w-auto">
                             <Button
                                 type="submit"
-                                disabled={ isSaving || isSubmitting || !learnsetDeckName.trim() || pokemonList.length === 0 }
+                                disabled={
+                                    isSaving || isSubmitting || !learnsetDeckName.trim() || pokemonList.length === 0
+                                }
                             >
                                 { isSaving ? (
                                     <span className="inline-flex items-center gap-2">
                                         <Spinner className="size-4" />
                                         Saving...
                                     </span>
-                                ) : (<>
-                                    <Save className="mr-2" />Save learnset deck</>) }
+                                ) : (
+                                    <>
+                                        <Save className="mr-2" />
+                                        Save learnset deck
+                                    </>
+                                ) }
                             </Button>
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button 
-                                        className="whitespace-nowrap" 
+                                    <Button
+                                        className="whitespace-nowrap"
                                         type="button"
                                         onClick={ (event) => {
                                             handleClearLearnsetsFromDeck(event)
                                         } }
                                         disabled={ isSaving || isSubmitting || learnsets.length === 0 }
-                                    ><BrushCleaning className="mr-2" />Clear</Button>
+                                    >
+                                        <BrushCleaning className="mr-2" />
+                                        Clear
+                                    </Button>
                                 </TooltipTrigger>
                                 <TooltipContent>
                                     <p>Remove all learnsets from this deck</p>

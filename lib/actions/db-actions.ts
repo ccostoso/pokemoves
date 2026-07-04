@@ -6,7 +6,6 @@ import { LearnsetDeckItem } from "@/lib/types"
 import { getServerSession } from "@/lib/auth-server"
 import { revalidatePath } from "next/cache"
 
-
 export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDeckItem[]): Promise<string> {
     const session = await getServerSession()
     if (!session?.user?.id) {
@@ -14,7 +13,7 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
     }
 
     const userId = session.user.id
-    
+
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 
     const createdLearnsetDeck = await prisma.learnsetDeck.create({
@@ -27,9 +26,9 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
                         pokemonName: learnset.pokemonName,
                         versionGroupName: learnset.versionGroupName,
                         sortOrder: index,
-                    }))
-                }
-            }
+                    })),
+                },
+            },
         },
         select: {
             id: true,
@@ -44,16 +43,16 @@ export async function getLearnsetDeckItemById(deckId: string): Promise<LearnsetD
         where: { id: deckId },
         include: {
             items: {
-                orderBy: { sortOrder: 'asc' }
-            }
-        }
+                orderBy: { sortOrder: "asc" },
+            },
+        },
     })
 
     if (!learnsetDeck) {
         return null
     }
 
-    return learnsetDeck.items.map(item => ({
+    return learnsetDeck.items.map((item) => ({
         pokemonName: item.pokemonName,
         versionGroupName: item.versionGroupName,
         sortOrder: item.sortOrder,
@@ -69,11 +68,13 @@ export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ use
     return learnsetDeck ?? null
 }
 
-export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(userId: string): Promise<{ id: string, name: string, items: LearnsetDeckItem[] }[]> {
+export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(
+    userId: string,
+): Promise<{ id: string, name: string, items: LearnsetDeckItem[] }[]> {
     const learnsetDecks = await prisma.learnsetDeck.findMany({
         where: { userId },
-        select: { 
-            id: true, 
+        select: {
+            id: true,
             name: true,
             items: {
                 select: {
@@ -81,10 +82,10 @@ export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(userId: s
                     versionGroupName: true,
                     sortOrder: true,
                 },
-                orderBy: { sortOrder: 'asc' }
-            }
+                orderBy: { sortOrder: "asc" },
+            },
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: "desc" },
     })
 
     return learnsetDecks
@@ -93,7 +94,7 @@ export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(userId: s
 export async function updateLearnsetDeck(
     deckId: string,
     name: string,
-    learnsetDeck: LearnsetDeckItem[]
+    learnsetDeck: LearnsetDeckItem[],
 ): Promise<string> {
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 
@@ -137,7 +138,7 @@ export async function deleteLearnsetDeck(deckId: string): Promise<void> {
     if (!deckId) {
         throw new Error("Invalid deck ID.")
     }
-    
+
     const session = await getServerSession()
     if (!session?.user?.id) {
         throw new Error("User is not authenticated.")
@@ -158,5 +159,4 @@ export async function deleteLearnsetDeck(deckId: string): Promise<void> {
     ])
 
     revalidatePath("/account/decks")
-
 }

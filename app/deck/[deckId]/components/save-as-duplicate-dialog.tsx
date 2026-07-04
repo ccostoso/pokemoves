@@ -27,7 +27,11 @@ type SaveAsDuplicateDialogProps = {
     onCreateDuplicateLearnsetDeckWithChanges: (learnsetName: string) => Promise<string>
 }
 
-export default function SaveAsDuplicateDialog({ open, onOpenChange, onCreateDuplicateLearnsetDeckWithChanges }: SaveAsDuplicateDialogProps) {
+export default function SaveAsDuplicateDialog({
+    open,
+    onOpenChange,
+    onCreateDuplicateLearnsetDeckWithChanges,
+}: SaveAsDuplicateDialogProps) {
     const router = useRouter()
     const [isSaving, setIsSaving] = useState(false)
 
@@ -73,17 +77,13 @@ export default function SaveAsDuplicateDialog({ open, onOpenChange, onCreateDupl
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Save as duplicate</DialogTitle>
-                    <DialogDescription>
-                        Enter a name for the duplicate learnset.
-                    </DialogDescription>
+                    <DialogDescription>Enter a name for the duplicate learnset.</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={ form.handleSubmit(handleSave) }>
                     <FieldSet>
                         <FieldGroup className="space-y-4 py-2 pb-4">
                             <Field orientation="vertical">
-                                <Label htmlFor="duplicate-learnset-name">
-                                    Duplicate Learnset Name
-                                </Label>
+                                <Label htmlFor="duplicate-learnset-name">Duplicate Learnset Name</Label>
                                 <Input
                                     id="duplicate-learnset-name"
                                     type="text"
@@ -94,9 +94,7 @@ export default function SaveAsDuplicateDialog({ open, onOpenChange, onCreateDupl
                                     disabled={ isSaving }
                                 />
                                 { form.formState.errors.learnsetName && (
-                                    <FieldError>
-                                        { form.formState.errors.learnsetName.message }
-                                    </FieldError>
+                                    <FieldError>{ form.formState.errors.learnsetName.message }</FieldError>
                                 ) }
                             </Field>
                         </FieldGroup>
@@ -112,7 +110,9 @@ export default function SaveAsDuplicateDialog({ open, onOpenChange, onCreateDupl
                                 ) }
                             </Button>
                             <DialogClose asChild>
-                                <Button variant="outline" disabled={ isSaving } onClick={ () => onOpenChange(false) }>Cancel</Button>
+                                <Button variant="outline" disabled={ isSaving } onClick={ () => onOpenChange(false) }>
+                                    Cancel
+                                </Button>
                             </DialogClose>
                         </DialogFooter>
                     </FieldSet>

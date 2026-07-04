@@ -1,18 +1,10 @@
 "use server"
 
 import { gqlClient } from "../graphql-client"
-import {
-    GET_POKEMON_BY_VERSIONGROUP_NAME,
-    GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
-} from "../queries"
+import { GET_POKEMON_BY_VERSIONGROUP_NAME, GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP } from "../queries"
 
 import { unstable_cache } from "next/cache"
-import {
-    pokemonListCacheKey,
-    POKEMON_LIST_TAG,
-    movesCacheKey,
-    MOVES_TAG,
-} from "../cache-keys"
+import { pokemonListCacheKey, POKEMON_LIST_TAG, movesCacheKey, MOVES_TAG } from "../cache-keys"
 import { LevelUpLearnset, PokemonListItem } from "../types"
 
 // --- Shared primitives ---
@@ -92,9 +84,7 @@ type RawLevelUpResponse = {
 
 // --- Mapping functions ---
 
-const mapPokemonListResponse = (
-    response: RawPokemonListResponse,
-): PokemonListItem[] => {
+const mapPokemonListResponse = (response: RawPokemonListResponse): PokemonListItem[] => {
     const pokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
 
     return pokemon.map((p) => ({
@@ -102,49 +92,31 @@ const mapPokemonListResponse = (
         name: p.name,
         species: {
             names:
-                p.pokemonspecy?.pokemonspeciesnames ??
-                p.pokemon_v2_pokemonspecy?.pokemon_v2_pokemonspeciesnames ??
-                [],
+                p.pokemonspecy?.pokemonspeciesnames ?? p.pokemon_v2_pokemonspecy?.pokemon_v2_pokemonspeciesnames ?? [],
         },
     }))
 }
 
-const mapLevelUpResponse = (
-    response: RawLevelUpResponse,
-    versionGroupName: string,
-): LevelUpLearnset => {
+const mapLevelUpResponse = (response: RawLevelUpResponse, versionGroupName: string): LevelUpLearnset => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
-    const fallbackSpecies = (response.pokemonspecy ??
-        response.pokemon_v2_pokemonspecy ??
-        [])[0]
+    const fallbackSpecies = (response.pokemonspecy ?? response.pokemon_v2_pokemonspecy ?? [])[0]
 
     const pokemon = rawPokemon.map((p) => ({
         id: p.id,
         name: p.name,
-        pokemonmoves: (p.pokemonmoves ?? p.pokemon_v2_pokemonmoves ?? []).map(
-            (m) => ({
-                level: m.level,
-                movelearnmethod: {
-                    name:
-                        m.movelearnmethod?.name ??
-                        m.pokemon_v2_movelearnmethod?.name ??
-                        "",
+        pokemonmoves: (p.pokemonmoves ?? p.pokemon_v2_pokemonmoves ?? []).map((m) => ({
+            level: m.level,
+            movelearnmethod: {
+                name: m.movelearnmethod?.name ?? m.pokemon_v2_movelearnmethod?.name ?? "",
+            },
+            move: {
+                name: m.move?.name ?? m.pokemon_v2_move?.name ?? "",
+                type: {
+                    name: m.move?.type?.name ?? m.pokemon_v2_move?.pokemon_v2_type?.name ?? "",
                 },
-                move: {
-                    name: m.move?.name ?? m.pokemon_v2_move?.name ?? "",
-                    type: {
-                        name:
-                            m.move?.type?.name ??
-                            m.pokemon_v2_move?.pokemon_v2_type?.name ??
-                            "",
-                    },
-                    movenames:
-                        m.move?.movenames ??
-                        m.pokemon_v2_move?.pokemon_v2_movenames ??
-                        [],
-                },
-            }),
-        ),
+                movenames: m.move?.movenames ?? m.pokemon_v2_move?.pokemon_v2_movenames ?? [],
+            },
+        })),
         species: {
             names:
                 p.pokemonspecy?.pokemonspeciesnames ??
@@ -166,10 +138,9 @@ const mapLevelUpResponse = (
 
 export const getAllPokemonByVersionGroupName = unstable_cache(
     async (versionGroupName: string): Promise<PokemonListItem[]> => {
-        const response = await gqlClient.request<RawPokemonListResponse>(
-            GET_POKEMON_BY_VERSIONGROUP_NAME,
-            { versionGroupName },
-        )
+        const response = await gqlClient.request<RawPokemonListResponse>(GET_POKEMON_BY_VERSIONGROUP_NAME, {
+            versionGroupName,
+        })
 
         if (!response.pokemon && !response.pokemon_v2_pokemon) {
             throw new Error("Empty response, skipping cache")
@@ -186,10 +157,7 @@ export const getAllPokemonByVersionGroupName = unstable_cache(
 )
 
 export const getLevelUpMovesByPokemonNameAndVersionGroup = unstable_cache(
-    async (
-        pokemonName: string,
-        versionGroupName: string,
-    ): Promise<LevelUpLearnset> => {
+    async (pokemonName: string, versionGroupName: string): Promise<LevelUpLearnset> => {
         const response = await gqlClient.request<RawLevelUpResponse>(
             GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
             { pokemonName, versionGroupName },
