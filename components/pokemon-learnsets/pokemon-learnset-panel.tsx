@@ -13,7 +13,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 type PokemonLearnsetPanelProps = {
     learnsets: LevelUpLearnset[],
     onRemoveLearnset: (index: number) => void,
-    onReorderLearnset: (fromIndex: number, toIndex: number) => void
+    onReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
 function SortableItem({
@@ -46,7 +46,7 @@ function SortableItem({
 export default function PokemonLearnsetPanel({
     learnsets,
     onRemoveLearnset,
-    onReorderLearnset,
+    onReorderLearnsetDeck,
 }: PokemonLearnsetPanelProps) {
     const scrollAreaRef = useRef<HTMLDivElement>(null)
     const previousLengthRef = useRef(learnsets.length)
@@ -77,7 +77,7 @@ export default function PokemonLearnsetPanel({
             (item) => item.id === active.id,
         )
         const toIndex = learnsets.findIndex((item) => item.id === over.id)
-        onReorderLearnset(fromIndex, toIndex)
+        onReorderLearnsetDeck(fromIndex, toIndex)
     }
 
     return (

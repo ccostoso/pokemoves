@@ -69,12 +69,12 @@ type UseSearchShellControllerReturn = {
     handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement>,
     handleUpdateLearnsetDeck: (name: string) => Promise<string>,
     handleCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
-    handleCreateDuplicateLearnsetDeckUnchanged: (userId: string, learnsetName: string) => Promise<string>,
+    handleCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
     handleRevertChangesToLearnsetDeck: () => void,
     handleDeleteLearnsetDeck: () => Promise<void>,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
-    handleReorderLearnset: (fromIndex: number, toIndex: number) => void
+    handleReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
 function searchShellReducer(
@@ -406,7 +406,7 @@ export function useSearchShellController(
         return duplicateFromSource(userId, learnsetName, mapLearnsetsToDeckItems(state.learnsets))
     }
 
-    const handleCreateDuplicateLearnsetDeckUnchanged = async (userId: string, learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateRevertedLearnsetDeck = async (userId: string, learnsetName: string): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)
     }
 
@@ -431,7 +431,7 @@ export function useSearchShellController(
     const handleRemoveLearnset = (indexToRemove: number) =>
         dispatch({ type: "learnsetRemoved", indexToRemove })
 
-    const handleReorderLearnset = (fromIndex: number, toIndex: number) =>
+    const handleReorderLearnsetDeck = (fromIndex: number, toIndex: number) =>
         dispatch({ type: "learnsetReordered", fromIndex, toIndex })
 
     useEffect(() => {
@@ -546,11 +546,11 @@ export function useSearchShellController(
         handleAddLearnsetToLearnsetDeck,
         handleUpdateLearnsetDeck,
         handleCreateDuplicateLearnsetDeckWithChanges,
-        handleCreateDuplicateLearnsetDeckUnchanged,
+        handleCreateDuplicateRevertedLearnsetDeck,
         handleRevertChangesToLearnsetDeck,
         handleDeleteLearnsetDeck,
         handleClearLearnsets,
         handleRemoveLearnset,
-        handleReorderLearnset,
+        handleReorderLearnsetDeck,
     }
 }
