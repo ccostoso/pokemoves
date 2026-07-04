@@ -29,8 +29,6 @@ export default async function LearnsetDecks() {
         )
     }
 
-    // const pokemonSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item?.pokemon?.[0]?.id}.png`
-
     return (
         <main className="container mx-auto p-4 flex-1">
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
@@ -46,12 +44,12 @@ export default async function LearnsetDecks() {
                                         <Item variant="outline">
                                             <Image
                                                 src={ `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.pokemonId}.png` }
-                                                alt={ item.pokemonName }
+                                                alt={ item.pokemonDisplayName }
                                                 width={ 96 }
                                                 height={ 96 }
                                                 className="mr-2"
                                             />
-                                            { item.pokemonName } ({ item.versionGroupName })
+                                            { item.pokemonDisplayName } ({ item.versionGroupDisplayName })
                                         </Item>
                                     </li>
                                 )) }

@@ -24,8 +24,10 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
                 createMany: {
                     data: learnsetDeck.map((learnset, index) => ({
                         pokemonId: learnset.pokemonId,
-                        pokemonName: learnset.pokemonName,
-                        versionGroupName: learnset.versionGroupName,
+                        pokemonApiName: learnset.pokemonApiName,
+                        pokemonDisplayName: learnset.pokemonDisplayName,
+                        versionGroupApiName: learnset.versionGroupApiName,
+                        versionGroupDisplayName: learnset.versionGroupDisplayName,
                         sortOrder: index,
                     })),
                 },
@@ -55,8 +57,10 @@ export async function getLearnsetDeckItemById(deckId: string): Promise<LearnsetD
 
     return learnsetDeck.items.map((item) => ({
         pokemonId: item.pokemonId,
-        pokemonName: item.pokemonName,
-        versionGroupName: item.versionGroupName,
+        pokemonApiName: item.pokemonApiName,
+        pokemonDisplayName: item.pokemonDisplayName,
+        versionGroupApiName: item.versionGroupApiName,
+        versionGroupDisplayName: item.versionGroupDisplayName,
         sortOrder: item.sortOrder,
     }))
 }
@@ -81,8 +85,10 @@ export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(
             items: {
                 select: {
                     pokemonId: true,
-                    pokemonName: true,
-                    versionGroupName: true,
+                    pokemonApiName: true,
+                    pokemonDisplayName: true,
+                    versionGroupApiName: true,
+                    versionGroupDisplayName: true,
                     sortOrder: true,
                 },
                 orderBy: { sortOrder: "asc" },
@@ -122,8 +128,10 @@ export async function updateLearnsetDeck(
             data: learnsetDeck.map((item, index) => ({
                 deckId,
                 pokemonId: item.pokemonId,
-                pokemonName: item.pokemonName,
-                versionGroupName: item.versionGroupName,
+                pokemonApiName: item.pokemonApiName,
+                pokemonDisplayName: item.pokemonDisplayName,
+                versionGroupApiName: item.versionGroupApiName,
+                versionGroupDisplayName: item.versionGroupDisplayName,
                 sortOrder: index,
             })),
         })

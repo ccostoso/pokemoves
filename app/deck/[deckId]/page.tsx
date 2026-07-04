@@ -34,16 +34,16 @@ export default async function DeckPage({ params }: DeckPageProps) {
         learnsetDeckItem.map(async (item) => {
             // Fetch the level-up moves for each Pokémon in the learnset deck
             const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
-                item.pokemonName,
-                item.versionGroupName,
+                item.pokemonApiName,
+                item.versionGroupApiName,
             )
 
-            const nextOccurrence = getNextLearnsetOccurrence(occurrenceMap, item.pokemonName, item.versionGroupName)
+            const nextOccurrence = getNextLearnsetOccurrence(occurrenceMap, item.pokemonApiName, item.versionGroupApiName)
 
             // For each learnset, create a unique instance ID based on the occurrence
             return {
                 ...pokemonMoves,
-                id: createLearnsetInstanceId(item.pokemonName, item.versionGroupName, nextOccurrence),
+                id: createLearnsetInstanceId(item.pokemonApiName, item.versionGroupApiName, nextOccurrence),
             }
         }),
     )

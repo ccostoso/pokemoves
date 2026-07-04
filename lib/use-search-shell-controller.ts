@@ -5,6 +5,8 @@ import {
     countLearnsetPairOccurrences,
     createLearnsetInstanceId,
     getNextLearnsetOccurrence,
+    getPokemonDisplayName,
+    getVersionGroupDisplayName,
     mapLearnsetsToDeckItems,
     toLearnsetSignature,
 } from "./utils"
@@ -203,27 +205,39 @@ export function useSearchShellController(
                 .sort((a, b) => a.sortOrder - b.sortOrder)
                 .map((item, index) => ({
                     pokemonId: item.pokemonId,
-                    pokemonName: item.pokemonName,
-                    versionGroupName: item.versionGroupName,
+                    pokemonApiName: item.pokemonApiName,
+                    pokemonDisplayName: item.pokemonDisplayName,
+                    versionGroupApiName: item.versionGroupApiName,
+                    versionGroupDisplayName: item.versionGroupDisplayName,
                     sortOrder: index,
                 }))
         }
 
         // If there is an initialHydratedLearnsets, we use that to create the snapshot
         if (initialHydratedLearnsets && initialHydratedLearnsets.length > 0) {
-            return initialHydratedLearnsets.map((item, index) => ({
-                pokemonId: item.pokemon[0]?.id,
-                pokemonName: item.pokemonName,
-                versionGroupName: item.versionGroupName,
-                sortOrder: index,
-            }))
+            return initialHydratedLearnsets.map((item, index) => {
+                const pokemon = item.pokemon[0]
+
+                if (!pokemon || pokemon.id == null) {
+                    throw new Error(`Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`)
+                }
+
+                return {
+                    pokemonId: pokemon.id,
+                    pokemonApiName: item.pokemonName,
+                    pokemonDisplayName: getPokemonDisplayName(pokemon),
+                    versionGroupApiName: item.versionGroupName,
+                    versionGroupDisplayName: getVersionGroupDisplayName(item.versionGroupName),
+                    sortOrder: index,
+                }
+            })
         }
 
         return []
     }, [initialLearnsetDeck, initialHydratedLearnsets])
 
     const initialLearnsetSignature = useMemo(
-        () => originalLearnsetDeckSnapshot.map((item) => `${item.pokemonName}:${item.versionGroupName}`).join("|"),
+        () => originalLearnsetDeckSnapshot.map((item) => `${item.pokemonApiName}:${item.versionGroupApiName}`).join("|"),
         [originalLearnsetDeckSnapshot],
     )
 
@@ -433,7 +447,7 @@ export function useSearchShellController(
 
         // Create a unique key for the initial learnset deck data to avoid rehydrating if it hasn't changed
         const learnsetContentKey = initialLearnsetDeck
-            .map((item) => `${item.pokemonName}:${item.versionGroupName}:${item.sortOrder}`)
+            .map((item) => `${item.pokemonApiName}:${item.versionGroupApiName}:${item.sortOrder}`)
             .join("|")
 
         const deckKey = `${initialLearnsetDeckId ?? "unknown"}|${learnsetContentKey}`
@@ -458,19 +472,19 @@ export function useSearchShellController(
                 const hydratedLearnsets: LevelUpLearnset[] = await Promise.all(
                     initialLearnsetDeck.map(async (item) => {
                         const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
-                            item.pokemonName,
-                            item.versionGroupName,
+                            item.pokemonApiName,
+                            item.versionGroupApiName,
                         )
 
                         const nextOccurrence = getNextLearnsetOccurrence(
                             occurrenceMap,
-                            item.pokemonName,
-                            item.versionGroupName,
+                            item.pokemonApiName,
+                            item.versionGroupApiName,
                         )
 
                         return {
                             ...pokemonMoves,
-                            id: createLearnsetInstanceId(item.pokemonName, item.versionGroupName, nextOccurrence),
+                            id: createLearnsetInstanceId(item.pokemonApiName, item.versionGroupApiName, nextOccurrence),
                         }
                     }),
                 )
