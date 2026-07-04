@@ -5,9 +5,9 @@ import Image from "next/image"
 import { Item } from "@/components/ui/item"
 
 type DeckItemPreview = {
-    sortOrder: number
-    pokemonId: number
-    pokemonDisplayName: string
+    sortOrder: number,
+    pokemonId: number,
+    pokemonDisplayName: string,
     versionGroupDisplayName: string
 }
 
