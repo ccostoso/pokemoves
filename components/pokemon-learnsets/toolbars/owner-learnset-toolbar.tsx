@@ -18,13 +18,13 @@ type OwnerLearnsetToolbarProps = {
     onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
     onCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChangesToLearnsetDeck: () => void,
-    onClearLearnsets: () => void,
+    onClearLearnsetsFromDeck: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     hasUnsavedChanges: boolean,
     learnsetsLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onCreateDuplicateLearnsetDeckWithChanges, onCreateDuplicateRevertedLearnsetDeck, onRevertChangesToLearnsetDeck, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onCreateDuplicateLearnsetDeckWithChanges, onCreateDuplicateRevertedLearnsetDeck, onRevertChangesToLearnsetDeck, onClearLearnsetsFromDeck, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -82,8 +82,8 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
         setIsDuplicateDialogOpen(true)
     }
 
-    const handleClearLearnsets = () => {
-        onClearLearnsets()
+    const handleClearLearnsetsFromDeck = () => {
+        onClearLearnsetsFromDeck()
         toast.success("Learnset panel cleared", { 
             description: "Click on \"Save changes\" to apply this change to the learnset deck",
             position: "top-center" })
@@ -198,7 +198,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
                                             <TooltipTrigger asChild>
                                                 <DropdownMenuItem 
                                                     className="whitespace-nowrap" 
-                                                    onSelect={ handleClearLearnsets }
+                                                    onSelect={ handleClearLearnsetsFromDeck }
                                                     disabled={ learnsetsLength === 0 }
                                                 ><BrushCleaning className="mr-2" />Clear</DropdownMenuItem>
                                             </TooltipTrigger>

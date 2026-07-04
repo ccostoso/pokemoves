@@ -14,12 +14,12 @@ import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type NewLearnsetToolbarProps = {
     learnsets: LevelUpLearnset[],
-    onClearLearnsets: () => void,
+    onClearLearnsetsFromDeck: () => void,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean
 }
 
-export function NewLearnsetToolbar({ learnsets, onClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
+export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
@@ -72,9 +72,9 @@ export function NewLearnsetToolbar({ learnsets, onClearLearnsets, pokemonList, i
         }
     }
 
-    const handleClearLearnsets = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClearLearnsetsFromDeck = (event: React.MouseEvent<HTMLButtonElement>) => {
         event?.preventDefault()
-        onClearLearnsets()
+        onClearLearnsetsFromDeck()
         toast.success("Learnset panel cleared.", { position: "top-center" })
     }
 
@@ -123,7 +123,7 @@ export function NewLearnsetToolbar({ learnsets, onClearLearnsets, pokemonList, i
                                         className="whitespace-nowrap" 
                                         type="button"
                                         onClick={ (event) => {
-                                            handleClearLearnsets(event)
+                                            handleClearLearnsetsFromDeck(event)
                                         } }
                                         disabled={ isSaving || isSubmitting || learnsets.length === 0 }
                                     ><BrushCleaning className="mr-2" />Clear</Button>

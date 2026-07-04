@@ -37,7 +37,7 @@ type SearchShellAction =
     | { type: "addLearnsetToLearnsetDeckStarted" }
     | { type: "addLearnsetToLearnsetDeckSucceeded", learnset: LevelUpLearnset }
     | { type: "addLearnsetToLearnsetDeckFailed", message: string }
-    | { type: "learnsetCleared" }
+    | { type: "learnsetsClearedFromDeck" }
     | { type: "learnsetRemovedFromDeck", indexToRemove: number }
     | { type: "learnsetDeckReordered", fromIndex: number, toIndex: number }
     | { type: "learnsetHydrationStarted" }
@@ -72,7 +72,7 @@ type UseSearchShellControllerReturn = {
     handleCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
     handleRevertChangesToLearnsetDeck: () => void,
     handleDeleteLearnsetDeck: () => Promise<void>,
-    handleClearLearnsets: () => void,
+    handleClearLearnsetsFromDeck: () => void,
     handleRemoveLearnsetFromDeck: (indexToRemove: number) => void,
     handleReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
@@ -135,7 +135,7 @@ function searchShellReducer(
                 requestState: { status: "error", message: action.message },
             }
 
-        case "learnsetCleared":
+        case "learnsetsClearedFromDeck":
             return {
                 ...state,
                 learnsets: [],
@@ -413,8 +413,8 @@ export function useSearchShellController(
     const handleRevertChangesToLearnsetDeck = () =>
         dispatch({ type: "learnsetHydrationSucceeded", learnsets: revertBaselineLearnsetsRef.current ?? [] })
 
-    const handleClearLearnsets = () => 
-        dispatch({ type: "learnsetCleared" })
+    const handleClearLearnsetsFromDeck = () => 
+        dispatch({ type: "learnsetsClearedFromDeck" })
 
     const handleDeleteLearnsetDeck = async () => {
         const deckId = initialLearnsetDeckId
@@ -424,7 +424,7 @@ export function useSearchShellController(
         }
 
         await deleteLearnsetDeck(deckId)
-        dispatch({ type: "learnsetCleared" })
+        dispatch({ type: "learnsetsClearedFromDeck" })
         dispatch({ type: "savedBaselineSynced", signature: "" })
     }
 
@@ -549,7 +549,7 @@ export function useSearchShellController(
         handleCreateDuplicateRevertedLearnsetDeck,
         handleRevertChangesToLearnsetDeck,
         handleDeleteLearnsetDeck,
-        handleClearLearnsets,
+        handleClearLearnsetsFromDeck,
         handleRemoveLearnsetFromDeck,
         handleReorderLearnsetDeck,
     }
