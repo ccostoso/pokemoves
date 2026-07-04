@@ -1,5 +1,5 @@
 import { SubmitEventHandler, useState } from "react"
-import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "@/lib/types"
+import { LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { authClient } from "@/lib/auth-client"
 import { Input } from "../ui/input"
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
@@ -8,6 +8,7 @@ import { Field, FieldDescription, FieldGroup, FieldLabel } from "../ui/field"
 import { Button } from "../ui/button"
 import { Save } from "lucide-react"
 import { Spinner } from "../ui/spinner"
+import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type SavePanelProps = {
     learnsetList: LevelUpLearnset[],
@@ -20,14 +21,6 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
-
-    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItem[] => {
-        return learnset.map((item, index) => ({
-            pokemonName: item.pokemonName,
-            versionGroupName: item.versionGroupName,
-            sortOrder: index,
-        }))
-    }
 
     const handleCreateLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
@@ -50,7 +43,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
         }
 
         try {
-            const formattedLearnset = mapLevelUpLearnsetToDbFormat(learnsetList)
+            const formattedLearnset = mapLearnsetsToDeckItems(learnsetList)
             await createLearnsetDeck(learnsetDeckName, formattedLearnset)
 
             setLearnsetDeckName("")

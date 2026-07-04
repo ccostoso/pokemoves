@@ -10,6 +10,7 @@ import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { BrushCleaning, Save } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
 import { toast } from "sonner"
+import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type NewLearnsetToolbarProps = {
     learnsetList: LevelUpLearnset[],
@@ -23,14 +24,6 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
     const [isSaving, setIsSaving] = useState(false)
-
-    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItem[] => {
-        return learnset.map((item, index) => ({
-            pokemonName: item.pokemonName,
-            versionGroupName: item.versionGroupName,
-            sortOrder: index,
-        }))
-    }
 
     const handleCreateLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
@@ -59,7 +52,7 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
         }
 
         try {
-            const formattedLearnset = mapLevelUpLearnsetToDbFormat(learnsetList)
+            const formattedLearnset = mapLearnsetsToDeckItems(learnsetList)
             await createLearnsetDeck(learnsetTitleResult.data, formattedLearnset)
 
             setLearnsetDeckName("")
