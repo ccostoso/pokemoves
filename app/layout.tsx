@@ -45,10 +45,14 @@ export default async function RootLayout({
                     >
                         <Navbar
                             // Pass the initial user to the Navbar component
-                            initialUser={ {
-                                name: session?.user?.name ?? null,
-                                username: session?.user?.username ?? null,
-                            } }
+                            initialUser={
+                                session?.user
+                                    ? {
+                                        name: session.user.name ?? null,
+                                        username: session.user.username ?? null,
+                                    }
+                                    : null
+                            }
                         />
                         { children }
                         <Toaster />
