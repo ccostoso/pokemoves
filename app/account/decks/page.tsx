@@ -1,24 +1,13 @@
 import { getServerSession } from "@/lib/auth-server"
-import { deleteLearnsetDeck, getAllLearnsetDecksWithLearnsetDeckItemsByUserId } from "@/lib/actions/db-actions"
+import { getAllLearnsetDecksWithLearnsetDeckItemsByUserId } from "@/lib/actions/db-actions"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, X } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { DeckItemsPreview } from "./components/deck-items-preview"
-
-async function handleDeleteDeck(formData: FormData) {
-    "use server"
-
-    const deckId = formData.get("deckId")
-
-    if (typeof deckId !== "string" || !deckId) {
-        throw new Error("Invalid deck ID.")
-    }
-
-    await deleteLearnsetDeck(deckId)
-}
+import { DeleteDeckButton } from "./components/delete-deck-button"
 
 export default async function LearnsetDecks() {
     const session = await getServerSession()
@@ -74,18 +63,7 @@ export default async function LearnsetDecks() {
                                             { deck.items.length } entries • Updated { updatedAtLabel }
                                         </p>
                                     </div>
-                                    <form action={ handleDeleteDeck }>
-                                        <input type="hidden" name="deckId" value={ deck.id } />
-                                        <Button
-                                            type="submit"
-                                            variant="ghost"
-                                            size="icon"
-                                            className="text-muted-foreground hover:text-destructive"
-                                            aria-label={ `Delete ${deck.name}` }
-                                        >
-                                            <X className="h-4 w-4" />
-                                        </Button>
-                                    </form>
+                                    <DeleteDeckButton deckId={ deck.id } deckName={ deck.name } />
                                 </div>
                             </CardHeader>
                             <Separator />
