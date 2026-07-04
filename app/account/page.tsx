@@ -1,4 +1,6 @@
 import { getServerSession } from "@/lib/auth-server"
+import UsernameEmailForm from "./components/username-email-form"
+
 
 export default async function UserPage() {
     let session: Awaited<ReturnType<typeof getServerSession>> | null = null
@@ -26,12 +28,8 @@ export default async function UserPage() {
     return (
         <main className="container mx-auto p-4 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
-
+            <UsernameEmailForm username={ user.name } email={ user.email } />
             <pre>{ JSON.stringify(session, null, 2) }</pre>
-
-            <p className="mt-4 text-lg">
-                Welcome to your dashboard! Here you can manage your account and view your Pokemon move comparisons.
-            </p>
         </main>
     )
 }
