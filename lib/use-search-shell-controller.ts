@@ -1,7 +1,7 @@
 import {
     getAllPokemonByVersionGroupName,
     getLevelUpMovesByPokemonNameAndVersionGroup,
-} from "./actions/qraphql-actions"
+} from "./actions/graphql-actions"
 import { createLearnsetDeck, updateLearnsetDeck, deleteLearnsetDeck } from "./actions/db-actions"
 import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
 import {

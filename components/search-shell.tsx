@@ -43,7 +43,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
     return (
         <>
             <div className="flex gap-6 mt-6">
-                { toolbarType !== "viewer" && 
+                { (toolbarType === "new" || toolbarType === "owner") && 
                     <aside className="w-72 shrink-0">
                         <SearchPanel
                             pokemonList={ pokemonList }
