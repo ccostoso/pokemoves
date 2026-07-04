@@ -15,8 +15,8 @@ import { toast } from "sonner"
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
     onUpdateLearnsetDeck: (name: string) => Promise<string>,
-    onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
-    onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
+    onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
+    onCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChangesToLearnsetDeck: () => void,
     onClearLearnsets: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
@@ -24,7 +24,7 @@ type OwnerLearnsetToolbarProps = {
     learnsetsLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChangesToLearnsetDeck, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onCreateDuplicateLearnsetDeckWithChanges, onCreateDuplicateRevertedLearnsetDeck, onRevertChangesToLearnsetDeck, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -55,7 +55,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
         }
     }
 
-    const handleSaveAsDuplicate = async (learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<string> => {
         const userId = session?.user?.id
 
         if (!userId) {
@@ -65,9 +65,9 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
 
         switch (duplicateMode) {
             case "current":
-                return onSaveAsDuplicate(userId, learnsetName)
+                return onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
             case "original":
-                return onDuplicateOriginalWithoutSaving(userId, learnsetName)
+                return onCreateDuplicateRevertedLearnsetDeck(userId, learnsetName)
         }
     }
 
@@ -216,7 +216,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
             <SaveAsDuplicateDialog
                 open={ isDuplicateDialogOpen }
                 onOpenChange={ setIsDuplicateDialogOpen }
-                onSaveAsDuplicate={ handleSaveAsDuplicate }
+                onCreateDuplicateLearnsetDeckWithChanges={ handleCreateDuplicateLearnsetDeckWithChanges }
             />
             <ConfirmDeleteLearnsetDeckDialog
                 open={ isDeleteDialogOpen }

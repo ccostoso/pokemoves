@@ -8,21 +8,21 @@ import { CopyCheck } from "lucide-react"
 
 type ViewerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
-    onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>
+    onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>
 }
 
-export function ViewerLearnsetToolbar({ learnsetDeckName, onSaveAsDuplicate }: ViewerLearnsetToolbarProps) {
+export function ViewerLearnsetToolbar({ learnsetDeckName, onCreateDuplicateLearnsetDeckWithChanges }: ViewerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleSaveAsDuplicate = async (learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<string> => {
         const userId = session?.user?.id
 
         if (!userId) {
             throw new Error("You must be logged in to duplicate this learnset.")
         }
 
-        return onSaveAsDuplicate(userId, learnsetName)
+        return onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
     }
 
     const handleOnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -43,7 +43,7 @@ export function ViewerLearnsetToolbar({ learnsetDeckName, onSaveAsDuplicate }: V
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
                                 <Button type="button" onClick={ handleOnClick }><CopyCheck className="mr-2" />Save as duplicate</Button>
-                                <SaveAsDuplicateDialog open={ isOpen } onOpenChange={ setIsOpen } onSaveAsDuplicate={ handleSaveAsDuplicate } />
+                                <SaveAsDuplicateDialog open={ isOpen } onOpenChange={ setIsOpen } onCreateDuplicateLearnsetDeckWithChanges={ handleCreateDuplicateLearnsetDeckWithChanges } />
                             </Field>
                         </FieldGroup>
                     ) }

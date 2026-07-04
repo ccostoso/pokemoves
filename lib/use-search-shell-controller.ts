@@ -68,8 +68,8 @@ type UseSearchShellControllerReturn = {
     // handlers used by child components
     handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement>,
     handleUpdateLearnsetDeck: (name: string) => Promise<string>,
-    handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
-    handleDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
+    handleCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
+    handleCreateDuplicateLearnsetDeckUnchanged: (userId: string, learnsetName: string) => Promise<string>,
     handleRevertChangesToLearnsetDeck: () => void,
     handleDeleteLearnsetDeck: () => Promise<void>,
     handleClearLearnsets: () => void,
@@ -402,11 +402,11 @@ export function useSearchShellController(
         return createLearnsetDeck(trimmedLearnsetName, sourceDeck)
     }
 
-    const handleSaveAsDuplicate = async (userId: string, learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (userId: string, learnsetName: string): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, mapLearnsetsToDeckItems(state.learnsets))
     }
 
-    const handleDuplicateOriginalWithoutSaving = async (userId: string, learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckUnchanged = async (userId: string, learnsetName: string): Promise<string> => {
         return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)
     }
 
@@ -545,8 +545,8 @@ export function useSearchShellController(
         setPokemonName,
         handleAddLearnsetToLearnsetDeck,
         handleUpdateLearnsetDeck,
-        handleSaveAsDuplicate,
-        handleDuplicateOriginalWithoutSaving,
+        handleCreateDuplicateLearnsetDeckWithChanges,
+        handleCreateDuplicateLearnsetDeckUnchanged,
         handleRevertChangesToLearnsetDeck,
         handleDeleteLearnsetDeck,
         handleClearLearnsets,

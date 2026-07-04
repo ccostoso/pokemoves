@@ -10,8 +10,8 @@ type PokemonLearnsetWindowProps = {
     onRemoveLearnset: (index: number) => void,
     onReorderLearnset: (fromIndex: number, toIndex: number) => void,
     onUpdateLearnsetDeck: (learnsetName: string) => Promise<string>,
-    onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
-    onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
+    onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
+    onCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
     onRevertChangesToLearnsetDeck: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     pokemonList: PokemonListItem[],
@@ -28,8 +28,8 @@ export default function PokemonLearnsetWindow({
     onRemoveLearnset,
     onReorderLearnset,
     onUpdateLearnsetDeck,
-    onSaveAsDuplicate,
-    onDuplicateOriginalWithoutSaving,
+    onCreateDuplicateLearnsetDeckWithChanges,
+    onCreateDuplicateRevertedLearnsetDeck,
     onRevertChangesToLearnsetDeck,
     onDeleteLearnsetDeck,
     pokemonList,
@@ -47,8 +47,8 @@ export default function PokemonLearnsetWindow({
                 <OwnerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
                     onUpdateLearnsetDeck={ onUpdateLearnsetDeck }
-                    onSaveAsDuplicate={ onSaveAsDuplicate }
-                    onDuplicateOriginalWithoutSaving={ onDuplicateOriginalWithoutSaving }
+                    onCreateDuplicateLearnsetDeckWithChanges={ onCreateDuplicateLearnsetDeckWithChanges }
+                    onCreateDuplicateRevertedLearnsetDeck={ onCreateDuplicateRevertedLearnsetDeck }
                     onRevertChangesToLearnsetDeck={ onRevertChangesToLearnsetDeck }
                     onClearLearnsets={ onClearLearnsets }
                     onDeleteLearnsetDeck={ onDeleteLearnsetDeck }
@@ -59,7 +59,7 @@ export default function PokemonLearnsetWindow({
             { toolbarType === "viewer" && (
                 <ViewerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
-                    onSaveAsDuplicate={ onSaveAsDuplicate }
+                    onCreateDuplicateLearnsetDeckWithChanges={ onCreateDuplicateLearnsetDeckWithChanges }
                 />
             ) }
             { toolbarType === "new" && <NewLearnsetToolbar
