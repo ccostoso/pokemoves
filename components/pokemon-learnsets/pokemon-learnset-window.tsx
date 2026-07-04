@@ -5,14 +5,14 @@ import { OwnerLearnsetToolbar, ViewerLearnsetToolbar, NewLearnsetToolbar } from 
 type PokemonLearnsetWindowProps = {
     toolbarType: "owner" | "viewer" | "new" | "none",
     learnsetDeckId?: string,
-    learnsetList: LevelUpLearnset[],
-    onClearLearnsets: () => void,
-    onRemoveLearnset: (index: number) => void,
-    onReorderLearnset: (fromIndex: number, toIndex: number) => void,
-    onSaveChanges: (learnsetName: string) => Promise<string>,
-    onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
-    onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
-    onRevertChanges: () => void,
+    learnsets: LevelUpLearnset[],
+    onClearLearnsetsFromDeck: () => void,
+    onRemoveLearnsetFromDeck: (index: number) => void,
+    onReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void,
+    onUpdateLearnsetDeck: (learnsetName: string) => Promise<string>,
+    onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
+    onCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
+    onRevertChangesToLearnsetDeck: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean,
@@ -23,14 +23,14 @@ type PokemonLearnsetWindowProps = {
 export default function PokemonLearnsetWindow({
     toolbarType,
     learnsetDeckId,
-    learnsetList,
-    onClearLearnsets,
-    onRemoveLearnset,
-    onReorderLearnset,
-    onSaveChanges,
-    onSaveAsDuplicate,
-    onDuplicateOriginalWithoutSaving,
-    onRevertChanges,
+    learnsets,
+    onClearLearnsetsFromDeck,
+    onRemoveLearnsetFromDeck,
+    onReorderLearnsetDeck,
+    onUpdateLearnsetDeck,
+    onCreateDuplicateLearnsetDeckWithChanges,
+    onCreateDuplicateRevertedLearnsetDeck,
+    onRevertChangesToLearnsetDeck,
     onDeleteLearnsetDeck,
     pokemonList,
     isSubmitting,
@@ -46,31 +46,31 @@ export default function PokemonLearnsetWindow({
             { toolbarType === "owner" && learnsetDeckId && (
                 <OwnerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
-                    onSaveChanges={ onSaveChanges }
-                    onSaveAsDuplicate={ onSaveAsDuplicate }
-                    onDuplicateOriginalWithoutSaving={ onDuplicateOriginalWithoutSaving }
-                    onRevertChanges={ onRevertChanges }
-                    onClearLearnsets={ onClearLearnsets }
+                    onUpdateLearnsetDeck={ onUpdateLearnsetDeck }
+                    onCreateDuplicateLearnsetDeckWithChanges={ onCreateDuplicateLearnsetDeckWithChanges }
+                    onCreateDuplicateRevertedLearnsetDeck={ onCreateDuplicateRevertedLearnsetDeck }
+                    onRevertChangesToLearnsetDeck={ onRevertChangesToLearnsetDeck }
+                    onClearLearnsetsFromDeck={ onClearLearnsetsFromDeck }
                     onDeleteLearnsetDeck={ onDeleteLearnsetDeck }
                     hasUnsavedChanges={ hasUnsavedChanges }
-                    learnsetListLength={ learnsetList.length }
+                    learnsetsLength={ learnsets.length }
                 />
             ) }
             { toolbarType === "viewer" && (
                 <ViewerLearnsetToolbar
                     learnsetDeckName={ learnsetDeckName }
-                    onSaveAsDuplicate={ onSaveAsDuplicate }
+                    onCreateDuplicateLearnsetDeckWithChanges={ onCreateDuplicateLearnsetDeckWithChanges }
                 />
             ) }
             { toolbarType === "new" && <NewLearnsetToolbar
-                learnsetList={ learnsetList }
-                onClearLearnsets={ onClearLearnsets }
+                learnsets={ learnsets }
+                onClearLearnsetsFromDeck={ onClearLearnsetsFromDeck }
                 pokemonList={ pokemonList }
                 isSubmitting={ isSubmitting } /> }
             <PokemonLearnsetPanel
-                learnsetList={ learnsetList }
-                onRemoveLearnset={ onRemoveLearnset }
-                onReorderLearnset={ onReorderLearnset }
+                learnsets={ learnsets }
+                onRemoveLearnsetFromDeck={ onRemoveLearnsetFromDeck }
+                onReorderLearnsetDeck={ onReorderLearnsetDeck }
             />
         </div>
     )

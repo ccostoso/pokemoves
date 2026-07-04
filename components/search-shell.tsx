@@ -3,47 +3,47 @@
 import SearchPanel from "./pokemon-search/search-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
-import { LearnsetDeckItemData, LevelUpLearnset } from "@/lib/types"
+import { LearnsetDeckItem, LevelUpLearnset } from "@/lib/types"
 
 type SearchShellProps = {
     toolbarType?: "owner" | "viewer" | "new" | "none",
     learnsetDeckId?: string,
-    learnsetDeckItemData?: LearnsetDeckItemData[] | null,
-    initialHydratedLearnsetList?: LevelUpLearnset[] | null,
+    learnsetDeckItem?: LearnsetDeckItem[] | null,
+    initialHydratedLearnsets?: LevelUpLearnset[] | null,
     learnsetDeckName?: string | null
 }
 
-export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItemData, initialHydratedLearnsetList, learnsetDeckName }: SearchShellProps) {
+export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItem, initialHydratedLearnsets, learnsetDeckName }: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
         setVersionGroupName,
         pokemonName,
         setPokemonName,
-        learnsetList,
+        learnsets,
         error,
         pokemonListLoading,
         isSubmitting,
         hasUnsavedChanges,
-        handleAddLearnset,
-        handleSaveAsDuplicate,
-        handleDuplicateOriginalWithoutSaving,
-        handleSaveChanges,
-        handleRevertChanges,
-        handleClearLearnsets,
+        handleAddLearnsetToLearnsetDeck,
+        handleCreateDuplicateLearnsetDeckWithChanges,
+        handleCreateDuplicateRevertedLearnsetDeck,
+        handleUpdateLearnsetDeck,
+        handleRevertChangesToLearnsetDeck,
+        handleClearLearnsetsFromDeck,
         handleDeleteLearnsetDeck,
-        handleRemoveLearnset,
-        handleReorderLearnset,
+        handleRemoveLearnsetFromDeck,
+        handleReorderLearnsetDeck,
     } = useSearchShellController(
-        learnsetDeckItemData,
+        learnsetDeckItem,
         learnsetDeckId,
-        initialHydratedLearnsetList,
+        initialHydratedLearnsets,
     )
 
     return (
         <>
             <div className="flex gap-6 mt-6">
-                { toolbarType !== "viewer" && 
+                { (toolbarType === "new" || toolbarType === "owner") && 
                     <aside className="w-72 shrink-0">
                         <SearchPanel
                             pokemonList={ pokemonList }
@@ -54,7 +54,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                             isSubmitting={ isSubmitting }
                             pokemonListLoading={ pokemonListLoading }
                             error={ error }
-                            handleAddLearnset={ handleAddLearnset }
+                            handleAddLearnsetToLearnsetDeck={ handleAddLearnsetToLearnsetDeck }
                         />
                     </aside>
                 }
@@ -62,14 +62,14 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                     <PokemonLearnsetWindow
                         toolbarType={ toolbarType }
                         learnsetDeckId={ learnsetDeckId }
-                        learnsetList={ learnsetList }
-                        onClearLearnsets={ handleClearLearnsets }
-                        onRemoveLearnset={ handleRemoveLearnset }
-                        onReorderLearnset={ handleReorderLearnset }
-                        onSaveChanges={ handleSaveChanges }
-                        onSaveAsDuplicate={ handleSaveAsDuplicate }
-                        onDuplicateOriginalWithoutSaving={ handleDuplicateOriginalWithoutSaving }
-                        onRevertChanges={ handleRevertChanges }
+                        learnsets={ learnsets }
+                        onClearLearnsetsFromDeck={ handleClearLearnsetsFromDeck }
+                        onRemoveLearnsetFromDeck={ handleRemoveLearnsetFromDeck }
+                        onReorderLearnsetDeck={ handleReorderLearnsetDeck }
+                        onUpdateLearnsetDeck={ handleUpdateLearnsetDeck }
+                        onCreateDuplicateLearnsetDeckWithChanges={ handleCreateDuplicateLearnsetDeckWithChanges }
+                        onCreateDuplicateRevertedLearnsetDeck={ handleCreateDuplicateRevertedLearnsetDeck }
+                        onRevertChangesToLearnsetDeck={ handleRevertChangesToLearnsetDeck }
                         pokemonList={ pokemonList }
                         learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }

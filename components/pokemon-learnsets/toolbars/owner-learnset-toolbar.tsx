@@ -14,17 +14,17 @@ import { toast } from "sonner"
 
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
-    onSaveChanges: (name: string) => Promise<string>,
-    onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
-    onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
-    onRevertChanges: () => void,
-    onClearLearnsets: () => void,
+    onUpdateLearnsetDeck: (name: string) => Promise<string>,
+    onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
+    onCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
+    onRevertChangesToLearnsetDeck: () => void,
+    onClearLearnsetsFromDeck: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     hasUnsavedChanges: boolean,
-    learnsetListLength: number
+    learnsetsLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetListLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onCreateDuplicateLearnsetDeckWithChanges, onCreateDuplicateRevertedLearnsetDeck, onRevertChangesToLearnsetDeck, onClearLearnsetsFromDeck, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -40,11 +40,11 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [isDeleting, setIsDeleting] = useState(false)
 
-    const handleSaveChanges: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    const handleUpdateLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
         try {
-            await onSaveChanges(inputValue)
+            await onUpdateLearnsetDeck(inputValue)
             setSavedDeckName(inputValue)
             toast.success("Deck changes saved", { position: "top-center" })
         } catch (error) {
@@ -55,7 +55,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
         }
     }
 
-    const handleSaveAsDuplicate = async (learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<string> => {
         const userId = session?.user?.id
 
         if (!userId) {
@@ -65,15 +65,15 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
 
         switch (duplicateMode) {
             case "current":
-                return onSaveAsDuplicate(userId, learnsetName)
+                return onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
             case "original":
-                return onDuplicateOriginalWithoutSaving(userId, learnsetName)
+                return onCreateDuplicateRevertedLearnsetDeck(userId, learnsetName)
         }
     }
 
-    const handleRevertChanges = () => {
+    const handleRevertChangesToLearnsetDeck = () => {
         setInputValue(savedDeckName)
-        onRevertChanges()
+        onRevertChangesToLearnsetDeck()
         toast.success("All unsaved changes reverted", { position: "top-center" })
     }
 
@@ -82,8 +82,8 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
         setIsDuplicateDialogOpen(true)
     }
 
-    const handleClearLearnsets = () => {
-        onClearLearnsets()
+    const handleClearLearnsetsFromDeck = () => {
+        onClearLearnsetsFromDeck()
         toast.success("Learnset panel cleared", { 
             description: "Click on \"Save changes\" to apply this change to the learnset deck",
             position: "top-center" })
@@ -116,7 +116,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
 
     return (
         <div className="flex flex-col p-4 border-b">
-            <form id="owner-learnset-toolbar-form" onSubmit={ handleSaveChanges }>
+            <form id="owner-learnset-toolbar-form" onSubmit={ handleUpdateLearnsetDeck }>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className="flex-1">
@@ -134,7 +134,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                 <Button 
                                     type="submit" 
                                     variant="default" 
-                                    disabled={ !hasAnyUnsavedChanges || learnsetListLength === 0 }
+                                    disabled={ !hasAnyUnsavedChanges || learnsetsLength === 0 }
                                     name="intent"
                                     value="save-changes"
                                 >
@@ -142,19 +142,19 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                 </Button>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                        <Button disabled={ learnsetListLength === 0 }><ChevronDownIcon /></Button>
+                                        <Button disabled={ learnsetsLength === 0 }><ChevronDownIcon /></Button>
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="w-auto min-w-44">
                                         <DropdownMenuItem
                                             className="whitespace-nowrap"
-                                            disabled={ !hasUnsavedChanges || learnsetListLength === 0 }
+                                            disabled={ !hasUnsavedChanges || learnsetsLength === 0 }
                                             onSelect={ () => handleDuplicateMenuItemSelect("current") }
                                         >
                                             <CopyCheck className="mr-2" />Save as duplicate
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="whitespace-nowrap"
-                                            disabled={ learnsetListLength === 0 }
+                                            disabled={ learnsetsLength === 0 }
                                             onSelect={ () => handleDuplicateMenuItemSelect("original") }
                                         >
                                             <CopyX className="mr-2" />Duplicate without unsaved changes
@@ -166,7 +166,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                         <Field orientation="horizontal" className="w-auto">
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button type="button" disabled={ !hasAnyUnsavedChanges } onClick={ handleRevertChanges }>
+                                    <Button type="button" disabled={ !hasAnyUnsavedChanges } onClick={ handleRevertChangesToLearnsetDeck }>
                                         <Undo className="mr-2" />Revert
                                     </Button>
                                 </TooltipTrigger>
@@ -198,8 +198,8 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
                                             <TooltipTrigger asChild>
                                                 <DropdownMenuItem 
                                                     className="whitespace-nowrap" 
-                                                    onSelect={ handleClearLearnsets }
-                                                    disabled={ learnsetListLength === 0 }
+                                                    onSelect={ handleClearLearnsetsFromDeck }
+                                                    disabled={ learnsetsLength === 0 }
                                                 ><BrushCleaning className="mr-2" />Clear</DropdownMenuItem>
                                             </TooltipTrigger>
                                             <TooltipContent side="left">
@@ -216,7 +216,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onSaveChanges, onSaveAs
             <SaveAsDuplicateDialog
                 open={ isDuplicateDialogOpen }
                 onOpenChange={ setIsDuplicateDialogOpen }
-                onSaveAsDuplicate={ handleSaveAsDuplicate }
+                onCreateDuplicateLearnsetDeckWithChanges={ handleCreateDuplicateLearnsetDeckWithChanges }
             />
             <ConfirmDeleteLearnsetDeckDialog
                 open={ isDeleteDialogOpen }

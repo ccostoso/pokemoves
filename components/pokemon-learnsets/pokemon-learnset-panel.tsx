@@ -11,9 +11,9 @@ import PokemonLearnsetCard from "./pokemon-learnset-card"
 import { ScrollArea, ScrollBar } from "../ui/scroll-area"
 
 type PokemonLearnsetPanelProps = {
-    learnsetList: LevelUpLearnset[],
-    onRemoveLearnset: (index: number) => void,
-    onReorderLearnset: (fromIndex: number, toIndex: number) => void
+    learnsets: LevelUpLearnset[],
+    onRemoveLearnsetFromDeck: (index: number) => void,
+    onReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
 function SortableItem({
@@ -44,15 +44,15 @@ function SortableItem({
 }
 
 export default function PokemonLearnsetPanel({
-    learnsetList,
-    onRemoveLearnset,
-    onReorderLearnset,
+    learnsets,
+    onRemoveLearnsetFromDeck,
+    onReorderLearnsetDeck,
 }: PokemonLearnsetPanelProps) {
     const scrollAreaRef = useRef<HTMLDivElement>(null)
-    const previousLengthRef = useRef(learnsetList.length)
+    const previousLengthRef = useRef(learnsets.length)
 
     useEffect(() => {
-        if (learnsetList.length > previousLengthRef.current) {
+        if (learnsets.length > previousLengthRef.current) {
             const viewport = scrollAreaRef.current?.querySelector(
                 "[data-slot='scroll-area-viewport']",
             ) as HTMLDivElement | null
@@ -67,36 +67,36 @@ export default function PokemonLearnsetPanel({
             }
         }
 
-        previousLengthRef.current = learnsetList.length
-    }, [learnsetList.length])
+        previousLengthRef.current = learnsets.length
+    }, [learnsets.length])
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
         if (!over || active.id === over.id) return
-        const fromIndex = learnsetList.findIndex(
+        const fromIndex = learnsets.findIndex(
             (item) => item.id === active.id,
         )
-        const toIndex = learnsetList.findIndex((item) => item.id === over.id)
-        onReorderLearnset(fromIndex, toIndex)
+        const toIndex = learnsets.findIndex((item) => item.id === over.id)
+        onReorderLearnsetDeck(fromIndex, toIndex)
     }
 
     return (
         <ScrollArea ref={ scrollAreaRef } className="w-full max-w-full">
-            { learnsetList.length > 0 ? (
+            { learnsets.length > 0 ? (
                 <DndContext id="learnset-dnd-context" onDragEnd={ handleDragEnd }>
                     <SortableContext
-                        items={ learnsetList.map((item) => item.id) }
+                        items={ learnsets.map((item) => item.id) }
                         strategy={ horizontalListSortingStrategy }
                     >
                         <div className="flex w-max min-w-max flex-nowrap justify-start gap-4 px-4 pt-4 pb-2">
-                            { learnsetList.map((item, index) => (
+                            { learnsets.map((item, index) => (
                                 <SortableItem key={ item.id } id={ item.id }>
                                     { (dragHandleProps) => (
                                         <div className="mb-8">
                                             <PokemonLearnsetCard
                                                 item={ item }
                                                 onRemove={ () =>
-                                                    onRemoveLearnset(index)
+                                                    onRemoveLearnsetFromDeck(index)
                                                 }
                                                 dragHandleProps={
                                                     dragHandleProps

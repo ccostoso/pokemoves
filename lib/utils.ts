@@ -2,7 +2,7 @@ import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 import { versionGroupList } from "./data/versiongroup-list"
 import { types } from "./data/type-list"
-import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "./types"
+import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "./types"
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -36,7 +36,7 @@ export function getTypeNumber(typeName: string): number {
 export function getPokemonDisplayName(pokemon: PokemonListItem): string {
     const region = getRegionalSuffix(pokemon.name)
     const regionlessName =
-        pokemon.pokemonspecy.pokemonspeciesnames[0]?.name ?? pokemon.name
+        pokemon.species?.names?.[0]?.name ?? pokemon.name
 
     return region ? `${regionlessName} (${region})` : regionlessName
 }
@@ -71,11 +71,11 @@ export function createLearnsetInstanceId(
 }
 
 export function countLearnsetPairOccurrences(
-    learnsetList: LevelUpLearnset[],
+    learnsets: LevelUpLearnset[],
     pokemonName: string,
     versionGroupName: string,
 ): number {
-    return learnsetList.filter(
+    return learnsets.filter(
         (learnset) =>
             learnset.pokemonName === pokemonName &&
             learnset.versionGroupName === versionGroupName,
@@ -83,11 +83,14 @@ export function countLearnsetPairOccurrences(
 }
 
 export function mapLearnsetsToDeckItems(
-    learnsetList: LevelUpLearnset[],
-): LearnsetDeckItemData[] {
-    return learnsetList.map((item, index) => ({
+    learnsets: LevelUpLearnset[],
+): LearnsetDeckItem[] {
+    return learnsets.map((item, index) => ({
         pokemonName: item.pokemonName,
         versionGroupName: item.versionGroupName,
         sortOrder: index,
     }))
 }
+
+export const toLearnsetSignature = (learnsets: LevelUpLearnset[]): string =>
+    learnsets.map((item) => `${item.pokemonName}:${item.versionGroupName}`).join("|")

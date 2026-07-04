@@ -1,6 +1,6 @@
 import SearchShell from "@/components/search-shell"
-import { getLearnsetDeckMetadataById, getLearnsetDeckItemDataById } from "@/lib/actions/db-actions"
-import { getLevelUpMovesByPokemonNameAndVersionGroup } from "@/lib/actions/qraphql-actions"
+import { getLearnsetDeckMetadataById, getLearnsetDeckItemById } from "@/lib/actions/db-actions"
+import { getLevelUpMovesByPokemonNameAndVersionGroup } from "@/lib/actions/graphql-actions"
 import { getServerSession } from "@/lib/auth-server"
 import { createLearnsetInstanceId, getNextLearnsetOccurrence } from "@/lib/utils"
 import { notFound } from "next/navigation"
@@ -11,13 +11,13 @@ type DeckPageProps = {
 
 export default async function DeckPage({ params }: DeckPageProps) {
     const { deckId } = await params
-    const [learnsetDeckMetadata, learnsetDeckItemData, session] = await Promise.all([
+    const [learnsetDeckMetadata, learnsetDeckItem, session] = await Promise.all([
         getLearnsetDeckMetadataById(deckId),
-        getLearnsetDeckItemDataById(deckId),
+        getLearnsetDeckItemById(deckId),
         getServerSession(),
     ])
 
-    if (!learnsetDeckItemData) {
+    if (!learnsetDeckItem) {
         notFound()
     }
 
@@ -30,8 +30,9 @@ export default async function DeckPage({ params }: DeckPageProps) {
 
     const occurrenceMap = new Map<string, number>()
 
-    const initialHydratedLearnsetList = await Promise.all(
-        learnsetDeckItemData.map(async (item) => {
+    const initialHydratedLearnsets = await Promise.all(
+        learnsetDeckItem.map(async (item) => {
+            // Fetch the level-up moves for each Pokémon in the learnset deck
             const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
                 item.pokemonName,
                 item.versionGroupName,
@@ -43,6 +44,7 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 item.versionGroupName,
             )
 
+            // For each learnset, create a unique instance ID based on the occurrence
             return {
                 ...pokemonMoves,
                 id: createLearnsetInstanceId(
@@ -60,8 +62,8 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 key={ deckId }
                 toolbarType={ toolbarType } 
                 learnsetDeckId={ deckId }
-                learnsetDeckItemData={ learnsetDeckItemData }
-                initialHydratedLearnsetList={ initialHydratedLearnsetList }
+                learnsetDeckItem={ learnsetDeckItem }
+                initialHydratedLearnsets={ initialHydratedLearnsets }
                 learnsetDeckName={ learnsetDeckMetadata.name } 
             />
         </main>

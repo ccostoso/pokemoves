@@ -6,31 +6,24 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
 import { authClient } from "@/lib/auth-client"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
-import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "@/lib/types"
+import { LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { BrushCleaning, Save } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
 import { toast } from "sonner"
+import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type NewLearnsetToolbarProps = {
-    learnsetList: LevelUpLearnset[],
-    onClearLearnsets: () => void,
+    learnsets: LevelUpLearnset[],
+    onClearLearnsetsFromDeck: () => void,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean
 }
 
-export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
+export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, pokemonList, isSubmitting }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
     const [isSaving, setIsSaving] = useState(false)
-
-    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
-        return learnset.map((item, index) => ({
-            pokemonName: item.pokemonName,
-            versionGroupName: item.versionGroupName,
-            sortOrder: index,
-        }))
-    }
 
     const handleCreateLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
@@ -52,14 +45,14 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
             return
         }
 
-        if (learnsetList.length === 0) {
+        if (learnsets.length === 0) {
             toast.error("No learnset deck to save. Please add a Pokémon first.", { position: "top-center" })
             setIsSaving(false)
             return
         }
 
         try {
-            const formattedLearnset = mapLevelUpLearnsetToDbFormat(learnsetList)
+            const formattedLearnset = mapLearnsetsToDeckItems(learnsets)
             await createLearnsetDeck(learnsetTitleResult.data, formattedLearnset)
 
             setLearnsetDeckName("")
@@ -79,9 +72,9 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
         }
     }
 
-    const handleClearLearnsets = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleClearLearnsetsFromDeck = (event: React.MouseEvent<HTMLButtonElement>) => {
         event?.preventDefault()
-        onClearLearnsets()
+        onClearLearnsetsFromDeck()
         toast.success("Learnset panel cleared.", { position: "top-center" })
     }
 
@@ -130,9 +123,9 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
                                         className="whitespace-nowrap" 
                                         type="button"
                                         onClick={ (event) => {
-                                            handleClearLearnsets(event)
+                                            handleClearLearnsetsFromDeck(event)
                                         } }
-                                        disabled={ isSaving || isSubmitting || learnsetList.length === 0 }
+                                        disabled={ isSaving || isSubmitting || learnsets.length === 0 }
                                     ><BrushCleaning className="mr-2" />Clear</Button>
                                 </TooltipTrigger>
                                 <TooltipContent>

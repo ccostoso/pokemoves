@@ -68,13 +68,13 @@ type RawLevelUpPokemon = {
     name: string,
     // v1beta2
     pokemonmoves?: RawPokemonMove[],
-    pokemonspecy?: RawSpecy,
+    pokemonspecy?: RawSpecies,
     // v1beta
     pokemon_v2_pokemonmoves?: RawPokemonMove[],
-    pokemon_v2_pokemonspecy?: RawSpecy
+    pokemon_v2_pokemonspecy?: RawSpecies
 }
 
-type RawSpecy = {
+type RawSpecies = {
     // v1beta2
     pokemonspeciesnames?: LocalizedName[],
     // v1beta
@@ -84,10 +84,10 @@ type RawSpecy = {
 type RawLevelUpResponse = {
     // v1beta2
     pokemon?: RawLevelUpPokemon[],
-    pokemonspecy?: RawSpecy[],
+    pokemonspecy?: RawSpecies[],
     // v1beta
     pokemon_v2_pokemon?: RawLevelUpPokemon[],
-    pokemon_v2_pokemonspecy?: RawSpecy[]
+    pokemon_v2_pokemonspecy?: RawSpecies[]
 }
 
 // --- Mapping functions ---
@@ -100,8 +100,8 @@ const mapPokemonListResponse = (
     return pokemon.map((p) => ({
         id: p.id,
         name: p.name,
-        pokemonspecy: {
-            pokemonspeciesnames:
+        species: {
+            names:
                 p.pokemonspecy?.pokemonspeciesnames ??
                 p.pokemon_v2_pokemonspecy?.pokemon_v2_pokemonspeciesnames ??
                 [],
@@ -114,7 +114,7 @@ const mapLevelUpResponse = (
     versionGroupName: string,
 ): LevelUpLearnset => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
-    const fallbackSpecy = (response.pokemonspecy ??
+    const fallbackSpecies = (response.pokemonspecy ??
         response.pokemon_v2_pokemonspecy ??
         [])[0]
 
@@ -145,12 +145,12 @@ const mapLevelUpResponse = (
                 },
             }),
         ),
-        pokemonspecy: {
-            pokemonspeciesnames:
+        species: {
+            names:
                 p.pokemonspecy?.pokemonspeciesnames ??
                 p.pokemon_v2_pokemonspecy?.pokemon_v2_pokemonspeciesnames ??
-                fallbackSpecy?.pokemonspeciesnames ??
-                fallbackSpecy?.pokemon_v2_pokemonspeciesnames ??
+                fallbackSpecies?.pokemonspeciesnames ??
+                fallbackSpecies?.pokemon_v2_pokemonspeciesnames ??
                 [],
         },
     }))

@@ -1,12 +1,12 @@
-import { LocalizedName } from "./actions/qraphql-actions"
+import { LocalizedName } from "./actions/graphql-actions"
 
 // --- Normalized output types for frontend ---
 
 export type PokemonListItem = {
     id: number,
     name: string,
-    pokemonspecy: {
-        pokemonspeciesnames: LocalizedName[]
+    species: {
+        names: LocalizedName[]
     }
 }
 
@@ -20,21 +20,24 @@ export type LevelUpMove = {
     }
 }
 
-export type LevelUpLearnset = {
+type BaseLearnset = {
+    pokemonName: string,
+    versionGroupName: string,
+    id: string
+}
+
+export type LevelUpLearnset = BaseLearnset & {
     pokemon: Array<{
         id: number,
         name: string,
         pokemonmoves: LevelUpMove[],
-        pokemonspecy: {
-            pokemonspeciesnames: LocalizedName[]
+        species: {
+            names: LocalizedName[]
         }
-    }>,
-    pokemonName: string,
-    versionGroupName: string,
-    id: string // Unique ID for DnD tracking
+    }>
 }
 
-export type LearnsetDeckItemData = {
+export type LearnsetDeckItem = {
     pokemonName: string,
     versionGroupName: string,
     sortOrder: number

@@ -24,10 +24,10 @@ import { toast } from "sonner"
 type SaveAsDuplicateDialogProps = {
     open: boolean,
     onOpenChange: (open: boolean) => void,
-    onSaveAsDuplicate: (learnsetName: string) => Promise<string>
+    onCreateDuplicateLearnsetDeckWithChanges: (learnsetName: string) => Promise<string>
 }
 
-export default function SaveAsDuplicateDialog({ open, onOpenChange, onSaveAsDuplicate }: SaveAsDuplicateDialogProps) {
+export default function SaveAsDuplicateDialog({ open, onOpenChange, onCreateDuplicateLearnsetDeckWithChanges }: SaveAsDuplicateDialogProps) {
     const router = useRouter()
     const [isSaving, setIsSaving] = useState(false)
 
@@ -42,7 +42,7 @@ export default function SaveAsDuplicateDialog({ open, onOpenChange, onSaveAsDupl
         setIsSaving(true)
 
         try {
-            const duplicatedDeckId = await onSaveAsDuplicate(learnsetName)
+            const duplicatedDeckId = await onCreateDuplicateLearnsetDeckWithChanges(learnsetName)
 
             toast.success("Duplicate learnset saved successfully!", {
                 position: "top-center",
