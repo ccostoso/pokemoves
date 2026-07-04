@@ -47,8 +47,8 @@ export default async function LearnsetDecks() {
                                             <Image
                                                 src={ `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.pokemonId}.png` }
                                                 alt={ item.pokemonName }
-                                                width={ 32 }
-                                                height={ 32 }
+                                                width={ 96 }
+                                                height={ 96 }
                                                 className="mr-2"
                                             />
                                             { item.pokemonName } ({ item.versionGroupName })
