@@ -34,9 +34,9 @@ type SearchShellAction =
     | { type: "pokemonListLoading" }
     | { type: "pokemonListLoaded", pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
-    | { type: "addLearnsetStarted" }
-    | { type: "addLearnsetSucceeded", learnset: LevelUpLearnset }
-    | { type: "addLearnsetFailed", message: string }
+    | { type: "addLearnsetToDeckStarted" }
+    | { type: "addLearnsetToDeckSucceeded", learnset: LevelUpLearnset }
+    | { type: "addLearnsetToDeckFailed", message: string }
     | { type: "learnsetCleared" }
     | { type: "learnsetRemoved", indexToRemove: number }
     | { type: "learnsetReordered", fromIndex: number, toIndex: number }
@@ -66,11 +66,11 @@ type UseSearchShellControllerReturn = {
     setPokemonName: (name: string) => void,
 
     // handlers used by child components
-    handleAddLearnset: SubmitEventHandler<HTMLFormElement>,
+    handleAddLearnsetToDeck: SubmitEventHandler<HTMLFormElement>,
     handleUpdateLearnsetDeck: (name: string) => Promise<string>,
     handleSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     handleDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
-    handleRevertChanges: () => void,
+    handleRevertChangesToLearnsetDeck: () => void,
     handleDeleteLearnsetDeck: () => Promise<void>,
     handleClearLearnsets: () => void,
     handleRemoveLearnset: (indexToRemove: number) => void,
@@ -116,20 +116,20 @@ function searchShellReducer(
                 isPokemonListLoading: false,
             }
 
-        case "addLearnsetStarted":
+        case "addLearnsetToDeckStarted":
             return {
                 ...state,
                 requestState: { status: "loading" },
             }
 
-        case "addLearnsetSucceeded":
+        case "addLearnsetToDeckSucceeded":
             return {
                 ...state,
                 requestState: { status: "idle" },
                 learnsets: [...state.learnsets, action.learnset],
             }
 
-        case "addLearnsetFailed":
+        case "addLearnsetToDeckFailed":
             return {
                 ...state,
                 requestState: { status: "error", message: action.message },
@@ -293,7 +293,7 @@ export function useSearchShellController(
     const setPokemonName = (name: string) =>
         dispatch({ type: "pokemonNameChanged", pokemonName: name })
 
-    const handleAddLearnset: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    const handleAddLearnsetToDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
         const isDuplicate = state.learnsets.some(
@@ -304,13 +304,13 @@ export function useSearchShellController(
 
         if (isDuplicate) {
             dispatch({
-                type: "addLearnsetFailed",
+                type: "addLearnsetToDeckFailed",
                 message: `${state.pokemonName} in ${state.versionGroupName} is already in this deck.`,
             })
             return
         }
 
-        dispatch({ type: "addLearnsetStarted" })
+        dispatch({ type: "addLearnsetToDeckStarted" })
 
         try {
             const pokemonMoves =
@@ -331,14 +331,14 @@ export function useSearchShellController(
 
             if (!hasMoves) {
                 dispatch({
-                    type: "addLearnsetFailed",
+                    type: "addLearnsetToDeckFailed",
                     message: `No level-up moves found for ${state.pokemonName} in ${state.versionGroupName}.`,
                 })
                 return
             }
 
             dispatch({
-                type: "addLearnsetSucceeded",
+                type: "addLearnsetToDeckSucceeded",
                 learnset: {
                     ...pokemonMoves,
                     id: createLearnsetInstanceId(
@@ -354,7 +354,7 @@ export function useSearchShellController(
             })
         } catch {
             dispatch({
-                type: "addLearnsetFailed",
+                type: "addLearnsetToDeckFailed",
                 message: "An error occurred while searching. Please try again.",
             })
         }
@@ -410,7 +410,7 @@ export function useSearchShellController(
         return duplicateFromSource(userId, learnsetName, originalLearnsetDeckSnapshot)
     }
 
-    const handleRevertChanges = () =>
+    const handleRevertChangesToLearnsetDeck = () =>
         dispatch({ type: "learnsetHydrationSucceeded", learnsets: revertBaselineLearnsetsRef.current ?? [] })
 
     const handleClearLearnsets = () => 
@@ -543,11 +543,11 @@ export function useSearchShellController(
         hasUnsavedChanges,
         setVersionGroupName,
         setPokemonName,
-        handleAddLearnset,
+        handleAddLearnsetToDeck,
         handleUpdateLearnsetDeck,
         handleSaveAsDuplicate,
         handleDuplicateOriginalWithoutSaving,
-        handleRevertChanges,
+        handleRevertChangesToLearnsetDeck,
         handleDeleteLearnsetDeck,
         handleClearLearnsets,
         handleRemoveLearnset,

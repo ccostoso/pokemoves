@@ -17,14 +17,14 @@ type OwnerLearnsetToolbarProps = {
     onUpdateLearnsetDeck: (name: string) => Promise<string>,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
-    onRevertChanges: () => void,
+    onRevertChangesToLearnsetDeck: () => void,
     onClearLearnsets: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     hasUnsavedChanges: boolean,
     learnsetsLength: number
 }
 
-export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChanges, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
+export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, onSaveAsDuplicate, onDuplicateOriginalWithoutSaving, onRevertChangesToLearnsetDeck, onClearLearnsets, onDeleteLearnsetDeck, hasUnsavedChanges, learnsetsLength }: OwnerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [ inputValue, setInputValue ] = useState(learnsetDeckName ?? "")
     const [ savedDeckName, setSavedDeckName ] = useState(learnsetDeckName ?? "")
@@ -71,9 +71,9 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
         }
     }
 
-    const handleRevertChanges = () => {
+    const handleRevertChangesToLearnsetDeck = () => {
         setInputValue(savedDeckName)
-        onRevertChanges()
+        onRevertChangesToLearnsetDeck()
         toast.success("All unsaved changes reverted", { position: "top-center" })
     }
 
@@ -166,7 +166,7 @@ export function OwnerLearnsetToolbar({ learnsetDeckName, onUpdateLearnsetDeck, o
                         <Field orientation="horizontal" className="w-auto">
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button type="button" disabled={ !hasAnyUnsavedChanges } onClick={ handleRevertChanges }>
+                                    <Button type="button" disabled={ !hasAnyUnsavedChanges } onClick={ handleRevertChangesToLearnsetDeck }>
                                         <Undo className="mr-2" />Revert
                                     </Button>
                                 </TooltipTrigger>
