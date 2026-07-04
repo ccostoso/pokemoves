@@ -25,7 +25,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         pokemonListLoading,
         isSubmitting,
         hasUnsavedChanges,
-        handleAddLearnsetToDeck,
+        handleAddLearnsetToLearnsetDeck,
         handleSaveAsDuplicate,
         handleDuplicateOriginalWithoutSaving,
         handleUpdateLearnsetDeck,
@@ -54,7 +54,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                             isSubmitting={ isSubmitting }
                             pokemonListLoading={ pokemonListLoading }
                             error={ error }
-                            handleAddLearnsetToDeck={ handleAddLearnsetToDeck }
+                            handleAddLearnsetToLearnsetDeck={ handleAddLearnsetToLearnsetDeck }
                         />
                     </aside>
                 }
@@ -69,7 +69,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                         onUpdateLearnsetDeck={ handleUpdateLearnsetDeck }
                         onSaveAsDuplicate={ handleSaveAsDuplicate }
                         onDuplicateOriginalWithoutSaving={ handleDuplicateOriginalWithoutSaving }
-                        onRevertChanges={ handleRevertChangesToLearnsetDeck }
+                        onRevertChangesToLearnsetDeck={ handleRevertChangesToLearnsetDeck }
                         pokemonList={ pokemonList }
                         learnsetDeckName={ learnsetDeckName }
                         isSubmitting={ isSubmitting }

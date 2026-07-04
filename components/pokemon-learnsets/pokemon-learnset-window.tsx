@@ -12,7 +12,7 @@ type PokemonLearnsetWindowProps = {
     onUpdateLearnsetDeck: (learnsetName: string) => Promise<string>,
     onSaveAsDuplicate: (userId: string, learnsetName: string) => Promise<string>,
     onDuplicateOriginalWithoutSaving: (userId: string, learnsetName: string) => Promise<string>,
-    onRevertChanges: () => void,
+    onRevertChangesToLearnsetDeck: () => void,
     onDeleteLearnsetDeck: () => Promise<void>,
     pokemonList: PokemonListItem[],
     isSubmitting: boolean,
@@ -30,7 +30,7 @@ export default function PokemonLearnsetWindow({
     onUpdateLearnsetDeck,
     onSaveAsDuplicate,
     onDuplicateOriginalWithoutSaving,
-    onRevertChanges,
+    onRevertChangesToLearnsetDeck,
     onDeleteLearnsetDeck,
     pokemonList,
     isSubmitting,
@@ -49,7 +49,7 @@ export default function PokemonLearnsetWindow({
                     onUpdateLearnsetDeck={ onUpdateLearnsetDeck }
                     onSaveAsDuplicate={ onSaveAsDuplicate }
                     onDuplicateOriginalWithoutSaving={ onDuplicateOriginalWithoutSaving }
-                    onRevertChanges={ onRevertChanges }
+                    onRevertChangesToLearnsetDeck={ onRevertChangesToLearnsetDeck }
                     onClearLearnsets={ onClearLearnsets }
                     onDeleteLearnsetDeck={ onDeleteLearnsetDeck }
                     hasUnsavedChanges={ hasUnsavedChanges }
