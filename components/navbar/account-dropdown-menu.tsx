@@ -56,7 +56,7 @@ export default function AccountDropdownMenu({
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="min-w-48" align="end" sideOffset={ 4 }>
                 <DropdownMenuGroup className="whitespace-nowrap">
                     <div className="px-1.5 py-1.5">
                         <p className="text-sm font-semibold">@{ user?.username }</p>

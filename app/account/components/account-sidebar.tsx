@@ -40,7 +40,7 @@ const SidebarOptions: { href: string, icon: ReactNode, label: string }[] = [
     {
         href: "/account",
         icon: <User size={ 16 } />,
-        label: "Account settings",
+        label: "Settings",
     },
     {
         href: "/account/decks",

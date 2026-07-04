@@ -57,12 +57,14 @@ export default async function LearnsetDecks() {
                         >
                             <CardHeader>
                                 <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <h2 className="text-2xl font-bold">{ deck.name }</h2>
-                                        <p className="text-sm text-muted-foreground">
-                                            { deck.items.length } entries • Updated { updatedAtLabel }
-                                        </p>
-                                    </div>
+                                    <Link href={ `/deck/${deck.id}` }>
+                                        <div>
+                                            <h2 className="text-2xl font-bold">{ deck.name }</h2>
+                                            <p className="text-sm text-muted-foreground">
+                                                { deck.items.length } entries • Updated { updatedAtLabel }
+                                            </p>
+                                        </div>
+                                    </Link>
                                     <DeleteDeckButton deckId={ deck.id } deckName={ deck.name } />
                                 </div>
                             </CardHeader>
