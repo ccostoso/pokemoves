@@ -1,6 +1,6 @@
 "use client"
 
-import { User } from "lucide-react"
+import { Columns3, User } from "lucide-react"
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -31,7 +31,7 @@ export default function AccountDropdownMenu({
     setActiveButton,
     isAccountMenuOpen,
     handleAccountMenuOpenChange,
-    user
+    user,
 }: AccountDropdownMenuProps) {
     const router = useRouter()
 
@@ -56,33 +56,33 @@ export default function AccountDropdownMenu({
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="min-w-48" align="end" sideOffset={ 4 }>
                 <DropdownMenuGroup className="whitespace-nowrap">
                     <div className="px-1.5 py-1.5">
-                        <p className="text-sm font-semibold">
-                            @{ user?.username }
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                            { user?.name }
-                        </p>
+                        <p className="text-sm font-semibold">@{ user?.username }</p>
+                        <p className="text-sm text-muted-foreground">{ user?.name }</p>
                     </div>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>User</DropdownMenuLabel>
                     <DropdownMenuItem asChild>
-                        <Link href="/account">Account</Link>
+                        <Link href="/account" className="flex items-center gap-2">
+                            <User size={ 16 } />
+                            <span>Account</span>
+                        </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
-                        <Link href="/account/decks">Decks</Link>
+                        <Link href="/account/decks" className="flex items-center gap-2">
+                            <Columns3 size={ 16 } />
+                            <span>Decks</span>
+                        </Link>
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Session</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={ sessionSignOut }>
-                        Sign Out
-                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={ sessionSignOut }>Sign Out</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

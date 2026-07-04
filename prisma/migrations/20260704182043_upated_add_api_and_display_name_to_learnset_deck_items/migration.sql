@@ -1,0 +1,2 @@
+-- RenameIndex
+ALTER INDEX "learnset_deck_item_deckId_pokemonApiName_versionGroupApiName_ke" RENAME TO "learnset_deck_item_deckId_pokemonApiName_versionGroupApiNam_key";

@@ -1,11 +1,86 @@
-export default function LearnsetDecks() {
+import { getServerSession } from "@/lib/auth-server"
+import { getAllLearnsetDecksWithLearnsetDeckItemsByUserId } from "@/lib/actions/db-actions"
+import { notFound } from "next/navigation"
+import Link from "next/link"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Button } from "@/components/ui/button"
+import { ArrowRight } from "lucide-react"
+import { DeckItemsPreview } from "./components/deck-items-preview"
+import { DeleteDeckButton } from "./components/delete-deck-button"
+
+export default async function LearnsetDecks() {
+    const session = await getServerSession()
+    const userId = session?.user?.id
+
+    if (!userId) {
+        notFound()
+    }
+
+    const learnsetDecks = await getAllLearnsetDecksWithLearnsetDeckItemsByUserId(userId)
+
+    if (learnsetDecks.length === 0) {
+        return (
+            <main className="container mx-auto p-4 flex-1">
+                <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                    <h1 className="text-2xl font-bold">Learnset Decks</h1>
+                    <p className="text-muted-foreground">
+                        You have no learnset decks. <Link href="/" className="text-primary hover:underline">Create one</Link>{ " " }
+                        to get started.
+                    </p>
+                </div>
+            </main>
+        )
+    }
+
     return (
         <main className="container mx-auto p-4 flex-1">
-            <h1 className="text-4xl font-bold">Learnset Decks</h1>
-            <p className="text-lg">
-                This is the Learnset Decks page. Here you can view and manage
-                your learnset decks.
-            </p>
+            <section className="mb-4">
+                <h1 className="text-2xl font-bold">Learnset Decks</h1>
+                <p className="text-muted-foreground">
+                    Below are your learnset decks. Click on a deck to view its contents.
+                </p>
+            </section>
+            <div className="grid gap-4 py-8">
+                { learnsetDecks.map((deck) => {
+                    
+                    const updatedAtLabel = new Date(deck.updatedAt).toLocaleDateString(undefined, {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                    })
+
+                    return (
+                        <Card
+                            key={ deck.id }
+                            className="w-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:ring-foreground/20"
+                        >
+                            <CardHeader>
+                                <div className="flex items-start justify-between gap-3">
+                                    <Link href={ `/deck/${deck.id}` }>
+                                        <div>
+                                            <h2 className="text-2xl font-bold">{ deck.name }</h2>
+                                            <p className="text-sm text-muted-foreground">
+                                                { deck.items.length } entries • Updated { updatedAtLabel }
+                                            </p>
+                                        </div>
+                                    </Link>
+                                    <DeleteDeckButton deckId={ deck.id } deckName={ deck.name } />
+                                </div>
+                            </CardHeader>
+                            <Separator />
+                            <CardContent className="relative min-h-36">
+                                <DeckItemsPreview items={ deck.items } />
+                            </CardContent>
+                            <CardFooter className="justify-end gap-2">
+                                <Button asChild variant="outline" size="sm">
+                                    <Link href={ `/deck/${deck.id}` }>Open deck <ArrowRight className="h-4 w-4" /></Link>
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    )
+                }) }
+            </div>
         </main>
     )
 }

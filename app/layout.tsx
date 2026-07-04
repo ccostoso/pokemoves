@@ -37,12 +37,7 @@ export default async function RootLayout({
         >
             <body className="min-h-full flex flex-col">
                 <TooltipProvider delayDuration={ 500 }>
-                    <ThemeProvider
-                        attribute="class"
-                        defaultTheme="system"
-                        enableSystem
-                        disableTransitionOnChange
-                    >
+                    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                         <Navbar
                             // Pass the initial user to the Navbar component
                             initialUser={

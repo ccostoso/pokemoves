@@ -1,6 +1,5 @@
 import AccountSidebar from "@/app/account/components/account-sidebar"
 
-
 export default function AccountLayout({
     children,
 }: Readonly<{

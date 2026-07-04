@@ -23,14 +23,12 @@ export default function ConfirmDeleteLearnsetDeckDialog({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-end space-x-2 pt-4">
-                    <Button 
-                        variant="outline" 
-                        onClick={ () => onOpenChange(false) }
-                        disabled={ isDeleting }
-                    >Cancel</Button>
-                    <Button 
-                        variant="destructive" 
-                        onClick={ () => void onConfirmDeleteLearnsetDeck() } 
+                    <Button variant="outline" onClick={ () => onOpenChange(false) } disabled={ isDeleting }>
+                        Cancel
+                    </Button>
+                    <Button
+                        variant="destructive"
+                        onClick={ () => void onConfirmDeleteLearnsetDeck() }
                         disabled={ isDeleting }
                     >
                         { isDeleting ? (

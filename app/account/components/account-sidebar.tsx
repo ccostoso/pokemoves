@@ -7,7 +7,12 @@ import { ReactNode } from "react"
 import { usePathname } from "next/navigation"
 import { authClient } from "@/lib/auth-client"
 
-function SidebarNavLink({ href, icon, children, isActive }: {
+function SidebarNavLink({
+    href,
+    icon,
+    children,
+    isActive,
+}: {
     href: string,
     icon: ReactNode,
     children: ReactNode,
@@ -15,17 +20,13 @@ function SidebarNavLink({ href, icon, children, isActive }: {
 }) {
     return (
         <div className="relative">
-            { isActive && (
-                <span className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-foreground" />
-            ) }
+            { isActive && <span className="absolute -left-1.5 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-foreground" /> }
             <Link
                 href={ href }
                 className={ cn(
                     "flex items-center gap-2 px-3 py-1.5 rounded-md text-sm",
                     "hover:bg-accent hover:text-accent-foreground",
-                    isActive
-                        ? "font-medium text-foreground"
-                        : "text-muted-foreground"
+                    isActive ? "font-medium text-foreground" : "text-muted-foreground",
                 ) }
             >
                 { icon }
@@ -39,13 +40,13 @@ const SidebarOptions: { href: string, icon: ReactNode, label: string }[] = [
     {
         href: "/account",
         icon: <User size={ 16 } />,
-        label: "Account settings",
+        label: "Settings",
     },
     {
         href: "/account/decks",
         icon: <Columns3 size={ 16 } />,
         label: "Decks",
-    }
+    },
 ]
 
 export default function AccountSidebar() {

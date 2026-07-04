@@ -8,8 +8,7 @@ export const SignInSchema = z.object({
             message: "Password must be at least 8 characters long",
         })
         .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]+$/, {
-            message:
-                "Password must contain at least one letter, one number, and one special character",
+            message: "Password must contain at least one letter, one number, and one special character",
         }),
 })
 
@@ -17,12 +16,9 @@ export type SignInSchemaType = z.infer<typeof SignInSchema>
 
 export const SignUpSchema = z
     .object({
-        username: z
-            .string()
-            .min(1, { message: "Username is required" })
-            .max(20, {
-                message: "Username must be at most 20 characters long",
-            }),
+        username: z.string().min(1, { message: "Username is required" }).max(20, {
+            message: "Username must be at most 20 characters long",
+        }),
         email: z.string().email({ message: "Invalid email address" }),
         password: z
             .string()
@@ -33,8 +29,7 @@ export const SignUpSchema = z
                 message: "Password must be at most 50 characters long",
             })
             .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]+$/, {
-                message:
-                    "Password must contain at least one letter, one number, and one special character",
+                message: "Password must contain at least one letter, one number, and one special character",
             }),
         confirmPassword: z
             .string()

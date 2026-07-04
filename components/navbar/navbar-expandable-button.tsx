@@ -11,8 +11,7 @@ type NavbarExpandableButtonProps = {
     expandedWidthClass?: string
 } & Omit<ComponentProps<typeof Button>, "children">
 
-const baseClass =
-    "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
+const baseClass = "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
 
 export default function NavbarExpandableButton({
     label,
@@ -43,13 +42,7 @@ export default function NavbarExpandableButton({
 
                 onFocus?.(event)
             } }
-            className={ cn(
-                baseClass,
-                isActive
-                    ? `${expandedWidthClass} px-4 gap-2`
-                    : "w-8 px-0 gap-0",
-                className,
-            ) }
+            className={ cn(baseClass, isActive ? `${expandedWidthClass} px-4 gap-2` : "w-8 px-0 gap-0", className) }
             { ...buttonProps }
         >
             { icon }

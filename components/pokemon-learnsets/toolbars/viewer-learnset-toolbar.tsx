@@ -1,4 +1,4 @@
-import { Field, FieldGroup, FieldSet, } from "@/components/ui/field"
+import { Field, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
@@ -11,7 +11,10 @@ type ViewerLearnsetToolbarProps = {
     onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>
 }
 
-export function ViewerLearnsetToolbar({ learnsetDeckName, onCreateDuplicateLearnsetDeckWithChanges }: ViewerLearnsetToolbarProps) {
+export function ViewerLearnsetToolbar({
+    learnsetDeckName,
+    onCreateDuplicateLearnsetDeckWithChanges,
+}: ViewerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [isOpen, setIsOpen] = useState(false)
 
@@ -36,14 +39,29 @@ export function ViewerLearnsetToolbar({ learnsetDeckName, onCreateDuplicateLearn
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className="flex-1 max-w-full">
-                            <Input id="learnset-name" type="text" placeholder="Learnset Name..." value={ learnsetDeckName ?? "" } disabled />
+                            <Input
+                                id="learnset-name"
+                                type="text"
+                                placeholder="Learnset Name..."
+                                value={ learnsetDeckName ?? "" }
+                                disabled
+                            />
                         </Field>
                     </FieldGroup>
                     { session?.user && (
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
-                                <Button type="button" onClick={ handleOnClick }><CopyCheck className="mr-2" />Save as duplicate</Button>
-                                <SaveAsDuplicateDialog open={ isOpen } onOpenChange={ setIsOpen } onCreateDuplicateLearnsetDeckWithChanges={ handleCreateDuplicateLearnsetDeckWithChanges } />
+                                <Button type="button" onClick={ handleOnClick }>
+                                    <CopyCheck className="mr-2" />
+                                    Save as duplicate
+                                </Button>
+                                <SaveAsDuplicateDialog
+                                    open={ isOpen }
+                                    onOpenChange={ setIsOpen }
+                                    onCreateDuplicateLearnsetDeckWithChanges={
+                                        handleCreateDuplicateLearnsetDeckWithChanges
+                                    }
+                                />
                             </Field>
                         </FieldGroup>
                     ) }

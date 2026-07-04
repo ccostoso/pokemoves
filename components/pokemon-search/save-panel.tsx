@@ -72,28 +72,23 @@ export default function SavePanel({ learnsets, pokemonList, isSubmitting }: Save
                                 value={ learnsetDeckName }
                                 onChange={ (e) => setLearnsetDeckName(e.target.value) }
                             />
-                            <FieldDescription>
-                                Enter a name for your learnset deck.
-                            </FieldDescription>
+                            <FieldDescription>Enter a name for your learnset deck.</FieldDescription>
                         </Field>
-                        <Button 
-                            type="submit" 
-                            className="w-full" 
-                            variant="default" 
-                            disabled={
-                                isSubmitting || 
-                                pokemonList.length === 0 || 
-                                !learnsetDeckName 
-                            }
+                        <Button
+                            type="submit"
+                            className="w-full"
+                            variant="default"
+                            disabled={ isSubmitting || pokemonList.length === 0 || !learnsetDeckName }
                         >
                             { isSaving ? (
                                 <span className="inline-flex items-center gap-2">
                                     <Spinner className="size-4" />
                                     Saving...
                                 </span>
-                            ) : (<>
-                                <Save className="mr-2 h-4 w-4" /> Save Learnset Deck
-                            </>
+                            ) : (
+                                <>
+                                    <Save className="mr-2 h-4 w-4" /> Save Learnset Deck
+                                </>
                             ) }
                         </Button>
                         { error && <p className="text-red-500 mt-2">{ error }</p> }

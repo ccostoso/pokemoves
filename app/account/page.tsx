@@ -13,14 +13,9 @@ export default async function UserPage() {
         return (
             <main className="container mx-auto p-4 flex-1">
                 <h1 className="text-4xl font-bold">User Dashboard</h1>
-                <p className="mt-4 text-lg">
-                    You are not signed in. Please sign in to access your
-                    dashboard.
-                </p>
+                <p className="mt-4 text-lg">You are not signed in. Please sign in to access your dashboard.</p>
                 { authFailed && (
-                    <p className="mt-2 text-lg text-red-500">
-                        Error retrieving session data. Please try again.
-                    </p>
+                    <p className="mt-2 text-lg text-red-500">Error retrieving session data. Please try again.</p>
                 ) }
             </main>
         )
@@ -35,8 +30,7 @@ export default async function UserPage() {
             <pre>{ JSON.stringify(session, null, 2) }</pre>
 
             <p className="mt-4 text-lg">
-                Welcome to your dashboard! Here you can manage your account and
-                view your Pokemon move comparisons.
+                Welcome to your dashboard! Here you can manage your account and view your Pokemon move comparisons.
             </p>
         </main>
     )

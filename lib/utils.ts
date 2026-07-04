@@ -35,18 +35,13 @@ export function getTypeNumber(typeName: string): number {
 
 export function getPokemonDisplayName(pokemon: PokemonListItem): string {
     const region = getRegionalSuffix(pokemon.name)
-    const regionlessName =
-        pokemon.species?.names?.[0]?.name ?? pokemon.name
+    const regionlessName = pokemon.species?.names?.[0]?.name ?? pokemon.name
 
     return region ? `${regionlessName} (${region})` : regionlessName
 }
 
-
 // Learnset Pair Utilities
-export function getLearnsetPairKey(
-    pokemonName: string,
-    versionGroupName: string,
-): string {
+export function getLearnsetPairKey(pokemonName: string, versionGroupName: string): string {
     return `${pokemonName}:${versionGroupName}`
 }
 
@@ -62,11 +57,7 @@ export function getNextLearnsetOccurrence(
     return nextOccurrence
 }
 
-export function createLearnsetInstanceId(
-    pokemonName: string,
-    versionGroupName: string,
-    occurrence: number,
-): string {
+export function createLearnsetInstanceId(pokemonName: string, versionGroupName: string, occurrence: number): string {
     return `${getLearnsetPairKey(pokemonName, versionGroupName)}:${occurrence}`
 }
 
@@ -76,20 +67,29 @@ export function countLearnsetPairOccurrences(
     versionGroupName: string,
 ): number {
     return learnsets.filter(
-        (learnset) =>
-            learnset.pokemonName === pokemonName &&
-            learnset.versionGroupName === versionGroupName,
+        (learnset) => learnset.pokemonName === pokemonName && learnset.versionGroupName === versionGroupName,
     ).length
 }
 
-export function mapLearnsetsToDeckItems(
-    learnsets: LevelUpLearnset[],
-): LearnsetDeckItem[] {
-    return learnsets.map((item, index) => ({
-        pokemonName: item.pokemonName,
-        versionGroupName: item.versionGroupName,
-        sortOrder: index,
-    }))
+export function mapLearnsetsToDeckItems(learnsets: LevelUpLearnset[]): LearnsetDeckItem[] {
+    return learnsets.map((item, index) => {
+        const pokemonId = item.pokemon[0]?.id
+
+        if (pokemonId === null || pokemonId === undefined) {
+            throw new Error(
+                `Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`,
+            )
+        }
+
+        return {
+            pokemonId,
+            pokemonApiName: item.pokemonName,
+            pokemonDisplayName: getPokemonDisplayName(item.pokemon[0]),
+            versionGroupApiName: item.versionGroupName,
+            versionGroupDisplayName: getVersionGroupDisplayName(item.versionGroupName),
+            sortOrder: index,
+        }
+    })
 }
 
 export const toLearnsetSignature = (learnsets: LevelUpLearnset[]): string =>

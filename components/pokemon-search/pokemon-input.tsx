@@ -21,38 +21,23 @@ type PokemonInputProps = {
     pokemonListLoading?: boolean
 }
 
-export default function PokemonInput({
-    pokemonList,
-    value,
-    onChange,
-    pokemonListLoading = false,
-}: PokemonInputProps) {
-    const canonicalToDisplay = useMemo(
-        () =>
-            new Map(
-                pokemonList.map((pokemon) => [
-                    pokemon.name,
-                    getPokemonDisplayName(pokemon),
-                ]),
-            ),
+export default function PokemonInput({ pokemonList, value, onChange, pokemonListLoading = false }: PokemonInputProps) {
+    const apiToDisplay = useMemo(
+        () => new Map(pokemonList.map((pokemon) => [pokemon.name, getPokemonDisplayName(pokemon)])),
         [pokemonList],
     )
 
-    const [inputText, setInputText] = useState(
-        canonicalToDisplay.get(value) ?? value,
-    )
+    const [inputText, setInputText] = useState(apiToDisplay.get(value) ?? value)
 
     return (
         <Field>
             <FieldLabel htmlFor="name">Pokémon Name</FieldLabel>
             <Combobox
                 items={ pokemonList }
-                onValueChange={ (canonicalName: string | null) => {
-                    if (!canonicalName) return
-                    setInputText(
-                        canonicalToDisplay.get(canonicalName) ?? canonicalName,
-                    )
-                    onChange(canonicalName)
+                onValueChange={ (apiName: string | null) => {
+                    if (!apiName) return
+                    setInputText(apiToDisplay.get(apiName) ?? apiName)
+                    onChange(apiName)
                 } }
             >
                 <ComboboxInput

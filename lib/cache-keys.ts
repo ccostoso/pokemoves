@@ -1,11 +1,9 @@
 // Cache key: uniquely identifies one specific cached result
 // Cache tag: labels a group of results for bulk invalidation
 
-export const pokemonListCacheKey = (versionGroupName: string) =>
-    `pokemon-list:${versionGroupName}`
+export const pokemonListCacheKey = (versionGroupName: string) => `pokemon-list:${versionGroupName}`
 
-export const pokemonListCacheTag = (versionGroupName: string) =>
-    `pokemon-list:${versionGroupName}`
+export const pokemonListCacheTag = (versionGroupName: string) => `pokemon-list:${versionGroupName}`
 
 // Top-level tag covering ALL pokemon list entries — useful if you ever
 // want to invalidate every cached list at once (e.g. after a data update)

@@ -101,15 +101,18 @@ model LearnsetDeck {
 }
 
 model LearnsetDeckItem {
-    id               String       @id @default(cuid())
-    deckId           String
-    deck             LearnsetDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
-    pokemonName      String
-    versionGroupName String
-    sortOrder        Int
-    createdAt        DateTime     @default(now())
+    id                      String       @id @default(cuid())
+    deckId                  String
+    deck                    LearnsetDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
+    pokemonId               Int
+    pokemonApiName          String
+    pokemonDisplayName      String
+    versionGroupApiName     String
+    versionGroupDisplayName String
+    sortOrder               Int
+    createdAt               DateTime     @default(now())
 
-    @@unique([deckId, pokemonName, versionGroupName])
+    @@unique([deckId, pokemonApiName, versionGroupApiName])
     @@index([deckId])
     @@map("learnset_deck_item")
 }

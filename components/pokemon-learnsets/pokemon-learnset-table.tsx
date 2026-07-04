@@ -1,11 +1,4 @@
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import TypeSprite from "../type-sprite"
 
 type Move = {
@@ -22,9 +15,7 @@ type PokemonLearnsetTableProps = {
     pokemonMoves: Move[]
 }
 
-export default function PokemonLearnsetTable({
-    pokemonMoves,
-}: PokemonLearnsetTableProps) {
+export default function PokemonLearnsetTable({ pokemonMoves }: PokemonLearnsetTableProps) {
     return (
         <Table>
             <TableHeader className="border-t-2">
@@ -36,18 +27,10 @@ export default function PokemonLearnsetTable({
             </TableHeader>
             <TableBody>
                 { pokemonMoves.map((move: Move) => (
-                    <TableRow
-                        key={ `${move.move.movenames[0]?.name}-${move.level}` }
-                    >
-                        <TableCell className="text-center">
-                            { move.level }
-                        </TableCell>
+                    <TableRow key={ `${move.move.movenames[0]?.name}-${move.level}` }>
+                        <TableCell className="text-center">{ move.level }</TableCell>
                         <TableCell>{ move.move.movenames[0]?.name }</TableCell>
-                        <TableCell>
-                            { move.move.type.name && (
-                                <TypeSprite typeName={ move.move.type.name } />
-                            ) }
-                        </TableCell>
+                        <TableCell>{ move.move.type.name && <TypeSprite typeName={ move.move.type.name } /> }</TableCell>
                     </TableRow>
                 )) }
             </TableBody>

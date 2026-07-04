@@ -6,7 +6,6 @@ import { LearnsetDeckItem } from "@/lib/types"
 import { getServerSession } from "@/lib/auth-server"
 import { revalidatePath } from "next/cache"
 
-
 export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDeckItem[]): Promise<string> {
     const session = await getServerSession()
     if (!session?.user?.id) {
@@ -14,7 +13,7 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
     }
 
     const userId = session.user.id
-    
+
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 
     const createdLearnsetDeck = await prisma.learnsetDeck.create({
@@ -24,12 +23,15 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
             items: {
                 createMany: {
                     data: learnsetDeck.map((learnset, index) => ({
-                        pokemonName: learnset.pokemonName,
-                        versionGroupName: learnset.versionGroupName,
+                        pokemonId: learnset.pokemonId,
+                        pokemonApiName: learnset.pokemonApiName,
+                        pokemonDisplayName: learnset.pokemonDisplayName,
+                        versionGroupApiName: learnset.versionGroupApiName,
+                        versionGroupDisplayName: learnset.versionGroupDisplayName,
                         sortOrder: index,
-                    }))
-                }
-            }
+                    })),
+                },
+            },
         },
         select: {
             id: true,
@@ -44,18 +46,21 @@ export async function getLearnsetDeckItemById(deckId: string): Promise<LearnsetD
         where: { id: deckId },
         include: {
             items: {
-                orderBy: { sortOrder: 'asc' }
-            }
-        }
+                orderBy: { sortOrder: "asc" },
+            },
+        },
     })
 
     if (!learnsetDeck) {
         return null
     }
 
-    return learnsetDeck.items.map(item => ({
-        pokemonName: item.pokemonName,
-        versionGroupName: item.versionGroupName,
+    return learnsetDeck.items.map((item) => ({
+        pokemonId: item.pokemonId,
+        pokemonApiName: item.pokemonApiName,
+        pokemonDisplayName: item.pokemonDisplayName,
+        versionGroupApiName: item.versionGroupApiName,
+        versionGroupDisplayName: item.versionGroupDisplayName,
         sortOrder: item.sortOrder,
     }))
 }
@@ -69,10 +74,37 @@ export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ use
     return learnsetDeck ?? null
 }
 
+export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(
+    userId: string,
+): Promise<{ id: string, name: string, updatedAt: Date, items: LearnsetDeckItem[] }[]> {
+    const learnsetDecks = await prisma.learnsetDeck.findMany({
+        where: { userId },
+        select: {
+            id: true,
+            name: true,
+            updatedAt: true,
+            items: {
+                select: {
+                    pokemonId: true,
+                    pokemonApiName: true,
+                    pokemonDisplayName: true,
+                    versionGroupApiName: true,
+                    versionGroupDisplayName: true,
+                    sortOrder: true,
+                },
+                orderBy: { sortOrder: "asc" },
+            },
+        },
+        orderBy: { createdAt: "desc" },
+    })
+
+    return learnsetDecks
+}
+
 export async function updateLearnsetDeck(
     deckId: string,
     name: string,
-    learnsetDeck: LearnsetDeckItem[]
+    learnsetDeck: LearnsetDeckItem[],
 ): Promise<string> {
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 
@@ -96,8 +128,11 @@ export async function updateLearnsetDeck(
         await tx.learnsetDeckItem.createMany({
             data: learnsetDeck.map((item, index) => ({
                 deckId,
-                pokemonName: item.pokemonName,
-                versionGroupName: item.versionGroupName,
+                pokemonId: item.pokemonId,
+                pokemonApiName: item.pokemonApiName,
+                pokemonDisplayName: item.pokemonDisplayName,
+                versionGroupApiName: item.versionGroupApiName,
+                versionGroupDisplayName: item.versionGroupDisplayName,
                 sortOrder: index,
             })),
         })
@@ -116,7 +151,7 @@ export async function deleteLearnsetDeck(deckId: string): Promise<void> {
     if (!deckId) {
         throw new Error("Invalid deck ID.")
     }
-    
+
     const session = await getServerSession()
     if (!session?.user?.id) {
         throw new Error("User is not authenticated.")
@@ -137,5 +172,4 @@ export async function deleteLearnsetDeck(deckId: string): Promise<void> {
     ])
 
     revalidatePath("/account/decks")
-
 }
