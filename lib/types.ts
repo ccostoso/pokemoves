@@ -5,8 +5,8 @@ import { LocalizedName } from "./actions/graphql-actions"
 export type PokemonListItem = {
     id: number,
     name: string,
-    pokemonspecy: {
-        pokemonspeciesnames: LocalizedName[]
+    species: {
+        names: LocalizedName[]
     }
 }
 
@@ -25,8 +25,8 @@ export type LevelUpLearnset = {
         id: number,
         name: string,
         pokemonmoves: LevelUpMove[],
-        pokemonspecy: {
-            pokemonspeciesnames: LocalizedName[]
+        species: {
+            names: LocalizedName[]
         }
     }>,
     pokemonName: string,
