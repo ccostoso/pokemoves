@@ -1,5 +1,5 @@
 import { SubmitEventHandler, useState } from "react"
-import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "@/lib/types"
+import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { authClient } from "@/lib/auth-client"
 import { Input } from "../ui/input"
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
@@ -21,7 +21,7 @@ export default function SavePanel({ learnsetList, pokemonList, isSubmitting }: S
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
 
-    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
+    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItem[] => {
         return learnset.map((item, index) => ({
             pokemonName: item.pokemonName,
             versionGroupName: item.versionGroupName,

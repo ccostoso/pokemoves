@@ -6,7 +6,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
 import { authClient } from "@/lib/auth-client"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
-import { LearnsetDeckItemData, LevelUpLearnset, PokemonListItem } from "@/lib/types"
+import { LearnsetDeckItem, LevelUpLearnset, PokemonListItem } from "@/lib/types"
 import { BrushCleaning, Save } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
 import { toast } from "sonner"
@@ -24,7 +24,7 @@ export function NewLearnsetToolbar({ learnsetList, onClearLearnsets, pokemonList
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
     const [isSaving, setIsSaving] = useState(false)
 
-    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItemData[] => {
+    const mapLevelUpLearnsetToDbFormat = (learnset: LevelUpLearnset[]): LearnsetDeckItem[] => {
         return learnset.map((item, index) => ({
             pokemonName: item.pokemonName,
             versionGroupName: item.versionGroupName,

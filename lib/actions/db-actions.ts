@@ -2,12 +2,12 @@
 
 import { prisma } from "@/lib/prisma"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
-import { LearnsetDeckItemData } from "@/lib/types"
+import { LearnsetDeckItem } from "@/lib/types"
 import { getServerSession } from "@/lib/auth-server"
 import { revalidatePath } from "next/cache"
 
 
-export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDeckItemData[]): Promise<string> {
+export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDeckItem[]): Promise<string> {
     const session = await getServerSession()
     if (!session?.user?.id) {
         throw new Error("User is not authenticated.")
@@ -39,7 +39,7 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
     return createdLearnsetDeck.id
 }
 
-export async function getLearnsetDeckItemDataById(deckId: string): Promise<LearnsetDeckItemData[] | null> {
+export async function getLearnsetDeckItemById(deckId: string): Promise<LearnsetDeckItem[] | null> {
     const learnsetDeck = await prisma.learnsetDeck.findUnique({
         where: { id: deckId },
         include: {
@@ -72,7 +72,7 @@ export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ use
 export async function updateLearnsetDeck(
     deckId: string,
     name: string,
-    learnsetDeck: LearnsetDeckItemData[]
+    learnsetDeck: LearnsetDeckItem[]
 ): Promise<string> {
     const validatedLearnsetName = LearnsetDeckTitleSchema.parse(name)
 

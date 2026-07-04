@@ -3,17 +3,17 @@
 import SearchPanel from "./pokemon-search/search-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
-import { LearnsetDeckItemData, LevelUpLearnset } from "@/lib/types"
+import { LearnsetDeckItem, LevelUpLearnset } from "@/lib/types"
 
 type SearchShellProps = {
     toolbarType?: "owner" | "viewer" | "new" | "none",
     learnsetDeckId?: string,
-    learnsetDeckItemData?: LearnsetDeckItemData[] | null,
+    learnsetDeckItem?: LearnsetDeckItem[] | null,
     initialHydratedLearnsetList?: LevelUpLearnset[] | null,
     learnsetDeckName?: string | null
 }
 
-export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItemData, initialHydratedLearnsetList, learnsetDeckName }: SearchShellProps) {
+export default function SearchShell({ toolbarType = "new", learnsetDeckId, learnsetDeckItem, initialHydratedLearnsetList, learnsetDeckName }: SearchShellProps) {
     const {
         pokemonList,
         versionGroupName,
@@ -35,7 +35,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         handleRemoveLearnset,
         handleReorderLearnset,
     } = useSearchShellController(
-        learnsetDeckItemData,
+        learnsetDeckItem,
         learnsetDeckId,
         initialHydratedLearnsetList,
     )
