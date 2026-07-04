@@ -9,19 +9,43 @@ import NavbarExpandableButton from "./navbar-expandable-button"
 import Link from "next/link"
 import AccountDropdownMenu from "./account-dropdown-menu"
 
-export default function Navbar() {
+type NavbarUser = {
+    name: string | null,
+    username: string | null
+}
+
+type NavbarProps = {
+    initialUser: NavbarUser | null
+}
+
+export default function Navbar({ initialUser }: NavbarProps) {
     const [activeButton, setActiveButton] = useState<string | null>(null)
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
     const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
     const [isSignInOpen, setIsSignInOpen] = useState(false)
     const { data: session, isPending } = authClient.useSession()
 
+    // Use server-provided user only while client session status is still pending.
+    // Once resolved, trust client session state (including logged-out/null).
+    const effectiveUser: NavbarUser | null = isPending
+        ? initialUser
+        : session?.user
+            ? {
+                name: session.user.name ?? null,
+                username: session.user.username ?? null,
+            }
+            : null
+
+    // Check if there is a session user
+    const hasSessionUser = Boolean(effectiveUser)
+
+    // Handle the account button click
     const handleAccountClick = () => {
         if (isPending) {
             return
         }
 
-        if (session?.user) {
+        if (hasSessionUser) {
             return
         }
 
@@ -49,11 +73,6 @@ export default function Navbar() {
         }
     }
 
-    const navbarUser: { name: string | null, username: string | null } = {
-        name: session?.user?.name ?? null,
-        username: session?.user?.username ?? null,
-    }
-
     return (
         <nav
             className="bg-background text-foreground p-4 border-b border-foreground/20"
@@ -68,7 +87,7 @@ export default function Navbar() {
                     <Link href="/">Pokémoves</Link>
                 </div>
                 <div className="flex items-center gap-3 md:gap-4">
-                    { session?.user ? (
+                    { hasSessionUser ? (
                         <AccountDropdownMenu
                             activeButton={ activeButton }
                             setActiveButton={ setActiveButton }
@@ -76,7 +95,7 @@ export default function Navbar() {
                             handleAccountMenuOpenChange={
                                 handleAccountMenuOpenChange
                             }
-                            user={ navbarUser }
+                            user={ effectiveUser }
                         />
                     ) : (
                         <NavbarExpandableButton

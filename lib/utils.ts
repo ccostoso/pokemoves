@@ -36,7 +36,7 @@ export function getTypeNumber(typeName: string): number {
 export function getPokemonDisplayName(pokemon: PokemonListItem): string {
     const region = getRegionalSuffix(pokemon.name)
     const regionlessName =
-        pokemon.species.names[0]?.name ?? pokemon.name
+        pokemon.species?.names?.[0]?.name ?? pokemon.name
 
     return region ? `${regionlessName} (${region})` : regionlessName
 }

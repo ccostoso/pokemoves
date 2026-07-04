@@ -32,6 +32,7 @@ export default async function DeckPage({ params }: DeckPageProps) {
 
     const initialHydratedLearnsets = await Promise.all(
         learnsetDeckItem.map(async (item) => {
+            // Fetch the level-up moves for each Pokémon in the learnset deck
             const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
                 item.pokemonName,
                 item.versionGroupName,
@@ -43,6 +44,7 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 item.versionGroupName,
             )
 
+            // For each learnset, create a unique instance ID based on the occurrence
             return {
                 ...pokemonMoves,
                 id: createLearnsetInstanceId(

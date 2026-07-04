@@ -20,7 +20,13 @@ export type LevelUpMove = {
     }
 }
 
-export type LevelUpLearnset = {
+type BaseLearnset = {
+    pokemonName: string,
+    versionGroupName: string,
+    id: string
+}
+
+export type LevelUpLearnset = BaseLearnset & {
     pokemon: Array<{
         id: number,
         name: string,
@@ -28,10 +34,7 @@ export type LevelUpLearnset = {
         species: {
             names: LocalizedName[]
         }
-    }>,
-    pokemonName: string,
-    versionGroupName: string,
-    id: string // Unique ID for DnD tracking
+    }>
 }
 
 export type LearnsetDeckItem = {
