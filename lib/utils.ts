@@ -72,11 +72,22 @@ export function countLearnsetPairOccurrences(
 }
 
 export function mapLearnsetsToDeckItems(learnsets: LevelUpLearnset[]): LearnsetDeckItem[] {
-    return learnsets.map((item, index) => ({
-        pokemonName: item.pokemonName,
-        versionGroupName: item.versionGroupName,
-        sortOrder: index,
-    }))
+    return learnsets.map((item, index) => {
+        const pokemonId = item.pokemon[0]?.id
+
+        if (pokemonId === null) {
+            throw new Error(
+                `Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`,
+            )
+        }
+
+        return {
+            pokemonName: item.pokemonName,
+            pokemonId,
+            versionGroupName: item.versionGroupName,
+            sortOrder: index,
+        }
+    })
 }
 
 export const toLearnsetSignature = (learnsets: LevelUpLearnset[]): string =>

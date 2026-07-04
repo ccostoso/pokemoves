@@ -45,7 +45,7 @@ export default async function LearnsetDecks() {
                                     <li key={ item.sortOrder }>
                                         <Item variant="outline">
                                             <Image
-                                                src={ `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.id}.png` }
+                                                src={ `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.pokemonId}.png` }
                                                 alt={ item.pokemonName }
                                                 width={ 32 }
                                                 height={ 32 }

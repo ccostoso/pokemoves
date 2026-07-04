@@ -188,26 +188,31 @@ function searchShellReducer(state: SearchShellState, action: SearchShellAction):
 }
 
 export function useSearchShellController(
-    initialLearnsetDeckItem?: LearnsetDeckItem[] | null,
+    initialLearnsetDeck?: LearnsetDeckItem[] | null,
     initialLearnsetDeckId?: string,
     initialHydratedLearnsets?: LevelUpLearnset[] | null,
 ): UseSearchShellControllerReturn {
     const hydratedDeckKeyRef = useRef<string | null>(null)
 
+    // Create a snapshot of the original learnset deck to use for reverting changes
     const originalLearnsetDeckSnapshot = useMemo<LearnsetDeckItem[]>(() => {
-        if (initialLearnsetDeckItem && initialLearnsetDeckItem.length > 0) {
-            return initialLearnsetDeckItem
+        // If there is an initialLearnsetDeck, we use that to create the snapshot
+        if (initialLearnsetDeck && initialLearnsetDeck.length > 0) {
+            return initialLearnsetDeck
                 .slice()
                 .sort((a, b) => a.sortOrder - b.sortOrder)
                 .map((item, index) => ({
+                    pokemonId: item.pokemonId,
                     pokemonName: item.pokemonName,
                     versionGroupName: item.versionGroupName,
                     sortOrder: index,
                 }))
         }
 
+        // If there is an initialHydratedLearnsets, we use that to create the snapshot
         if (initialHydratedLearnsets && initialHydratedLearnsets.length > 0) {
             return initialHydratedLearnsets.map((item, index) => ({
+                pokemonId: item.pokemon[0]?.id,
                 pokemonName: item.pokemonName,
                 versionGroupName: item.versionGroupName,
                 sortOrder: index,
@@ -215,7 +220,7 @@ export function useSearchShellController(
         }
 
         return []
-    }, [initialLearnsetDeckItem, initialHydratedLearnsets])
+    }, [initialLearnsetDeck, initialHydratedLearnsets])
 
     const initialLearnsetSignature = useMemo(
         () => originalLearnsetDeckSnapshot.map((item) => `${item.pokemonName}:${item.versionGroupName}`).join("|"),
@@ -421,13 +426,13 @@ export function useSearchShellController(
         }
 
         // If there is no initial learnset deck data, or if the length is zero, we don't need to hydrate anything
-        if (!initialLearnsetDeckItem || initialLearnsetDeckItem.length === 0) {
+        if (!initialLearnsetDeck || initialLearnsetDeck.length === 0) {
             dispatch({ type: "learnsetHydrationSucceeded", learnsets: [] })
             return
         }
 
         // Create a unique key for the initial learnset deck data to avoid rehydrating if it hasn't changed
-        const learnsetContentKey = initialLearnsetDeckItem
+        const learnsetContentKey = initialLearnsetDeck
             .map((item) => `${item.pokemonName}:${item.versionGroupName}:${item.sortOrder}`)
             .join("|")
 
@@ -443,7 +448,7 @@ export function useSearchShellController(
         // operation completes
         let cancelled = false
 
-        // Hydrate the learnsets from the initialLearnsetDeckItem
+        // Hydrate the learnsets from the initialLearnsetDeck
         const hydrateLearnsets = async () => {
             dispatch({ type: "learnsetHydrationStarted" })
 
@@ -451,7 +456,7 @@ export function useSearchShellController(
                 const occurrenceMap = new Map<string, number>()
 
                 const hydratedLearnsets: LevelUpLearnset[] = await Promise.all(
-                    initialLearnsetDeckItem.map(async (item) => {
+                    initialLearnsetDeck.map(async (item) => {
                         const pokemonMoves = await getLevelUpMovesByPokemonNameAndVersionGroup(
                             item.pokemonName,
                             item.versionGroupName,
@@ -496,7 +501,7 @@ export function useSearchShellController(
         return () => {
             cancelled = true
         }
-    }, [initialLearnsetDeckId, initialLearnsetDeckItem, initialHydratedLearnsets])
+    }, [initialLearnsetDeckId, initialLearnsetDeck, initialHydratedLearnsets])
 
     return {
         pokemonList: state.pokemonList,

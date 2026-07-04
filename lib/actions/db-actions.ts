@@ -23,6 +23,7 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
             items: {
                 createMany: {
                     data: learnsetDeck.map((learnset, index) => ({
+                        pokemonId: learnset.pokemonId,
                         pokemonName: learnset.pokemonName,
                         versionGroupName: learnset.versionGroupName,
                         sortOrder: index,
@@ -53,6 +54,7 @@ export async function getLearnsetDeckItemById(deckId: string): Promise<LearnsetD
     }
 
     return learnsetDeck.items.map((item) => ({
+        pokemonId: item.pokemonId,
         pokemonName: item.pokemonName,
         versionGroupName: item.versionGroupName,
         sortOrder: item.sortOrder,
@@ -78,6 +80,7 @@ export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(
             name: true,
             items: {
                 select: {
+                    pokemonId: true,
                     pokemonName: true,
                     versionGroupName: true,
                     sortOrder: true,
@@ -118,6 +121,7 @@ export async function updateLearnsetDeck(
         await tx.learnsetDeckItem.createMany({
             data: learnsetDeck.map((item, index) => ({
                 deckId,
+                pokemonId: item.pokemonId,
                 pokemonName: item.pokemonName,
                 versionGroupName: item.versionGroupName,
                 sortOrder: index,

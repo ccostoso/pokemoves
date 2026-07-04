@@ -39,6 +39,7 @@ export type LevelUpLearnset = BaseLearnset & {
 
 export type LearnsetDeckItem = {
     pokemonName: string,
+    pokemonId: number,
     versionGroupName: string,
     sortOrder: number
 }

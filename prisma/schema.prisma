@@ -105,6 +105,7 @@ model LearnsetDeckItem {
     deckId           String
     deck             LearnsetDeck @relation(fields: [deckId], references: [id], onDelete: Cascade)
     pokemonName      String
+    pokemonId        Int
     versionGroupName String
     sortOrder        Int
     createdAt        DateTime     @default(now())
