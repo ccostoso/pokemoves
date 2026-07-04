@@ -76,12 +76,13 @@ export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ use
 
 export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(
     userId: string,
-): Promise<{ id: string, name: string, items: LearnsetDeckItem[] }[]> {
+): Promise<{ id: string, name: string, updatedAt: Date, items: LearnsetDeckItem[] }[]> {
     const learnsetDecks = await prisma.learnsetDeck.findMany({
         where: { userId },
         select: {
             id: true,
             name: true,
+            updatedAt: true,
             items: {
                 select: {
                     pokemonId: true,
