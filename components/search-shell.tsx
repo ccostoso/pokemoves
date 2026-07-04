@@ -32,7 +32,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
         handleRevertChangesToLearnsetDeck,
         handleClearLearnsets,
         handleDeleteLearnsetDeck,
-        handleRemoveLearnset,
+        handleRemoveLearnsetFromDeck,
         handleReorderLearnsetDeck,
     } = useSearchShellController(
         learnsetDeckItem,
@@ -64,7 +64,7 @@ export default function SearchShell({ toolbarType = "new", learnsetDeckId, learn
                         learnsetDeckId={ learnsetDeckId }
                         learnsets={ learnsets }
                         onClearLearnsets={ handleClearLearnsets }
-                        onRemoveLearnset={ handleRemoveLearnset }
+                        onRemoveLearnsetFromDeck={ handleRemoveLearnsetFromDeck }
                         onReorderLearnsetDeck={ handleReorderLearnsetDeck }
                         onUpdateLearnsetDeck={ handleUpdateLearnsetDeck }
                         onCreateDuplicateLearnsetDeckWithChanges={ handleCreateDuplicateLearnsetDeckWithChanges }

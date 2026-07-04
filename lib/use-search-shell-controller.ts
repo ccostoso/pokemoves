@@ -38,8 +38,8 @@ type SearchShellAction =
     | { type: "addLearnsetToLearnsetDeckSucceeded", learnset: LevelUpLearnset }
     | { type: "addLearnsetToLearnsetDeckFailed", message: string }
     | { type: "learnsetCleared" }
-    | { type: "learnsetRemoved", indexToRemove: number }
-    | { type: "learnsetReordered", fromIndex: number, toIndex: number }
+    | { type: "learnsetRemovedFromDeck", indexToRemove: number }
+    | { type: "learnsetDeckReordered", fromIndex: number, toIndex: number }
     | { type: "learnsetHydrationStarted" }
     | { type: "learnsetHydrationSucceeded", learnsets: LevelUpLearnset[] }
     | { type: "learnsetHydrationFailed", message: string }
@@ -73,7 +73,7 @@ type UseSearchShellControllerReturn = {
     handleRevertChangesToLearnsetDeck: () => void,
     handleDeleteLearnsetDeck: () => Promise<void>,
     handleClearLearnsets: () => void,
-    handleRemoveLearnset: (indexToRemove: number) => void,
+    handleRemoveLearnsetFromDeck: (indexToRemove: number) => void,
     handleReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
@@ -142,7 +142,7 @@ function searchShellReducer(
                 requestState: { status: "idle" },
             }
 
-        case "learnsetRemoved":
+        case "learnsetRemovedFromDeck":
             return {
                 ...state,
                 learnsets: state.learnsets.filter(
@@ -150,7 +150,7 @@ function searchShellReducer(
                 ),
             }
 
-        case "learnsetReordered": {
+        case "learnsetDeckReordered": {
             const next = [...state.learnsets]
             const [moved] = next.splice(action.fromIndex, 1)
             next.splice(action.toIndex, 0, moved)
@@ -428,11 +428,11 @@ export function useSearchShellController(
         dispatch({ type: "savedBaselineSynced", signature: "" })
     }
 
-    const handleRemoveLearnset = (indexToRemove: number) =>
-        dispatch({ type: "learnsetRemoved", indexToRemove })
+    const handleRemoveLearnsetFromDeck = (indexToRemove: number) =>
+        dispatch({ type: "learnsetRemovedFromDeck", indexToRemove })
 
     const handleReorderLearnsetDeck = (fromIndex: number, toIndex: number) =>
-        dispatch({ type: "learnsetReordered", fromIndex, toIndex })
+        dispatch({ type: "learnsetDeckReordered", fromIndex, toIndex })
 
     useEffect(() => {
         if (initialHydratedLearnsets) {
@@ -550,7 +550,7 @@ export function useSearchShellController(
         handleRevertChangesToLearnsetDeck,
         handleDeleteLearnsetDeck,
         handleClearLearnsets,
-        handleRemoveLearnset,
+        handleRemoveLearnsetFromDeck,
         handleReorderLearnsetDeck,
     }
 }

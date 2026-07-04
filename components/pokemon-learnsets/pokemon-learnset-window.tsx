@@ -7,7 +7,7 @@ type PokemonLearnsetWindowProps = {
     learnsetDeckId?: string,
     learnsets: LevelUpLearnset[],
     onClearLearnsets: () => void,
-    onRemoveLearnset: (index: number) => void,
+    onRemoveLearnsetFromDeck: (index: number) => void,
     onReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void,
     onUpdateLearnsetDeck: (learnsetName: string) => Promise<string>,
     onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
@@ -25,7 +25,7 @@ export default function PokemonLearnsetWindow({
     learnsetDeckId,
     learnsets,
     onClearLearnsets,
-    onRemoveLearnset,
+    onRemoveLearnsetFromDeck,
     onReorderLearnsetDeck,
     onUpdateLearnsetDeck,
     onCreateDuplicateLearnsetDeckWithChanges,
@@ -69,7 +69,7 @@ export default function PokemonLearnsetWindow({
                 isSubmitting={ isSubmitting } /> }
             <PokemonLearnsetPanel
                 learnsets={ learnsets }
-                onRemoveLearnset={ onRemoveLearnset }
+                onRemoveLearnsetFromDeck={ onRemoveLearnsetFromDeck }
                 onReorderLearnsetDeck={ onReorderLearnsetDeck }
             />
         </div>
