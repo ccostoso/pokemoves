@@ -411,7 +411,7 @@ export function useSearchShellController(
     }
 
     const handleRevertChangesToLearnsetDeck = () =>
-        dispatch({ type: "learnsetHydrationSucceeded", learnsets: revertBaselineLearnsetsRef.current ?? [] })
+        dispatch({ type: "learnsetReverted", learnsets: revertBaselineLearnsetsRef.current ?? [] })
 
     const handleClearLearnsetsFromDeck = () => 
         dispatch({ type: "learnsetsClearedFromDeck" })
