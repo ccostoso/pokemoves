@@ -14,8 +14,11 @@ type PokemonLearnsetCardProps = {
 }
 
 export default function PokemonLearnsetCard({ item, onRemove, dragHandleProps }: PokemonLearnsetCardProps) {
+    console.log("item from PokemonLearnsetCard:", item)
     const pokemonName = item?.pokemon?.[0]?.species?.names?.[0]?.name || item?.pokemon?.[0]?.name || "Unknown"
+    console.log("pokemonName from PokemonLearnsetCard:", pokemonName)
     const pokemonMoves = item?.pokemon?.[0]?.pokemonmoves || []
+    console.log("pokemonMoves from PokemonLearnsetCard:", pokemonMoves)
 
     // Get display name for version group
     const versionGroupName = getVersionGroupDisplayName(item?.versionGroupName)

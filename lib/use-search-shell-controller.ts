@@ -316,9 +316,6 @@ export function useSearchShellController(
                 state.versionGroupName,
             )
 
-            console.log("pokemonMoves", pokemonMoves)
-            console.log("pokemonMoves.pokemon.length", pokemonMoves.pokemon.length)
-
             const hasMoves = pokemonMoves.pokemon.some((p) => p.pokemonmoves.length > 0)
 
             if (!hasMoves) {
