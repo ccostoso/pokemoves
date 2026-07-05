@@ -1,10 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { SubmitEvent, useState } from "react"
+import { FormEvent, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { PasswordChangeSchema } from "@/lib/schemas"
 import { toast } from "sonner"
@@ -15,7 +15,7 @@ export default function PasswordChangeForm() {
     const [ newPassword, setNewPassword ] = useState("")
     const [ confirmPassword, setConfirmPassword ] = useState("")
 
-    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         const parsedFormData = PasswordChangeSchema.safeParse({
@@ -54,11 +54,11 @@ export default function PasswordChangeForm() {
     }
 
     return (
-        <section className="mt-6">
+        <section className="mt-6 space-y-4">
             <h2 className="text-2xl font-bold">Change Password</h2>
             <Card className="max-w-1/2">
                 <CardContent>
-                    <form onSubmit={ handleSubmit }>
+                    <form id="password-change-form" onSubmit={ handleSubmit }>
                         <FieldSet className="space-y-2">
                             <FieldGroup>
                                 <Field>
@@ -101,12 +101,18 @@ export default function PasswordChangeForm() {
                                     </FieldDescription>
                                 </Field>
                             </FieldGroup>
-                            <Button type="submit" disabled={ isUpdating }>
-                                { isUpdating ? "Updating..." : "Update Password" }
-                            </Button>
                         </FieldSet>
                     </form>
                 </CardContent>
+                <CardFooter className="justify-end gap-2">
+                    <Button
+                        type="submit"
+                        form="password-change-form"
+                        disabled={ isUpdating || !currentPassword || !newPassword || !confirmPassword }
+                    >
+                        { isUpdating ? "Updating..." : "Update Password" }
+                    </Button>
+                </CardFooter>
             </Card>
         </section>
     )

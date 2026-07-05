@@ -1,7 +1,8 @@
 import { getServerSession } from "@/lib/auth-server"
-import UsernameEmailForm from "./components/username-email-form"
+import UsernameEmailChangeForm from "./components/username-email-change-form"
 import PasswordChangeForm from "./components/password-change-form"
 import { notFound } from "next/navigation"
+import DeleteAccountForm from "./components/delete-account-form"
 
 
 export default async function UserPage() {
@@ -26,9 +27,9 @@ export default async function UserPage() {
     return (
         <main className="container mx-auto p-4 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
-            <UsernameEmailForm name={ user?.name } email={ user.email } />
+            <UsernameEmailChangeForm name={ user?.name } email={ user.email } />
             <PasswordChangeForm />
-            <pre>{ JSON.stringify(session, null, 2) }</pre>
+            <DeleteAccountForm />
         </main>
     )
 }

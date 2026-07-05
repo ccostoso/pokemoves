@@ -1,15 +1,15 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { SubmitEvent, useMemo, useState } from "react"
+import { FormEvent, useMemo, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { UsernameEmailUpdateSchema } from "@/lib/schemas"
 import { toast } from "sonner"
 
-export default function UsernameEmailForm({ name, email }: { name: string, email: string }) {
+export default function UsernameEmailChangeForm({ name, email }: { name: string, email: string }) {
     const [ newName, setNewName ] = useState(name)
     const [ newEmail, setNewEmail ] = useState(email)
     const [ isUpdating, setIsUpdating ] = useState(false)
@@ -18,7 +18,7 @@ export default function UsernameEmailForm({ name, email }: { name: string, email
     const emailChanged = useMemo(() => newEmail.trim().toLowerCase() !== email.toLowerCase(), [newEmail, email])
     const hasChanges = nameChanged || emailChanged
 
-    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!hasChanges) return
 
@@ -70,11 +70,11 @@ export default function UsernameEmailForm({ name, email }: { name: string, email
     }
 
     return (
-        <section className="mt-6">
+        <section className="mt-6 space-y-4">
             <h2 className="text-2xl font-bold">Name and Email</h2>
             <Card className="max-w-1/2">
                 <CardContent>
-                    <form onSubmit={ handleSubmit }>
+                    <form id="username-email-form" onSubmit={ handleSubmit }>
                         <FieldSet className="space-y-2">
                             <FieldGroup>
                                 <Field>
@@ -104,16 +104,18 @@ export default function UsernameEmailForm({ name, email }: { name: string, email
                                     </FieldDescription>
                                 </Field>
                             </FieldGroup>
-                            <Button
-                                type="submit"
-                                disabled={ isUpdating || !hasChanges }
-                                className="mt-4"
-                            >
-                                { isUpdating ? "Saving..." : "Save Changes" }
-                            </Button>
                         </FieldSet>
                     </form>
                 </CardContent>
+                <CardFooter className="justify-end gap-2">
+                    <Button
+                        type="submit"
+                        form="username-email-form"
+                        disabled={ isUpdating || !hasChanges }
+                    >
+                        { isUpdating ? "Saving..." : "Save Changes" }
+                    </Button>
+                </CardFooter>
             </Card>
         </section>
     )
