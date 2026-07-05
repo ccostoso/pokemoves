@@ -1,6 +1,6 @@
 "use client"
 
-import { SubmitEvent, useState } from "react"
+import { SubmitEventHandler, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
@@ -13,7 +13,7 @@ export default function DeleteAccountForm() {
     const [ isDeleting, setIsDeleting ] = useState(false)
     const [ password, setPassword ] = useState("")
 
-    const handleDeleteAccount = async (e: SubmitEvent<HTMLFormElement>) => {
+    const handleDeleteAccount: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
 
         setIsDeleting(true)
