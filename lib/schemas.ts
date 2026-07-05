@@ -16,9 +16,15 @@ export type SignInSchemaType = z.infer<typeof SignInSchema>
 
 export const SignUpSchema = z
     .object({
-        username: z.string().min(1, { message: "Username is required" }).max(20, {
-            message: "Username must be at most 20 characters long",
-        }),
+        username: z
+            .string()
+            .min(1, { message: "Username is required" })
+            .max(20, {
+                message: "Username must be at most 20 characters long",
+            })
+            .regex(/^(?!.*[._-]{2})[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?$/, {
+                message: "Username may only contain letters, numbers, '.', '_' and '-', and cannot start/end with '.', '_' or '-'",
+            }),
         email: z.email({ message: "Invalid email address" }),
         password: z
             .string()
