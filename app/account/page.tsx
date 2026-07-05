@@ -27,7 +27,7 @@ export default async function UserPage() {
     return (
         <main className="container mx-auto p-4 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
-            <UsernameEmailChangeForm name={ user?.name } email={ user.email } />
+            <UsernameEmailChangeForm name={ user.name ?? "" } email={ user.email } />
             <PasswordChangeForm />
             <DeleteAccountForm />
         </main>
