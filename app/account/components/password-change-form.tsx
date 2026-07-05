@@ -47,7 +47,7 @@ export default function PasswordChangeForm() {
             toast.error("Error updating password.", {
                 position: "top-center",
             })
-            console.error("Error updating user:", error)
+            console.error("Error updating password:", error)
         } finally {
             setIsUpdating(false)
         }
