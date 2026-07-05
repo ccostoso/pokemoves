@@ -19,7 +19,7 @@ export const SignUpSchema = z
         username: z.string().min(1, { message: "Username is required" }).max(20, {
             message: "Username must be at most 20 characters long",
         }),
-        email: z.string().email({ message: "Invalid email address" }),
+        email: z.email({ message: "Invalid email address" }),
         password: z
             .string()
             .min(8, {
@@ -66,3 +66,36 @@ export const SaveAsDuplicateSchema = z.object({
 })
 
 export type SaveAsDuplicateSchemaType = z.infer<typeof SaveAsDuplicateSchema>
+
+export const UsernameEmailUpdateSchema = z.object({
+    name: z
+        .string()
+        .trim()
+        .min(1, { message: "Name is required" })
+        .max(50, { message: "Name must be at most 50 characters long" }),
+    email: z
+        .email({ message: "Invalid email address" })
+        .trim()
+        .transform((value) => value.toLowerCase()),
+})
+
+export type UsernameEmailUpdateSchemaType = z.infer<typeof UsernameEmailUpdateSchema>
+
+export const PasswordChangeSchema = z
+    .object({
+        currentPassword: z.string().min(1, { message: "Current password is required" }),
+        newPassword: z
+            .string()
+            .min(8, { message: "New password must be at least 8 characters long" })
+            .max(50, { message: "New password must be at most 50 characters long" })
+            .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[^A-Za-z\d])[^\s]+$/, {
+                message: "New password must contain at least one letter, one number, and one special character",
+            }),
+        confirmPassword: z.string().min(1, { message: "Please confirm your new password" }),
+    })
+    .refine((data) => data.newPassword === data.confirmPassword, {
+        message: "New password and confirm password do not match",
+        path: ["confirmPassword"],
+    })
+
+export type PasswordChangeSchemaType = z.infer<typeof PasswordChangeSchema>

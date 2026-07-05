@@ -4,28 +4,64 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { SubmitEvent, useState } from "react"
+import { SubmitEvent, useMemo, useState } from "react"
 import { authClient } from "@/lib/auth-client"
+import { UsernameEmailUpdateSchema } from "@/lib/schemas"
+import { toast } from "sonner"
 
-export default function UsernameEmailForm({ username, email }: { username: string, email: string }) {
-    const [ name, setName ] = useState(username)
-    const [ isUpdating, setIsUpdating ] = useState(false)
+export default function UsernameEmailForm({ name, email }: { name: string, email: string }) {
+    const [ newName, setNewName ] = useState(name)
     const [ newEmail, setNewEmail ] = useState(email)
+    const [ isUpdating, setIsUpdating ] = useState(false)
+
+    const nameChanged = useMemo(() => newName.trim() !== name, [newName, name])
+    const emailChanged = useMemo(() => newEmail.trim().toLowerCase() !== email.toLowerCase(), [newEmail, email])
+    const hasChanges = nameChanged || emailChanged
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
+        if (!hasChanges) return
 
-        console.log("Updated Name:", name)
-        console.log("Updated Email:", newEmail)
+        const parsedFormData = UsernameEmailUpdateSchema.safeParse({
+            name: newName,
+            email: newEmail,
+        })
+
+        if (!parsedFormData.success) {
+            toast.error(parsedFormData.error.issues[0]?.message ?? "Invalid name or email.", {
+                position: "top-center",
+            })
+            return
+        }
+
+        const validatedName = parsedFormData.data.name
+        const validatedEmail = parsedFormData.data.email
+        const shouldUpdateName = validatedName !== name.trim()
+        const shouldUpdateEmail = validatedEmail !== email.trim().toLowerCase()
+
+        if (!shouldUpdateName && !shouldUpdateEmail) {
+            return
+        }
 
         try {
             setIsUpdating(true)
-            const [updateUserResponse, changeEmailResponse] = await Promise.all([
-                authClient.updateUser({ name }), 
-                authClient.changeEmail({ newEmail, callbackURL: "/account" })
-            ])
-            console.log("Update response:", updateUserResponse, changeEmailResponse)
+            if (shouldUpdateName) {
+                await authClient.updateUser({ name: validatedName })
+            }
+            if (shouldUpdateEmail) {
+                await authClient.changeEmail({ 
+                    newEmail: validatedEmail,
+                    callbackURL: "/account",
+                })
+            }
+
+            toast.success("User information updated successfully.", {
+                position: "top-center",
+            })
         } catch (error) {
+            toast.error("Error updating user information.", {
+                position: "top-center",
+            })
             console.error("Error updating user:", error)
         } finally {
             setIsUpdating(false)
@@ -46,8 +82,8 @@ export default function UsernameEmailForm({ username, email }: { username: strin
                                     <Input
                                         id="name"
                                         type="text"
-                                        value={ name }
-                                        onChange={ (e) => setName(e.target.value) }
+                                        value={ newName }
+                                        onChange={ (e) => setNewName(e.target.value) }
                                         className="w-full rounded-md border border-muted-foreground p-2"
                                     />
                                     <FieldDescription>
@@ -70,7 +106,7 @@ export default function UsernameEmailForm({ username, email }: { username: strin
                             </FieldGroup>
                             <Button
                                 type="submit"
-                                disabled={ isUpdating }
+                                disabled={ isUpdating || !hasChanges }
                                 className="mt-4"
                             >
                                 { isUpdating ? "Saving..." : "Save Changes" }
