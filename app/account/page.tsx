@@ -1,4 +1,9 @@
 import { getServerSession } from "@/lib/auth-server"
+import UsernameEmailChangeForm from "./components/username-email-change-form"
+import PasswordChangeForm from "./components/password-change-form"
+import { notFound } from "next/navigation"
+import DeleteAccountForm from "./components/delete-account-form"
+
 
 export default async function UserPage() {
     let session: Awaited<ReturnType<typeof getServerSession>> | null = null
@@ -10,28 +15,21 @@ export default async function UserPage() {
     }
 
     if (!session?.user) {
-        return (
-            <main className="container mx-auto p-4 flex-1">
-                <h1 className="text-4xl font-bold">User Dashboard</h1>
-                <p className="mt-4 text-lg">You are not signed in. Please sign in to access your dashboard.</p>
-                { authFailed && (
-                    <p className="mt-2 text-lg text-red-500">Error retrieving session data. Please try again.</p>
-                ) }
-            </main>
-        )
+        notFound() 
     }
 
     const { user } = session
 
+    if (!user.username || !user.email) {
+        notFound()
+    }
+
     return (
         <main className="container mx-auto p-4 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
-
-            <pre>{ JSON.stringify(session, null, 2) }</pre>
-
-            <p className="mt-4 text-lg">
-                Welcome to your dashboard! Here you can manage your account and view your Pokemon move comparisons.
-            </p>
+            <UsernameEmailChangeForm name={ user.name ?? "" } email={ user.email } />
+            <PasswordChangeForm />
+            <DeleteAccountForm />
         </main>
     )
 }
