@@ -8,6 +8,7 @@ import { authClient } from "@/lib/auth-client"
 import NavbarExpandableButton from "./navbar-expandable-button"
 import Link from "next/link"
 import AccountDropdownMenu from "./account-dropdown-menu"
+import AboutDialog from "../about/about-dialog"
 
 type NavbarUser = {
     name: string | null,
@@ -106,13 +107,11 @@ export default function Navbar({ initialUser }: NavbarProps) {
                         />
                     ) }
 
-                    <NavbarExpandableButton
-                        label="About"
-                        icon={ <CircleQuestionMark className="shrink-0 h-5 w-5" /> }
-                        isActive={ activeButton === "about" }
-                        onActivate={ () => setActiveButton("about") }
-                        expandedWidthClass="w-24"
+                    <AboutDialog
+                        activeButton={ activeButton }
+                        setActiveButton={ setActiveButton }
                     />
+
                     <NavbarExpandableButton
                         label="Contact"
                         icon={ <Pencil className="shrink-0 h-5 w-5" /> }
@@ -120,6 +119,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
                         onActivate={ () => setActiveButton("contact") }
                         expandedWidthClass="w-28"
                     />
+
                     <ModeToggle
                         isActive={ activeButton === "theme" || isThemeMenuOpen }
                         onActivate={ () => setActiveButton("theme") }

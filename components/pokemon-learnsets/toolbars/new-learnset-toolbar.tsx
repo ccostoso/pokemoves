@@ -51,7 +51,7 @@ export function NewLearnsetToolbar({
         }
 
         if (learnsets.length === 0) {
-            toast.error("No learnset deck to save. Please add a Pokémon first.", { position: "top-center" })
+            toast.error("No learnsets to save. Please add a Pokémon first.", { position: "top-center" })
             setIsSaving(false)
             return
         }
@@ -103,18 +103,13 @@ export function NewLearnsetToolbar({
                                     }
                                 } }
                             />
-                            { learnsetDeckNameError && (
-                                <p className="text-sm text-destructive mt-1">{ learnsetDeckNameError }</p>
-                            ) }
                         </Field>
                     </FieldGroup>
                     <FieldGroup className="flex flex-row justify-end gap-2">
                         <Field orientation="horizontal" className="w-auto">
                             <Button
                                 type="submit"
-                                disabled={
-                                    isSaving || isSubmitting || !learnsetDeckName.trim() || pokemonList.length === 0
-                                }
+                                disabled={ isSaving || isSubmitting }
                             >
                                 { isSaving ? (
                                     <span className="inline-flex items-center gap-2">
