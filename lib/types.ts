@@ -45,3 +45,7 @@ export type LearnsetDeckItem = {
     versionGroupDisplayName: string,
     sortOrder: number
 }
+
+export type DuplicateLearnsetResult =
+    | { ok: true, deckId: string }
+    | { ok: false, message: string }

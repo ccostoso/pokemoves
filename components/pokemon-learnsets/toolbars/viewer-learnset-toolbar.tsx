@@ -5,6 +5,7 @@ import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplic
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CopyCheck } from "lucide-react"
+import { DuplicateLearnsetResult } from "@/lib/types"
 
 type ViewerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
@@ -18,20 +19,32 @@ export function ViewerLearnsetToolbar({
     const { data: session } = authClient.useSession()
     const [isOpen, setIsOpen] = useState(false)
 
-    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<DuplicateLearnsetResult> => {
         const userId = session?.user?.id
 
         if (!userId) {
-            throw new Error("You must be logged in to duplicate this learnset.")
+            return { ok: false, message: "You must be logged in to duplicate this learnset." }
         }
 
-        return onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
+        if (!session?.user.emailVerified) {
+            return {
+                ok: false,
+                message: "You must verify your email before duplicating this learnset. Please check your inbox for the verification email.",
+            }
+        }
+
+        try {
+            const deckId = await onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
+            return { ok: true, deckId }
+        } catch (error) {
+            return {
+                ok: false,
+                message: error instanceof Error ? error.message : "Failed to duplicate this learnset.",
+            }
+        }
     }
 
-    const handleOnClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event.preventDefault()
-        setIsOpen(true)
-    }
+    const handleOpenDuplicateDialog = () => setIsOpen(true)
 
     return (
         <div className="flex flex-col p-4 border-b">
@@ -51,7 +64,7 @@ export function ViewerLearnsetToolbar({
                     { session?.user && (
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
-                                <Button type="button" onClick={ handleOnClick }>
+                                <Button type="button" onClick={ handleOpenDuplicateDialog }>
                                     <CopyCheck className="mr-2" />
                                     Save as duplicate
                                 </Button>

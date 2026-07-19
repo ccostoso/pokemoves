@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Spinner } from "@/components/ui/spinner"
 import { SaveAsDuplicateSchema, SaveAsDuplicateSchemaType } from "@/lib/schemas"
+import { DuplicateLearnsetResult } from "@/lib/types"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
@@ -24,7 +25,7 @@ import { toast } from "sonner"
 type SaveAsDuplicateDialogProps = {
     open: boolean,
     onOpenChange: (open: boolean) => void,
-    onCreateDuplicateLearnsetDeckWithChanges: (learnsetName: string) => Promise<string>
+    onCreateDuplicateLearnsetDeckWithChanges: (learnsetName: string) => Promise<DuplicateLearnsetResult>
 }
 
 export default function SaveAsDuplicateDialog({
@@ -46,14 +47,21 @@ export default function SaveAsDuplicateDialog({
         setIsSaving(true)
 
         try {
-            const duplicatedDeckId = await onCreateDuplicateLearnsetDeckWithChanges(learnsetName)
+            const duplicateResult = await onCreateDuplicateLearnsetDeckWithChanges(learnsetName)
+
+            if (!duplicateResult.ok) {
+                toast.error(duplicateResult.message, {
+                    position: "top-center",
+                })
+                return
+            }
 
             toast.success("Duplicate learnset saved successfully!", {
                 position: "top-center",
             })
             onOpenChange(false)
             form.reset()
-            router.push(`/deck/${duplicatedDeckId}`)
+            router.push(`/deck/${duplicateResult.deckId}`)
         } catch (error) {
             toast.error("Failed to save duplicate learnset.", {
                 description: error instanceof Error ? error.message : "Unknown error",
