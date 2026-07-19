@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { SubmitEventHandler, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { Button } from "@/components/ui/button"
@@ -10,6 +11,7 @@ import { Input } from "@/components/ui/input"
 import { toast } from "sonner"
 
 export default function DeleteAccountForm() {
+    const router = useRouter()
     const [ isDeleting, setIsDeleting ] = useState(false)
     const [ password, setPassword ] = useState("")
 
@@ -33,6 +35,7 @@ export default function DeleteAccountForm() {
             console.error("Error deleting user:", error)
         } finally {
             setIsDeleting(false)
+            router.push("/")
         }
     }
 
