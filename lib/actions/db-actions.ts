@@ -11,6 +11,9 @@ export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDec
     if (!session?.user?.id) {
         throw new Error("User is not authenticated.")
     }
+    if (!session.user.emailVerified) {
+        throw new Error("You must verify your email before saving or duplicating a learnset deck.")
+    }
 
     const userId = session.user.id
 

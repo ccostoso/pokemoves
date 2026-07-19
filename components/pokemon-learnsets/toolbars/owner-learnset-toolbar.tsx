@@ -73,6 +73,13 @@ export function OwnerLearnsetToolbar({
             return { ok: false, message: "You must be logged in to duplicate this learnset." }
         }
 
+        if (!session?.user.emailVerified) {
+            return {
+                ok: false,
+                message: "You must verify your email before duplicating this learnset. Please check your inbox for the verification email.",
+            }
+        }
+
         try {
             const deckId = duplicateMode === "current"
                 ? await onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)

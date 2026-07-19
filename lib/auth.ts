@@ -10,7 +10,6 @@ import { buildVerificationEmail } from "./email/verification-email"
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 const from = process.env.RESEND_FROM_EMAIL
-if (!from) throw new Error("RESEND_FROM_EMAIL is not defined. Email sending will not work without it.")
 
 export const auth = betterAuth({
     database: prismaAdapter(prisma, {
@@ -39,6 +38,12 @@ export const auth = betterAuth({
         sendVerificationEmail: async ({ user, url }) => {
             after(async () => {
                 const { subject, html, text } = buildVerificationEmail(url)
+                if (!from) {
+                    console.error("RESEND_FROM_EMAIL is not defined. Verification email was not sent.", {
+                        email: user.email,
+                    })
+                    return
+                }
 
                 try {
                     await resend.emails.send({
