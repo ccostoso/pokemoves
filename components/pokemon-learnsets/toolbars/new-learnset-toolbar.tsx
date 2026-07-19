@@ -22,7 +22,6 @@ type NewLearnsetToolbarProps = {
 export function NewLearnsetToolbar({
     learnsets,
     onClearLearnsetsFromDeck,
-    pokemonList,
     isSubmitting,
 }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
@@ -37,6 +36,12 @@ export function NewLearnsetToolbar({
 
         if (!session?.user) {
             toast.error("You must be logged in to save a learnset deck.", { position: "top-center" })
+            setIsSaving(false)
+            return
+        }
+
+        if (!session?.user.emailVerified) {
+            toast.error("You must verify your email before saving a learnset deck. Please check your inbox for the verification email.", { position: "top-center" })
             setIsSaving(false)
             return
         }
@@ -78,7 +83,7 @@ export function NewLearnsetToolbar({
     }
 
     const handleClearLearnsetsFromDeck = (event: React.MouseEvent<HTMLButtonElement>) => {
-        event?.preventDefault()
+        event.preventDefault()
         onClearLearnsetsFromDeck()
         toast.success("Learnset panel cleared.", { position: "top-center" })
     }

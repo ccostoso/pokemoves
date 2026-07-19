@@ -11,6 +11,7 @@ import { authClient } from "@/lib/auth-client"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
 import ConfirmDeleteLearnsetDeckDialog from "@/app/deck/[deckId]/components/confirm-delete-learnset-deck-dialog"
 import { toast } from "sonner"
+import { DuplicateLearnsetResult } from "@/lib/types"
 
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
@@ -65,19 +66,24 @@ export function OwnerLearnsetToolbar({
         }
     }
 
-    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<string> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<DuplicateLearnsetResult> => {
         const userId = session?.user?.id
 
         if (!userId) {
-            toast.error("You must be logged in to duplicate this learnset.", { position: "top-center" })
-            throw new Error("You must be logged in to duplicate this learnset.")
+            return { ok: false, message: "You must be logged in to duplicate this learnset." }
         }
 
-        switch (duplicateMode) {
-            case "current":
-                return onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
-            case "original":
-                return onCreateDuplicateRevertedLearnsetDeck(userId, learnsetName)
+        try {
+            const deckId = duplicateMode === "current"
+                ? await onCreateDuplicateLearnsetDeckWithChanges(userId, learnsetName)
+                : await onCreateDuplicateRevertedLearnsetDeck(userId, learnsetName)
+
+            return { ok: true, deckId }
+        } catch (error) {
+            return {
+                ok: false,
+                message: error instanceof Error ? error.message : "Failed to duplicate this learnset.",
+            }
         }
     }
 
