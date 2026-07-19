@@ -38,6 +38,12 @@ export const auth = betterAuth({
         sendVerificationEmail: async ({ user, url }) => {
             after(async () => {
                 const { subject, html, text } = buildVerificationEmail(url)
+                if (!process.env.RESEND_API_KEY) {
+                    console.error("RESEND_API_KEY is not defined. Verification email was not sent.", {
+                        email: user.email,
+                    })
+                    return
+                }
                 if (!from) {
                     console.error("RESEND_FROM_EMAIL is not defined. Verification email was not sent.", {
                         email: user.email,
