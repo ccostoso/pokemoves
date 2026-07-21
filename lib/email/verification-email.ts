@@ -1,10 +1,6 @@
-type VerificationEmailTemplate = {
-    subject: string,
-    html: string,
-    text: string
-}
+import { EmailTemplate } from "../types"
 
-export function buildVerificationEmail(url: string): VerificationEmailTemplate {
+export function buildVerificationEmail(url: string): EmailTemplate {
     const subject = "Verify your email"
 
     const html = `

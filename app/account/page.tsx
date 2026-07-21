@@ -7,11 +7,11 @@ import DeleteAccountForm from "./components/delete-account-form"
 
 export default async function UserPage() {
     let session: Awaited<ReturnType<typeof getServerSession>> | null = null
-    let authFailed = false
+
     try {
         session = await getServerSession()
     } catch (error) {
-        authFailed = true
+        console.error("Error fetching session:", error)
     }
 
     if (!session?.user) {

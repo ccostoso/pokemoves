@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import SignUpForm from "./components/sign-up-form"
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { User } from "lucide-react"
 
 export default function SignUpPage() {
@@ -58,8 +58,11 @@ export default function SignUpPage() {
     return (
         <div className="flex min-h-screen flex-col items-center justify-center">
             <Card className="w-full max-w-md mx-auto">
-                <CardHeader className="text-center text-2xl font-bold">
-                    <h1>Create an account</h1>
+                <CardHeader>
+                    <CardTitle>Sign Up</CardTitle>
+                    <CardDescription>
+                        Create an account to get started. You can sign up with your email address and password.
+                    </CardDescription>
                 </CardHeader>
                 <CardContent>
                     <SignUpForm
@@ -75,7 +78,6 @@ export default function SignUpPage() {
                         corner to sign in.
                     </p>
                 </CardFooter>
-                { /* </div> */ }
             </Card>
         </div>
     )

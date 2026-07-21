@@ -123,6 +123,17 @@ export default function SignInDialog({ open, onOpenChange }: SignInDialogProps) 
                                 </Link>
                                 .
                             </p>
+                            <p className="text-muted-foreground">
+                                Forgot your password?{ " " }
+                                <Link
+                                    href="/reset-password"
+                                    className="text-primary hover:underline"
+                                    onClick={ () => onOpenChange(false) }
+                                >
+                                    Click here to reset it
+                                </Link>
+                                .
+                            </p>
                         </div>
                         <DialogFooter>
                             <DialogClose asChild>

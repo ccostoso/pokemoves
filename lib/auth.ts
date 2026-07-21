@@ -7,6 +7,7 @@ import { after } from "next/server"
 import { Resend } from "resend"
 import { buildVerificationEmail } from "./email/verification-email"
 import { buildPasswordResetEmail } from "./email/reset-password-email"
+import { buildChangeEmailAddressEmail } from "./email/change-email-address-email"
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
@@ -30,12 +31,14 @@ export const auth = betterAuth({
         sendResetPassword: async ({ user, url }) => {
             after(async () => {
                 const { subject, html, text } = buildPasswordResetEmail(url)
+                
                 if (!process.env.RESEND_API_KEY) {
                     console.error("RESEND_API_KEY is not defined. Password reset email was not sent.", {
                         email: user.email,
                     })
                     return
                 }
+
                 if (!from) {
                     console.error("RESEND_FROM_EMAIL is not defined. Password reset email was not sent.", {
                         email: user.email,
@@ -68,6 +71,47 @@ export const auth = betterAuth({
     user: {
         deleteUser: {
             enabled: true,
+        },
+        changeEmail: {
+            enabled: true,
+            sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+                after(async () => {
+                    if (!process.env.RESEND_API_KEY) {
+                        console.error("RESEND_API_KEY is not defined. Change email confirmation was not sent.", {
+                            email: user.email,
+                            newEmail,
+                        })
+                        return
+                    }
+
+                    if (!from) {
+                        console.error("RESEND_FROM_EMAIL is not defined. Change email confirmation was not sent.", {
+                            email: user.email,
+                            newEmail,
+                        })
+                        return
+                    }
+
+                    const { subject, html, text } = buildChangeEmailAddressEmail(url, user.email, newEmail)
+
+                    try {
+                        await resend.emails.send({
+                            from,
+                            to: user.email,
+                            subject,
+                            html,
+                            text,
+                        })
+                    } catch (error) {
+                        console.error("Failed to send change email confirmation", {
+                            email: user.email,
+                            newEmail,
+                            error,
+                        })
+                    }
+                })
+            },
+            updateEmailWithoutVerification: false,
         },
         additionalFields: {
             role: {

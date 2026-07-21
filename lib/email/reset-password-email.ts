@@ -1,10 +1,6 @@
-type PasswordResetEmailTemplate = {
-    subject: string,
-    html: string,
-    text: string
-}
+import { EmailTemplate } from "../types"
 
-export function buildPasswordResetEmail(url: string): PasswordResetEmailTemplate {
+export function buildPasswordResetEmail(url: string): EmailTemplate {
     const subject = "Reset your password"
 
     const html = `
