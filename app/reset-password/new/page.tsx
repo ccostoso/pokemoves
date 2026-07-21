@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter, useSearchParams } from "next/navigation"
-import { SubmitEventHandler, useMemo, useState } from "react"
+import { SubmitEventHandler, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
 import { authClient } from "@/lib/auth-client"
 import {
@@ -29,6 +29,16 @@ export default function SetNewPasswordPage() {
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [isSubmitting, setIsSubmitting] = useState(false)
+
+    useEffect(() => {
+        if (!token) {
+            router.replace("/reset-password")
+        }
+    }, [token, router])
+
+    if (!token) {
+        return null
+    }
 
     const handleSetNewPassword: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
