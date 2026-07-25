@@ -9,8 +9,11 @@ import { buildVerificationEmail } from "./email/verification-email"
 import { buildPasswordResetEmail } from "./email/reset-password-email"
 import { buildChangeEmailAddressEmail } from "./email/change-email-address-email"
 
+let resend: Resend | undefined
+
 function getResendClient() {
-    return new Resend(process.env.RESEND_API_KEY)
+    resend ??= new Resend(process.env.RESEND_API_KEY)
+    return resend
 }
 
 const from = process.env.RESEND_FROM_EMAIL
