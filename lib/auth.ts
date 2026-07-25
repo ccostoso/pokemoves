@@ -9,7 +9,9 @@ import { buildVerificationEmail } from "./email/verification-email"
 import { buildPasswordResetEmail } from "./email/reset-password-email"
 import { buildChangeEmailAddressEmail } from "./email/change-email-address-email"
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+function getResendClient() {
+    return new Resend(process.env.RESEND_API_KEY)
+}
 
 const from = process.env.RESEND_FROM_EMAIL
 
@@ -47,7 +49,7 @@ export const auth = betterAuth({
                 }
 
                 try {
-                    await resend.emails.send({
+                    await getResendClient().emails.send({
                         from,
                         to: user.email,
                         subject,
@@ -95,7 +97,7 @@ export const auth = betterAuth({
                     const { subject, html, text } = buildChangeEmailAddressEmail(url, user.email, newEmail)
 
                     try {
-                        await resend.emails.send({
+                        await getResendClient().emails.send({
                             from,
                             to: user.email,
                             subject,
@@ -143,7 +145,7 @@ export const auth = betterAuth({
                 }
 
                 try {
-                    await resend.emails.send({
+                    await getResendClient().emails.send({
                         from,
                         to: user.email,
                         subject,
