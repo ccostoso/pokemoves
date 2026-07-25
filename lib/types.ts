@@ -49,3 +49,9 @@ export type LearnsetDeckItem = {
 export type DuplicateLearnsetResult =
     | { ok: true, deckId: string }
     | { ok: false, message: string }
+
+export type EmailTemplate = {
+    subject: string,
+    html: string,
+    text: string
+}
