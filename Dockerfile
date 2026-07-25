@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 FROM node:24-slim AS base
-RUN corepack enable
+RUN corepack enable && corepack prepare pnpm@11.17.0 --activate
 
 # deps
 FROM base AS deps
