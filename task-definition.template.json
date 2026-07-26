@@ -1,0 +1,45 @@
+{
+    "family": "pokemoves",
+    "networkMode": "awsvpc",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "512",
+    "memory": "1024",
+    "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/pokemovesExecutionRole",
+    "containerDefinitions": [
+        {
+            "name": "pokemoves",
+            "image": "<ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/pokemoves:latest",
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "protocol": "tcp"
+                }
+            ],
+            "essential": true,
+            "secrets": [
+                {
+                    "name": "DATABASE_URL",
+                    "valueFrom": "arn:aws:ssm:us-east-1:<ACCOUNT_ID>:parameter/pokemoves/database-url"
+                },
+                {
+                    "name": "BETTER_AUTH_SECRET",
+                    "valueFrom": "arn:aws:ssm:us-east-1:<ACCOUNT_ID>:parameter/pokemoves/better-auth-secret"
+                },
+                {
+                    "name": "RESEND_API_KEY",
+                    "valueFrom": "arn:aws:ssm:us-east-1:<ACCOUNT_ID>:parameter/pokemoves/resend-api-key"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/pokemoves",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                }
+            }
+        }
+    ]
+}
