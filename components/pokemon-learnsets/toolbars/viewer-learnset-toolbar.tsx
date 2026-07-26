@@ -28,8 +28,8 @@ export function ViewerLearnsetToolbar({
     // authClient.useSession(), a client-only hook — the server always renders without a session, 
     // but if the client already has a cached session synchronously available, it renders that extra 
     // FieldGroup during hydration itself, mismatching the server HTML.
-    // Therefore, we use useSyncExternalStore to ensure that the component is only rendered on the client side, 
-    // after hydration, when the session is available.
+    // Therefore, we gate the "Save as duplicate" FieldGroup behind a mount check so it only appears after hydration.
+    // This prevents server/client HTML mismatches when the client has a cached session available during hydration.
     const isMounted = useSyncExternalStore(
         emptySubscribe,
         () => true,
