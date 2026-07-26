@@ -18,6 +18,12 @@
                 }
             ],
             "essential": true,
+            "environment": [
+                {
+                    "name": "BETTER_AUTH_URL",
+                    "value": "http://<ALB_DNS_NAME>"
+                }
+            ],
             "secrets": [
                 {
                     "name": "DATABASE_URL",
