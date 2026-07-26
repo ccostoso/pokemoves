@@ -61,3 +61,4 @@ export default async function DeckPage({ params }: DeckPageProps) {
         </main>
     )
 }
+

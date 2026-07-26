@@ -1,8 +1,8 @@
 import { Field, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { authClient } from "@/lib/auth-client"
+import { useState, useSyncExternalStore } from "react"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { CopyCheck } from "lucide-react"
 import { DuplicateLearnsetResult } from "@/lib/types"
@@ -12,12 +12,29 @@ type ViewerLearnsetToolbarProps = {
     onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>
 }
 
+// This is a no-op subscribe function for useSyncExternalStore, since we don't need to subscribe to any external 
+// store in this case.
+const emptySubscribe = () => () => {}
+
 export function ViewerLearnsetToolbar({
     learnsetDeckName,
     onCreateDuplicateLearnsetDeckWithChanges,
 }: ViewerLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [isOpen, setIsOpen] = useState(false)
+
+    // viewer-learnset-toolbar.tsx conditionally renders a whole <FieldGroup> 
+    // (the "Save as duplicate" button) with { session?.user && (...) }. session comes from 
+    // authClient.useSession(), a client-only hook — the server always renders without a session, 
+    // but if the client already has a cached session synchronously available, it renders that extra 
+    // FieldGroup during hydration itself, mismatching the server HTML.
+    // Therefore, we gate the "Save as duplicate" FieldGroup behind a mount check so it only appears after hydration.
+    // This prevents server/client HTML mismatches when the client has a cached session available during hydration.
+    const isMounted = useSyncExternalStore(
+        emptySubscribe,
+        () => true,
+        () => false,
+    )
 
     const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<DuplicateLearnsetResult> => {
         const userId = session?.user?.id
@@ -61,7 +78,7 @@ export function ViewerLearnsetToolbar({
                             />
                         </Field>
                     </FieldGroup>
-                    { session?.user && (
+                    { isMounted && session?.user && (
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
                                 <Button type="button" onClick={ handleOpenDuplicateDialog }>
