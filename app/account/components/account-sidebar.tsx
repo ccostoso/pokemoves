@@ -49,15 +49,35 @@ const SidebarOptions: { href: string, icon: ReactNode, label: string }[] = [
     },
 ]
 
-export default function AccountSidebar() {
+type AccountSidebarUser = {
+    name: string | null,
+    username: string | null
+}
+
+type AccountSidebarProps = {
+    initialUser: AccountSidebarUser | null
+}
+
+export default function AccountSidebar({ initialUser }: AccountSidebarProps) {
     const pathname = usePathname()
-    const { data: session } = authClient.useSession()
+    const { data: session, isPending } = authClient.useSession()
+
+    // Use server-provided user only while client session status is still pending.
+    // Once resolved, trust client session state (including logged-out/null).
+    const effectiveUser: AccountSidebarUser | null = isPending
+        ? initialUser
+        : session?.user
+            ? {
+                name: session.user.name ?? null,
+                username: session.user.username ?? null,
+            }
+            : null
 
     return (
         <aside className="w-56 shrink-0 self-stretch p-4 flex flex-col gap-4">
             <div className="px-2">
-                <p className="text-sm font-semibold">@{ session?.user?.username }</p>
-                <p className="text-muted-foreground">{ session?.user?.name }</p>
+                <p className="text-sm font-semibold">@{ effectiveUser?.username }</p>
+                <p className="text-muted-foreground">{ effectiveUser?.name }</p>
             </div>
 
             <nav className="flex flex-col gap-4">
