@@ -42,3 +42,5 @@ next-env.d.ts
 
 /generated/prisma
 task-definition.json
+trust-policy.json
+aws-resources.md

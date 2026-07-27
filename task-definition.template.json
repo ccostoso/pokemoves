@@ -22,6 +22,14 @@
                 {
                     "name": "BETTER_AUTH_URL",
                     "value": "http://<ALB_DNS_NAME>"
+                },
+                {
+                    "name": "RESEND_FROM_EMAIL",
+                    "value": "<EMAIL_ADDRESS>"
+                },
+                {
+                    "name": "NEXT_PUBLIC_POKEAPI_SCHEMA_MODE",
+                    "value": "v1beta2"
                 }
             ],
             "secrets": [
