@@ -24,8 +24,8 @@ services:
         environment:
             DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
         depends_on:
-            - postgres:
-                  condition: service_healthy
+            postgres:
+                condition: service_healthy
 
 volumes:
     postgres_data:

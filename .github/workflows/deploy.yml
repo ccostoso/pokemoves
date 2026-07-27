@@ -1,0 +1,90 @@
+name: Deploy to ECS
+
+on:
+    push:
+        branches: [main]
+
+permissions:
+    id-token: write # required for OIDC
+    contents: read
+
+env:
+    AWS_REGION: us-east-1
+    ECR_REPOSITORY: pokemoves
+    ECS_CLUSTER: pokemoves-cluster
+    ECS_SERVICE: pokemoves-service
+    ECS_TASK_FAMILY: pokemoves
+    CONTAINER_NAME: pokemoves
+
+concurrency:
+    group: ecs-deploy-${{ github.ref }}
+    cancel-in-progress: false
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Configure AWS credentials via OIDC
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+                  aws-region: ${{ env.AWS_REGION }}
+
+            - name: Login to Amazon ECR
+              id: login-ecr
+              uses: aws-actions/amazon-ecr-login@v2
+
+            - name: Build and push image
+              id: build-image
+              env:
+                  ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+                  IMAGE_TAG: ${{ github.sha }}
+              run: |
+                  docker buildx build --platform linux/amd64 \
+                    -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+                    -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+                    --push .
+                  echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> "$GITHUB_OUTPUT"
+
+            - name: Set up Node
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 24
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Run database migrations
+              env:
+                  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+              run: pnpm prisma migrate deploy
+
+            - name: Download current task definition
+              run: |
+                  aws ecs describe-task-definition \
+                    --task-definition ${{ env.ECS_TASK_FAMILY }} \
+                    --query taskDefinition \
+                    > task-definition.json
+
+            - name: Render new task definition with updated image
+              id: render-task-def
+              uses: aws-actions/amazon-ecs-render-task-definition@v1
+              with:
+                  task-definition: task-definition.json
+                  container-name: ${{ env.CONTAINER_NAME }}
+                  image: ${{ steps.build-image.outputs.image }}
+
+            - name: Deploy new task definition to ECS service
+              uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+              with:
+                  task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+                  service: ${{ env.ECS_SERVICE }}
+                  cluster: ${{ env.ECS_CLUSTER }}
+                  wait-for-service-stability: true
