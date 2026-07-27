@@ -16,6 +16,10 @@ env:
     ECS_TASK_FAMILY: pokemoves
     CONTAINER_NAME: pokemoves
 
+concurrency:
+    group: ecs-deploy-${{ github.ref }}
+    cancel-in-progress: false
+
 jobs:
     deploy:
         runs-on: ubuntu-latest
