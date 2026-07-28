@@ -53,7 +53,7 @@ export function buildVerificationEmail(url: string): EmailTemplate {
         `Verification link: ${url}`,
         "",
         "If you did not create an account, you can safely ignore this email.",
-    ].join("\\n")
+    ].join("\n")
 
     return {
         subject,

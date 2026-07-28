@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { FormEvent, useMemo, useState } from "react"
+import { SubmitEvent, useMemo, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { UsernameEmailUpdateSchema } from "@/lib/schemas"
 import { toast } from "sonner"
@@ -12,19 +12,23 @@ import { toast } from "sonner"
 export default function UsernameEmailChangeForm({ name, email }: { name: string, email: string }) {
     const [ newName, setNewName ] = useState(name)
     const [ newEmail, setNewEmail ] = useState(email)
+    const [ confirmEmail, setConfirmEmail ] = useState("")
     const [ isUpdating, setIsUpdating ] = useState(false)
 
     const nameChanged = useMemo(() => newName.trim() !== name, [newName, name])
     const emailChanged = useMemo(() => newEmail.trim().toLowerCase() !== email.toLowerCase(), [newEmail, email])
     const hasChanges = nameChanged || emailChanged
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!hasChanges) return
 
         const parsedFormData = UsernameEmailUpdateSchema.safeParse({
             name: newName,
             email: newEmail,
+            // Only require confirmEmail to actually match when the email is changing;
+            // otherwise a name-only update shouldn't be blocked by an untouched, empty field.
+            confirmEmail: emailChanged ? confirmEmail : newEmail,
         })
 
         if (!parsedFormData.success) {
@@ -54,10 +58,17 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                     callbackURL: "/account",
                 })
             }
-
-            toast.success("User information updated successfully.", {
-                position: "top-center",
-            })
+            
+            if (shouldUpdateName) {
+                toast.success("User information updated successfully.", {
+                    position: "top-center",
+                })
+            }
+            if (shouldUpdateEmail) {
+                toast.success(`Email change request sent. Please check your inbox at ${email} to confirm the request. After confirming, you\'ll receive a second email at ${validatedEmail} to verify the new address and complete the change.`, {
+                    position: "top-center",
+                })
+            }
         } catch (error) {
             toast.error("Error updating user information.", {
                 position: "top-center",
@@ -101,6 +112,19 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                                     />
                                     <FieldDescription>
                                         This is the email that will be used for account-related notifications and login.
+                                    </FieldDescription>
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor="confirm-email">Confirm Email</FieldLabel>
+                                    <Input
+                                        id="confirm-email"
+                                        type="email"
+                                        value={ confirmEmail }
+                                        onChange={ (e) => setConfirmEmail(e.target.value) }
+                                        className="w-full rounded-md border border-muted-foreground p-2"
+                                    />
+                                    <FieldDescription>
+                                        Confirm your new email address to ensure it is entered correctly. This helps prevent typos and ensures you receive important account notifications.
                                     </FieldDescription>
                                 </Field>
                             </FieldGroup>

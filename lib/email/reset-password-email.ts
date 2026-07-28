@@ -53,7 +53,7 @@ export function buildPasswordResetEmail(url: string): EmailTemplate {
         `Reset link: ${url}`,
         "",
         "If you did not request this reset, you can safely ignore this email.",
-    ].join("\\n")
+    ].join("\n")
 
     return {
         subject,

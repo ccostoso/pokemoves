@@ -83,6 +83,13 @@ export const UsernameEmailUpdateSchema = z.object({
         .email({ message: "Invalid email address" })
         .trim()
         .transform((value) => value.toLowerCase()),
+    confirmEmail: z
+        .email({ message: "Invalid email address" })
+        .trim()
+        .transform((value) => value.toLowerCase()),
+}).refine((data) => data.email === data.confirmEmail, {
+    message: "Email and confirm email do not match",
+    path: ["confirmEmail"],
 })
 
 export type UsernameEmailUpdateSchemaType = z.infer<typeof UsernameEmailUpdateSchema>
