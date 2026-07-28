@@ -12,6 +12,7 @@ import { toast } from "sonner"
 export default function UsernameEmailChangeForm({ name, email }: { name: string, email: string }) {
     const [ newName, setNewName ] = useState(name)
     const [ newEmail, setNewEmail ] = useState(email)
+    const [ confirmEmail, setConfirmEmail ] = useState("")
     const [ isUpdating, setIsUpdating ] = useState(false)
 
     const nameChanged = useMemo(() => newName.trim() !== name, [newName, name])
@@ -25,6 +26,9 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
         const parsedFormData = UsernameEmailUpdateSchema.safeParse({
             name: newName,
             email: newEmail,
+            // Only require confirmEmail to actually match when the email is changing;
+            // otherwise a name-only update shouldn't be blocked by an untouched, empty field.
+            confirmEmail: emailChanged ? confirmEmail : newEmail,
         })
 
         if (!parsedFormData.success) {
@@ -108,6 +112,19 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                                     />
                                     <FieldDescription>
                                         This is the email that will be used for account-related notifications and login.
+                                    </FieldDescription>
+                                </Field>
+                                <Field>
+                                    <FieldLabel htmlFor="confirm-email">Confirm Email</FieldLabel>
+                                    <Input
+                                        id="confirm-email"
+                                        type="email"
+                                        value={ confirmEmail }
+                                        onChange={ (e) => setConfirmEmail(e.target.value) }
+                                        className="w-full rounded-md border border-muted-foreground p-2"
+                                    />
+                                    <FieldDescription>
+                                        Confirm your new email address to ensure it is entered correctly. This helps prevent typos and ensures you receive important account notifications.
                                     </FieldDescription>
                                 </Field>
                             </FieldGroup>
