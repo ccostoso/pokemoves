@@ -7,7 +7,7 @@ import { after } from "next/server"
 import { Resend } from "resend"
 import { buildVerificationEmail } from "./email/verification-email"
 import { buildPasswordResetEmail } from "./email/reset-password-email"
-import { buildChangeEmailAddressEmail } from "./email/change-email-address-email"
+import { buildEmailChangeVerificationEmail } from "./email/change-email-address-email"
 
 let resend: Resend | undefined
 
@@ -79,43 +79,6 @@ export const auth = betterAuth({
         },
         changeEmail: {
             enabled: true,
-            sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
-                after(async () => {
-                    if (!process.env.RESEND_API_KEY) {
-                        console.error("RESEND_API_KEY is not defined. Change email confirmation was not sent.", {
-                            email: user.email,
-                            newEmail,
-                        })
-                        return
-                    }
-
-                    if (!from) {
-                        console.error("RESEND_FROM_EMAIL is not defined. Change email confirmation was not sent.", {
-                            email: user.email,
-                            newEmail,
-                        })
-                        return
-                    }
-
-                    const { subject, html, text } = buildChangeEmailAddressEmail(url, user.email, newEmail)
-
-                    try {
-                        await getResendClient().emails.send({
-                            from,
-                            to: user.email,
-                            subject,
-                            html,
-                            text,
-                        })
-                    } catch (error) {
-                        console.error("Failed to send change email confirmation", {
-                            email: user.email,
-                            newEmail,
-                            error,
-                        })
-                    }
-                })
-            },
             updateEmailWithoutVerification: false,
         },
         additionalFields: {
@@ -133,7 +96,14 @@ export const auth = betterAuth({
         autoSignInAfterVerification: true,
         sendVerificationEmail: async ({ user, url }) => {
             after(async () => {
-                const { subject, html, text } = buildVerificationEmail(url)
+                // better-auth also calls this handler for changeEmail's final step
+                // (confirming the new address). A brand-new sign-up always has
+                // emailVerified: false, whereas an existing account going through
+                // changeEmail always has emailVerified: true - use that to tell them apart.
+                const isEmailChange = user.emailVerified
+                const { subject, html, text } = isEmailChange
+                    ? buildEmailChangeVerificationEmail(url, user.email)
+                    : buildVerificationEmail(url)
                 if (!process.env.RESEND_API_KEY) {
                     console.error("RESEND_API_KEY is not defined. Verification email was not sent.", {
                         email: user.email,

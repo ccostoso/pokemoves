@@ -1,31 +1,31 @@
 import { EmailTemplate } from "../types"
 
-export function buildChangeEmailAddressEmail(url: string, currentEmail: string, newEmail: string): EmailTemplate {
-    const subject = "Confirm your email change"
-    
+export function buildEmailChangeVerificationEmail(url: string, newEmail: string): EmailTemplate {
+    const subject = "Confirm your new email address"
+
     const html = `
     <!doctype html>
     <html lang="en">
         <head>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <title>Confirm Email Change</title>
+            <title>Confirm Your New Email</title>
         </head>
         <body style="margin:0;padding:24px;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#111827;">
             <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;margin:0 auto;background-color:#ffffff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;">
                 <tr>
                     <td style="padding:24px 24px 8px 24px;">
-                        <h1 style="margin:0;font-size:22px;line-height:1.25;color:#111827;">Confirm your email change</h1>
+                        <h1 style="margin:0;font-size:22px;line-height:1.25;color:#111827;">Confirm your new email address</h1>
                     </td>
                 </tr>
                 <tr>
                     <td style="padding:8px 24px 0 24px;font-size:15px;line-height:1.6;color:#374151;">
-                        We received a request to change your Pokémoves account email from <strong>${currentEmail}</strong> to <strong>${newEmail}</strong>.
+                        You requested to change your Pokémoves account email to <strong>${newEmail}</strong>. Click below to confirm this address.
                     </td>
                 </tr>
                 <tr>
                     <td style="padding:24px;">
-                        <a href="${url}" style="display:inline-block;background-color:#111827;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;line-height:1;padding:12px 16px;border-radius:8px;">Confirm email change</a>
+                        <a href="${url}" style="display:inline-block;background-color:#111827;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;line-height:1;padding:12px 16px;border-radius:8px;">Confirm new email</a>
                     </td>
                 </tr>
                 <tr>
@@ -46,20 +46,18 @@ export function buildChangeEmailAddressEmail(url: string, currentEmail: string, 
                         `
 
     const text = [
-        "We received a request to change your Pokémoves account email.",
+        "Confirm your new email address",
         "",
-        `Current email: ${currentEmail}`,
-        `New email: ${newEmail}`,
+        `You requested to change your Pokémoves account email to ${newEmail}. Use the link below to confirm this address.`,
         "",
-        "Confirm the change using this link:",
         url,
         "",
-        "If you did not request this change, you can ignore this email.",
+        "If you did not request this change, you can safely ignore this email.",
     ].join("\\n")
-    
+
     return {
         subject,
         html,
-        text
+        text,
     }
 }

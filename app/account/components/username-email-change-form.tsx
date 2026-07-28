@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { FormEvent, useMemo, useState } from "react"
+import { SubmitEvent, useMemo, useState } from "react"
 import { authClient } from "@/lib/auth-client"
 import { UsernameEmailUpdateSchema } from "@/lib/schemas"
 import { toast } from "sonner"
@@ -18,7 +18,7 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
     const emailChanged = useMemo(() => newEmail.trim().toLowerCase() !== email.toLowerCase(), [newEmail, email])
     const hasChanges = nameChanged || emailChanged
 
-    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
         if (!hasChanges) return
 
@@ -54,10 +54,17 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                     callbackURL: "/account",
                 })
             }
-
-            toast.success("User information updated successfully.", {
-                position: "top-center",
-            })
+            
+            if (shouldUpdateName) {
+                toast.success("User information updated successfully.", {
+                    position: "top-center",
+                })
+            }
+            if (shouldUpdateEmail) {
+                toast.success(`Email change request sent. Please check your inbox at ${validatedEmail} for a verification email to complete the change.`, {
+                    position: "top-center",
+                })
+            }
         } catch (error) {
             toast.error("Error updating user information.", {
                 position: "top-center",
