@@ -65,7 +65,7 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                 })
             }
             if (shouldUpdateEmail) {
-                toast.success(`Email change request sent. Please check your inbox at ${validatedEmail} for a verification email to complete the change.`, {
+                toast.success(`Email change request sent. Please check your inbox at ${email} to confirm the request. After confirming, you\'ll receive a second email at ${validatedEmail} to verify the new address and complete the change.`, {
                     position: "top-center",
                 })
             }
