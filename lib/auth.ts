@@ -7,7 +7,7 @@ import { after } from "next/server"
 import { Resend } from "resend"
 import { buildVerificationEmail } from "./email/verification-email"
 import { buildPasswordResetEmail } from "./email/reset-password-email"
-import { buildEmailChangeVerificationEmail } from "./email/change-email-address-email"
+import { buildChangeEmailAddressEmail, buildEmailChangeVerificationEmail } from "./email/change-email-address-email"
 
 let resend: Resend | undefined
 
@@ -79,6 +79,43 @@ export const auth = betterAuth({
         },
         changeEmail: {
             enabled: true,
+            sendChangeEmailConfirmation: async ({ user, newEmail, url }) => {
+                after(async () => {
+                    if (!process.env.RESEND_API_KEY) {
+                        console.error("RESEND_API_KEY is not defined. Change email confirmation was not sent.", {
+                            email: user.email,
+                            newEmail,
+                        })
+                        return
+                    }
+
+                    if (!from) {
+                        console.error("RESEND_FROM_EMAIL is not defined. Change email confirmation was not sent.", {
+                            email: user.email,
+                            newEmail,
+                        })
+                        return
+                    }
+
+                    const { subject, html, text } = buildChangeEmailAddressEmail(url, user.email, newEmail)
+
+                    try {
+                        await getResendClient().emails.send({
+                            from,
+                            to: user.email,
+                            subject,
+                            html,
+                            text,
+                        })
+                    } catch (error) {
+                        console.error("Failed to send change email confirmation", {
+                            email: user.email,
+                            newEmail,
+                            error,
+                        })
+                    }
+                })
+            },
             updateEmailWithoutVerification: false,
         },
         additionalFields: {
