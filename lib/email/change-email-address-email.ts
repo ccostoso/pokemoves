@@ -70,11 +70,13 @@ export function buildChangeEmailAddressEmail(url: string, currentEmail: string, 
         `Current email: ${currentEmail}`,
         `New email: ${newEmail}`,
         "",
+        "NOTE: Once you confirm this change, a second email will be sent to the new email address to verify it. Please check your inbox and follow the instructions in that email to complete the change. The change will not be finalized until the new email address is verified.",
+        "",
         "Confirm the change using this link:",
         url,
         "",
         "If you did not request this change, you can ignore this email.",
-    ].join("\\n")
+    ].join("\n")
 
     return {
         subject,
@@ -136,7 +138,7 @@ export function buildEmailChangeVerificationEmail(url: string, newEmail: string)
         url,
         "",
         "If you did not request this change, you can safely ignore this email.",
-    ].join("\\n")
+    ].join("\n")
 
     return {
         subject,
