@@ -6,74 +6,49 @@ import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/com
 import { Input } from "@/components/ui/input"
 import { SubmitEvent, useMemo, useState } from "react"
 import { authClient } from "@/lib/auth-client"
-import { UsernameEmailUpdateSchema } from "@/lib/schemas"
+import { EmailUpdateSchema } from "@/lib/schemas"
 import { toast } from "sonner"
 
-export default function UsernameEmailChangeForm({ name, email }: { name: string, email: string }) {
-    const [ newName, setNewName ] = useState(name)
+export default function EmailChangeForm({ email }: { email: string }) {
     const [ newEmail, setNewEmail ] = useState(email)
     const [ confirmEmail, setConfirmEmail ] = useState("")
     const [ isUpdating, setIsUpdating ] = useState(false)
 
-    const nameChanged = useMemo(() => newName.trim() !== name, [newName, name])
     const emailChanged = useMemo(() => newEmail.trim().toLowerCase() !== email.toLowerCase(), [newEmail, email])
-    const hasChanges = nameChanged || emailChanged
 
     const handleSubmit = async (e: SubmitEvent<HTMLFormElement>) => {
         e.preventDefault()
-        if (!hasChanges) return
+        if (!emailChanged) return
 
-        const parsedFormData = UsernameEmailUpdateSchema.safeParse({
-            name: newName,
+        const parsedFormData = EmailUpdateSchema.safeParse({
             email: newEmail,
-            // Only require confirmEmail to actually match when the email is changing;
-            // otherwise a name-only update shouldn't be blocked by an untouched, empty field.
-            confirmEmail: emailChanged ? confirmEmail : newEmail,
+            confirmEmail,
         })
 
         if (!parsedFormData.success) {
-            toast.error(parsedFormData.error.issues[0]?.message ?? "Invalid name or email.", {
+            toast.error(parsedFormData.error.issues[0]?.message ?? "Invalid email.", {
                 position: "top-center",
             })
             return
         }
 
-        const validatedName = parsedFormData.data.name
         const validatedEmail = parsedFormData.data.email
-        const shouldUpdateName = validatedName !== name.trim()
-        const shouldUpdateEmail = validatedEmail !== email.trim().toLowerCase()
-
-        if (!shouldUpdateName && !shouldUpdateEmail) {
-            return
-        }
 
         try {
             setIsUpdating(true)
-            if (shouldUpdateName) {
-                await authClient.updateUser({ name: validatedName })
-            }
-            if (shouldUpdateEmail) {
-                await authClient.changeEmail({ 
-                    newEmail: validatedEmail,
-                    callbackURL: "/account",
-                })
-            }
-            
-            if (shouldUpdateName) {
-                toast.success("User information updated successfully.", {
-                    position: "top-center",
-                })
-            }
-            if (shouldUpdateEmail) {
-                toast.success(`Email change request sent. Please check your inbox at ${email} to confirm the request. After confirming, you\'ll receive a second email at ${validatedEmail} to verify the new address and complete the change.`, {
-                    position: "top-center",
-                })
-            }
-        } catch (error) {
-            toast.error("Error updating user information.", {
+            await authClient.changeEmail({
+                newEmail: validatedEmail,
+                callbackURL: "/account",
+            })
+
+            toast.success(`If ${validatedEmail} is available, we've sent a confirmation link to ${email} to continue the change. If nothing arrives within a few minutes, that address may already be in use.`, {
                 position: "top-center",
             })
-            console.error("Error updating user:", error)
+        } catch (error) {
+            toast.error("Error updating email.", {
+                position: "top-center",
+            })
+            console.error("Error updating email:", error)
         } finally {
             setIsUpdating(false)
         }
@@ -82,25 +57,12 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
 
     return (
         <section className="mt-6 space-y-4">
-            <h2 className="text-2xl font-bold">Name and Email</h2>
+            <h2 className="text-2xl font-bold">Change Email</h2>
             <Card className="max-w-1/2">
                 <CardContent>
-                    <form id="username-email-form" onSubmit={ handleSubmit }>
+                    <form id="email-change-form" onSubmit={ handleSubmit }>
                         <FieldSet className="space-y-2">
                             <FieldGroup>
-                                <Field>
-                                    <FieldLabel htmlFor="name">Name</FieldLabel>
-                                    <Input
-                                        id="name"
-                                        type="text"
-                                        value={ newName }
-                                        onChange={ (e) => setNewName(e.target.value) }
-                                        className="w-full rounded-md border border-muted-foreground p-2"
-                                    />
-                                    <FieldDescription>
-                                        This is the name that will be displayed on your profile and in your account settings.
-                                    </FieldDescription>
-                                </Field>
                                 <Field>
                                     <FieldLabel htmlFor="email">Email</FieldLabel>
                                     <Input
@@ -124,7 +86,7 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                                         className="w-full rounded-md border border-muted-foreground p-2"
                                     />
                                     <FieldDescription>
-                                        Confirm your new email address to ensure it is entered correctly. This helps prevent typos and ensures you receive important account notifications.
+                                        Confirm your new email address. A confirmation email will be sent to your current address; once confirmed, a second email will be sent to your new address to verify the change.
                                     </FieldDescription>
                                 </Field>
                             </FieldGroup>
@@ -134,8 +96,8 @@ export default function UsernameEmailChangeForm({ name, email }: { name: string,
                 <CardFooter className="justify-end gap-2">
                     <Button
                         type="submit"
-                        form="username-email-form"
-                        disabled={ isUpdating || !hasChanges }
+                        form="email-change-form"
+                        disabled={ isUpdating || !emailChanged }
                     >
                         { isUpdating ? "Saving..." : "Save Changes" }
                     </Button>

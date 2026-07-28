@@ -73,12 +73,17 @@ export const SaveAsDuplicateSchema = z.object({
 
 export type SaveAsDuplicateSchemaType = z.infer<typeof SaveAsDuplicateSchema>
 
-export const UsernameEmailUpdateSchema = z.object({
+export const NameUpdateSchema = z.object({
     name: z
         .string()
         .trim()
         .min(1, { message: "Name is required" })
         .max(50, { message: "Name must be at most 50 characters long" }),
+})
+
+export type NameUpdateSchemaType = z.infer<typeof NameUpdateSchema>
+
+export const EmailUpdateSchema = z.object({
     email: z
         .email({ message: "Invalid email address" })
         .trim()
@@ -92,7 +97,7 @@ export const UsernameEmailUpdateSchema = z.object({
     path: ["confirmEmail"],
 })
 
-export type UsernameEmailUpdateSchemaType = z.infer<typeof UsernameEmailUpdateSchema>
+export type EmailUpdateSchemaType = z.infer<typeof EmailUpdateSchema>
 
 export const PasswordChangeSchema = z
     .object({

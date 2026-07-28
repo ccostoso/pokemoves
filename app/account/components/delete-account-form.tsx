@@ -42,7 +42,7 @@ export default function DeleteAccountForm() {
 
     return (
         <section className="mt-6 space-y-4">
-            <h2 className="text-2xl font-bold text-destructive">Danger Zone</h2>
+            <h2 className="text-2xl font-bold text-destructive">Delete Account</h2>
             <Card className="max-w-1/2">
                 <CardHeader>
                     <p className="text-sm text-muted-foreground">
