@@ -10,6 +10,9 @@
         "lint:fix": "eslint --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
         "shadd": "pnpm dlx shadcn@latest add",
         "studio": "prisma studio --browser \"google chrome\""
     },
