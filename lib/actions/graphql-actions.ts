@@ -84,7 +84,7 @@ type RawLevelUpResponse = {
 
 // --- Mapping functions ---
 
-const mapPokemonListResponse = (response: RawPokemonListResponse): PokemonListItem[] => {
+export const mapPokemonListResponse = (response: RawPokemonListResponse): PokemonListItem[] => {
     const pokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
 
     return pokemon.map((p) => ({
@@ -97,7 +97,7 @@ const mapPokemonListResponse = (response: RawPokemonListResponse): PokemonListIt
     }))
 }
 
-const mapLevelUpResponse = (response: RawLevelUpResponse, versionGroupName: string): LevelUpLearnset => {
+export const mapLevelUpResponse = (response: RawLevelUpResponse, versionGroupName: string): LevelUpLearnset => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
     const fallbackSpecies = (response.pokemonspecy ?? response.pokemon_v2_pokemonspecy ?? [])[0]
 
