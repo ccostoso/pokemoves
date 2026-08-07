@@ -1,5 +1,5 @@
 import { gql } from "graphql-request"
-import { POKEAPI_SCHEMA_MODE } from "../graphql-client"
+import { POKEAPI_SCHEMA_MODE } from "../graphql/graphql-client"
 
 const GET_POKEMON_BY_VERSIONGROUP_NAME_V1BETA = gql`
     query getPokemonByVersionGroupName($versionGroupName: String!) {

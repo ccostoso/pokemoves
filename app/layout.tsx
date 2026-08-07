@@ -5,7 +5,7 @@ import Navbar from "@/components/navbar/navbar"
 import { ThemeProvider } from "next-themes"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { Toaster } from "@/components/ui/sonner"
-import { getServerSession } from "@/lib/auth-server"
+import { getServerSession } from "@/lib/auth/auth-server"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",

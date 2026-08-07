@@ -3,7 +3,7 @@
 import { prisma } from "@/lib/prisma"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
 import { LearnsetDeckItem } from "@/lib/types"
-import { getServerSession } from "@/lib/auth-server"
+import { getServerSession } from "@/lib/auth/auth-server"
 import { revalidatePath } from "next/cache"
 
 export async function createLearnsetDeck(name: string, learnsetDeck: LearnsetDeckItem[]): Promise<string> {

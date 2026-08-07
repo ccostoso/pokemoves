@@ -1,6 +1,6 @@
 import { SubmitEventHandler, useState } from "react"
 import { LevelUpLearnset, PokemonListItem } from "@/lib/types"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import { Input } from "../ui/input"
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"

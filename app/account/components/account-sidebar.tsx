@@ -5,7 +5,7 @@ import { Columns3, User } from "lucide-react"
 import Link from "next/link"
 import { ReactNode } from "react"
 import { usePathname } from "next/navigation"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 
 function SidebarNavLink({
     href,

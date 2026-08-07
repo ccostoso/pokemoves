@@ -1,4 +1,4 @@
-import { getServerSession } from "@/lib/auth-server"
+import { getServerSession } from "@/lib/auth/auth-server"
 import NameChangeForm from "./components/name-change-form"
 import EmailChangeForm from "./components/email-change-form"
 import PasswordChangeForm from "./components/password-change-form"
