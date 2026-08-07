@@ -31,6 +31,11 @@ jobs:
 
         env:
             DATABASE_URL: postgresql://postgres:postgres@localhost:5432/pokemoves_test?schema=public
+            # Build-only placeholders: never used to send email or authenticate real users in CI
+            BETTER_AUTH_SECRET: ci-placeholder-secret
+            BETTER_AUTH_URL: http://localhost:3000
+            RESEND_API_KEY: ci-placeholder-key
+            RESEND_FROM_EMAIL: test@example.com
 
         steps:
             - name: Checkout code
@@ -59,3 +64,6 @@ jobs:
 
             - name: Integration tests
               run: pnpm test:integration
+
+            - name: Build
+              run: pnpm build
