@@ -1,5 +1,5 @@
 import { gql } from "graphql-request"
-import { POKEAPI_SCHEMA_MODE } from "../graphql-client"
+import { POKEAPI_SCHEMA_MODE } from "../graphql/graphql-client"
 
 const GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP_V1BETA = gql`
     query getLevelUpMovesByPokemonNameAndVersionGroup($pokemonName: String!, $versionGroupName: String!) {

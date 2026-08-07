@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { SubmitEventHandler, useEffect, useMemo, useState } from "react"
 import { toast } from "sonner"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import {
     Card,
     CardContent,

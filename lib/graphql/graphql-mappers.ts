@@ -1,4 +1,4 @@
-import { LevelUpLearnset, PokemonListItem } from "./types"
+import { LevelUpLearnset, PokemonListItem } from "../types"
 
 // --- Shared primitives ---
 

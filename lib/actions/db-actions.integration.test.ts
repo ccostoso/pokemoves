@@ -5,7 +5,7 @@ import { LearnsetDeckItem } from "@/lib/types"
 const getServerSessionMock = vi.hoisted(() => vi.fn())
 const revalidatePathMock = vi.hoisted(() => vi.fn())
 
-vi.mock("@/lib/auth-server", () => ({ getServerSession: getServerSessionMock }))
+vi.mock("@/lib/auth/auth-server", () => ({ getServerSession: getServerSessionMock }))
 vi.mock("next/cache", () => ({ revalidatePath: revalidatePathMock }))
 
 const {

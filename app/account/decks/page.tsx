@@ -1,4 +1,4 @@
-import { getServerSession } from "@/lib/auth-server"
+import { getServerSession } from "@/lib/auth/auth-server"
 import { getAllLearnsetDecksWithLearnsetDeckItemsByUserId } from "@/lib/actions/db-actions"
 import { notFound } from "next/navigation"
 import Link from "next/link"

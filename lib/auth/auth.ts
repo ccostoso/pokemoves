@@ -1,13 +1,13 @@
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
-import { prisma } from "./prisma"
+import { prisma } from "../prisma"
 import { username } from "better-auth/plugins/username"
 import { admin } from "better-auth/plugins/admin"
 import { after } from "next/server"
 import { Resend } from "resend"
-import { buildVerificationEmail } from "./email/verification-email"
-import { buildPasswordResetEmail } from "./email/reset-password-email"
-import { buildChangeEmailAddressEmail, buildEmailChangeVerificationEmail } from "./email/change-email-address-email"
+import { buildVerificationEmail } from "../email/verification-email"
+import { buildPasswordResetEmail } from "../email/reset-password-email"
+import { buildChangeEmailAddressEmail, buildEmailChangeVerificationEmail } from "../email/change-email-address-email"
 
 let resend: Resend | undefined
 

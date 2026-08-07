@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const gqlRequestMock = vi.hoisted(() => vi.fn())
 
-vi.mock("@/lib/graphql-client", () => ({ gqlClient: { request: gqlRequestMock }, POKEAPI_SCHEMA_MODE: "v1beta" }))
+vi.mock("@/lib/graphql/graphql-client", () => ({ gqlClient: { request: gqlRequestMock }, POKEAPI_SCHEMA_MODE: "v1beta" }))
 vi.mock("next/cache", () => ({ unstable_cache: (fn: unknown) => fn }))
 
 const {

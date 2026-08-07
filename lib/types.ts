@@ -1,4 +1,4 @@
-import { LocalizedName } from "./graphql-mappers"
+import { LocalizedName } from "./graphql/graphql-mappers"
 
 // --- Normalized output types for frontend ---
 

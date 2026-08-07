@@ -11,7 +11,7 @@ import {
     DropdownMenuTrigger,
 } from "../ui/dropdown-menu"
 import NavbarExpandableButton from "./navbar-expandable-button"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 

@@ -5,7 +5,7 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet, FieldLabel, FieldDescription } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { SubmitEvent, useMemo, useState } from "react"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import { EmailUpdateSchema } from "@/lib/schemas"
 import { toast } from "sonner"
 

@@ -1,6 +1,6 @@
 import { Field, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import { useState, useSyncExternalStore } from "react"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
 import { Button } from "@/components/ui/button"

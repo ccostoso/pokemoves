@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation"
 import { SubmitEventHandler, useState } from "react"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Field, FieldGroup, FieldSet } from "@/components/ui/field"

@@ -23,7 +23,7 @@ const getServerSessionMock = vi.hoisted(() => vi.fn())
 const revalidatePathMock = vi.hoisted(() => vi.fn())
 
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }))
-vi.mock("@/lib/auth-server", () => ({ getServerSession: getServerSessionMock }))
+vi.mock("@/lib/auth/auth-server", () => ({ getServerSession: getServerSessionMock }))
 vi.mock("next/cache", () => ({ revalidatePath: revalidatePathMock }))
 
 const {

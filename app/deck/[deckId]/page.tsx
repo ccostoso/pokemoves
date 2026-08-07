@@ -1,7 +1,7 @@
 import SearchShell from "@/components/search-shell"
 import { getLearnsetDeckMetadataById, getLearnsetDeckItemById } from "@/lib/actions/db-actions"
 import { getLevelUpMovesByPokemonNameAndVersionGroup } from "@/lib/actions/graphql-actions"
-import { getServerSession } from "@/lib/auth-server"
+import { getServerSession } from "@/lib/auth/auth-server"
 import { createLearnsetInstanceId, getNextLearnsetOccurrence } from "@/lib/utils"
 import { notFound } from "next/navigation"
 

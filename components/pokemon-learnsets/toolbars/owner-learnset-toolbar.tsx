@@ -7,7 +7,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 import { BrushCleaning, ChevronDownIcon, CopyCheck, CopyX, Save, Trash, Undo } from "lucide-react"
 import { SubmitEventHandler, useState } from "react"
 import { useRouter } from "next/navigation"
-import { authClient } from "@/lib/auth-client"
+import { authClient } from "@/lib/auth/auth-client"
 import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplicate-dialog"
 import ConfirmDeleteLearnsetDeckDialog from "@/app/deck/[deckId]/components/confirm-delete-learnset-deck-dialog"
 import { toast } from "sonner"

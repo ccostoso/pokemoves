@@ -1,5 +1,5 @@
 import AccountSidebar from "@/app/account/components/account-sidebar"
-import { getServerSession } from "@/lib/auth-server"
+import { getServerSession } from "@/lib/auth/auth-server"
 
 export const dynamic = 'force-dynamic'
 

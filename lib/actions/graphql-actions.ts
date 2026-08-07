@@ -1,6 +1,6 @@
 "use server"
 
-import { gqlClient } from "../graphql-client"
+import { gqlClient } from "../graphql/graphql-client"
 import { GET_POKEMON_BY_VERSIONGROUP_NAME, GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP } from "../queries"
 
 import { unstable_cache } from "next/cache"
@@ -11,7 +11,7 @@ import {
     mapPokemonListResponse,
     RawLevelUpResponse,
     RawPokemonListResponse,
-} from "../graphql-mappers"
+} from "../graphql/graphql-mappers"
 
 // --- Exported server actions ---
 
