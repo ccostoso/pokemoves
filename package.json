@@ -13,6 +13,8 @@
         "test": "vitest run",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
+        "test:integration": "vitest run --config vitest.integration.config.mts",
+        "test:integration:watch": "vitest --config vitest.integration.config.mts",
         "shadd": "pnpm dlx shadcn@latest add",
         "studio": "prisma studio --browser \"google chrome\""
     },
