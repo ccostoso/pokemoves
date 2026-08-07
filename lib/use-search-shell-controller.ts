@@ -14,7 +14,7 @@ import { SubmitEventHandler, useEffect, useMemo, useReducer, useRef } from "reac
 
 type RequestState = { status: "idle" } | { status: "loading" } | { status: "error", message: string }
 
-type SearchShellState = {
+export type SearchShellState = {
     pokemonList: PokemonListItem[],
     versionGroupName: string,
     pokemonName: string,
@@ -24,7 +24,7 @@ type SearchShellState = {
     isPokemonListLoading: boolean
 }
 
-type SearchShellAction =
+export type SearchShellAction =
     | { type: "versionGroupChanged", versionGroupName: string }
     | { type: "pokemonNameChanged", pokemonName: string }
     | { type: "pokemonListLoading" }
@@ -73,7 +73,7 @@ type UseSearchShellControllerReturn = {
     handleReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
-function searchShellReducer(state: SearchShellState, action: SearchShellAction): SearchShellState {
+export function searchShellReducer(state: SearchShellState, action: SearchShellAction): SearchShellState {
     switch (action.type) {
         case "versionGroupChanged":
             return {

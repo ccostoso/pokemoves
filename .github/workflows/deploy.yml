@@ -1,7 +1,9 @@
 name: Deploy to ECS
 
 on:
-    push:
+    workflow_run:
+        workflows: [CI]
+        types: [completed]
         branches: [main]
 
 permissions:
@@ -23,10 +25,15 @@ concurrency:
 jobs:
     deploy:
         runs-on: ubuntu-latest
+        # Only deploy once CI has passed on main; skip on CI failure/cancellation
+        if: github.event.workflow_run.conclusion == 'success'
 
         steps:
             - name: Checkout code
               uses: actions/checkout@v6
+              with:
+                  # Deploy the exact commit CI validated, not main's current HEAD
+                  ref: ${{ github.event.workflow_run.head_sha }}
 
             - name: Configure AWS credentials via OIDC
               uses: aws-actions/configure-aws-credentials@v6
@@ -42,7 +49,7 @@ jobs:
               id: build-image
               env:
                   ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-                  IMAGE_TAG: ${{ github.sha }}
+                  IMAGE_TAG: ${{ github.event.workflow_run.head_sha }}
               run: |
                   docker buildx build --platform linux/amd64 \
                     -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
