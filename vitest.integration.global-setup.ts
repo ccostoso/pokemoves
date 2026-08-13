@@ -2,6 +2,7 @@ import { execSync } from "node:child_process"
 import fs from "node:fs"
 import path from "node:path"
 import { parse } from "dotenv"
+import { assertDisposableTestDatabase } from "./vitest.integration.db-guard"
 
 // Runs once before the integration suite starts (separate process from the test workers,
 // so it resolves DATABASE_URL independently rather than relying on vitest's `test.env`).
@@ -17,6 +18,8 @@ export default function setup() {
                 "running `pnpm test:integration`.",
         )
     }
+
+    assertDisposableTestDatabase(databaseUrl)
 
     execSync("pnpm exec prisma migrate deploy", {
         stdio: "inherit",

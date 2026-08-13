@@ -1,5 +1,8 @@
 import { afterAll, afterEach } from "vitest"
 import { prisma } from "@/lib/prisma"
+import { assertDisposableTestDatabase } from "./vitest.integration.db-guard"
+
+assertDisposableTestDatabase(`${process.env.DATABASE_URL}`)
 
 afterEach(async () => {
     // Wipe all app tables between tests so each test starts from a clean slate
