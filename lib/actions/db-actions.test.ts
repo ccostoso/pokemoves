@@ -35,7 +35,7 @@ const {
     deleteLearnsetDeck,
 } = await import("./db-actions")
 
-function makeSession(overrides: { id?: string, emailVerified?: boolean } = {}) {
+function makeSession(overrides: { id?: string; emailVerified?: boolean } = {}) {
     return {
         user: {
             id: overrides.id ?? "user-1",
@@ -72,9 +72,7 @@ describe("createLearnsetDeck", () => {
     it("throws when there is no session", async () => {
         getServerSessionMock.mockResolvedValue(null)
 
-        await expect(createLearnsetDeck("My Deck", [makeDeckItem()])).rejects.toThrow(
-            "User is not authenticated.",
-        )
+        await expect(createLearnsetDeck("My Deck", [makeDeckItem()])).rejects.toThrow("User is not authenticated.")
         expect(prismaMock.learnsetDeck.create).not.toHaveBeenCalled()
     })
 

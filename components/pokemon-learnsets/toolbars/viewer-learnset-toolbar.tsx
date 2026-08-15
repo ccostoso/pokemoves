@@ -8,11 +8,11 @@ import { CopyCheck } from "lucide-react"
 import { DuplicateLearnsetResult } from "@/lib/types"
 
 type ViewerLearnsetToolbarProps = {
-    learnsetDeckName?: string | null,
+    learnsetDeckName?: string | null
     onCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>
 }
 
-// This is a no-op subscribe function for useSyncExternalStore, since we don't need to subscribe to any external 
+// This is a no-op subscribe function for useSyncExternalStore, since we don't need to subscribe to any external
 // store in this case.
 const emptySubscribe = () => () => {}
 
@@ -23,10 +23,10 @@ export function ViewerLearnsetToolbar({
     const { data: session } = authClient.useSession()
     const [isOpen, setIsOpen] = useState(false)
 
-    // viewer-learnset-toolbar.tsx conditionally renders a whole <FieldGroup> 
-    // (the "Save as duplicate" button) with { session?.user && (...) }. session comes from 
-    // authClient.useSession(), a client-only hook — the server always renders without a session, 
-    // but if the client already has a cached session synchronously available, it renders that extra 
+    // viewer-learnset-toolbar.tsx conditionally renders a whole <FieldGroup>
+    // (the "Save as duplicate" button) with { session?.user && (...) }. session comes from
+    // authClient.useSession(), a client-only hook — the server always renders without a session,
+    // but if the client already has a cached session synchronously available, it renders that extra
     // FieldGroup during hydration itself, mismatching the server HTML.
     // Therefore, we gate the "Save as duplicate" FieldGroup behind a mount check so it only appears after hydration.
     // This prevents server/client HTML mismatches when the client has a cached session available during hydration.
@@ -36,7 +36,9 @@ export function ViewerLearnsetToolbar({
         () => false,
     )
 
-    const handleCreateDuplicateLearnsetDeckWithChanges = async (learnsetName: string): Promise<DuplicateLearnsetResult> => {
+    const handleCreateDuplicateLearnsetDeckWithChanges = async (
+        learnsetName: string,
+    ): Promise<DuplicateLearnsetResult> => {
         const userId = session?.user?.id
 
         if (!userId) {
@@ -46,7 +48,8 @@ export function ViewerLearnsetToolbar({
         if (!session?.user.emailVerified) {
             return {
                 ok: false,
-                message: "You must verify your email before duplicating this learnset. Please check your inbox for the verification email.",
+                message:
+                    "You must verify your email before duplicating this learnset. Please check your inbox for the verification email.",
             }
         }
 
@@ -73,28 +76,28 @@ export function ViewerLearnsetToolbar({
                                 id="learnset-name"
                                 type="text"
                                 placeholder="Learnset Name..."
-                                value={ learnsetDeckName ?? "" }
+                                value={learnsetDeckName ?? ""}
                                 disabled
                             />
                         </Field>
                     </FieldGroup>
-                    { isMounted && session?.user && (
+                    {isMounted && session?.user && (
                         <FieldGroup className="flex flex-row justify-end gap-2">
                             <Field orientation="horizontal" className="w-auto">
-                                <Button type="button" onClick={ handleOpenDuplicateDialog }>
+                                <Button type="button" onClick={handleOpenDuplicateDialog}>
                                     <CopyCheck className="mr-2" />
                                     Save as duplicate
                                 </Button>
                                 <SaveAsDuplicateDialog
-                                    open={ isOpen }
-                                    onOpenChange={ setIsOpen }
+                                    open={isOpen}
+                                    onOpenChange={setIsOpen}
                                     onCreateDuplicateLearnsetDeckWithChanges={
                                         handleCreateDuplicateLearnsetDeckWithChanges
                                     }
                                 />
                             </Field>
                         </FieldGroup>
-                    ) }
+                    )}
                 </FieldSet>
             </form>
         </div>

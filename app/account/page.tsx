@@ -6,7 +6,6 @@ import { notFound } from "next/navigation"
 import DeleteAccountForm from "./components/delete-account-form"
 import { Separator } from "@/components/ui/separator"
 
-
 export default async function UserPage() {
     let session: Awaited<ReturnType<typeof getServerSession>> | null = null
 
@@ -17,7 +16,7 @@ export default async function UserPage() {
     }
 
     if (!session?.user) {
-        notFound() 
+        notFound()
     }
 
     const { user } = session
@@ -29,8 +28,8 @@ export default async function UserPage() {
     return (
         <main className="container mx-auto p-4 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
-            <NameChangeForm name={ user.name ?? "" } />
-            <EmailChangeForm email={ user.email } />
+            <NameChangeForm name={user.name ?? ""} />
+            <EmailChangeForm email={user.email} />
             <PasswordChangeForm />
             <Separator className="my-8" />
             <h1 className="text-4xl font-bold text-destructive">Danger Zone</h1>

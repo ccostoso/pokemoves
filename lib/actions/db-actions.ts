@@ -81,7 +81,7 @@ export async function getLearnsetDeckItemById(deckId: string): Promise<LearnsetD
     }))
 }
 
-export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ userId: string, name: string } | null> {
+export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ userId: string; name: string } | null> {
     const learnsetDeck = await prisma.learnsetDeck.findUnique({
         where: { id: deckId },
         select: { userId: true, name: true },
@@ -92,7 +92,7 @@ export async function getLearnsetDeckMetadataById(deckId: string): Promise<{ use
 
 export async function getAllLearnsetDecksWithLearnsetDeckItemsByUserId(
     userId: string,
-): Promise<{ id: string, name: string, updatedAt: Date, items: LearnsetDeckItem[] }[]> {
+): Promise<{ id: string; name: string; updatedAt: Date; items: LearnsetDeckItem[] }[]> {
     const learnsetDecks = await prisma.learnsetDeck.findMany({
         where: { userId },
         select: {

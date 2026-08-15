@@ -3,7 +3,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { versionGroupList } from "@/lib/data/versiongroup-list"
 
 type VersionInputProps = {
-    value: string,
+    value: string
     onChange: (value: string) => void
 }
 
@@ -11,17 +11,17 @@ export default function VersionInput({ value, onChange }: VersionInputProps) {
     return (
         <Field>
             <FieldLabel htmlFor="include-forms">Game Version</FieldLabel>
-            <Select value={ value } onValueChange={ onChange }>
+            <Select value={value} onValueChange={onChange}>
                 <SelectTrigger>
                     <SelectValue placeholder="Choose a version" />
                 </SelectTrigger>
                 <SelectContent>
                     <SelectGroup>
-                        { versionGroupList.map((version) => (
-                            <SelectItem key={ version.id } value={ version.apiName }>
-                                { version.name }
+                        {versionGroupList.map((version) => (
+                            <SelectItem key={version.id} value={version.apiName}>
+                                {version.name}
                             </SelectItem>
-                        )) }
+                        ))}
                     </SelectGroup>
                 </SelectContent>
             </Select>

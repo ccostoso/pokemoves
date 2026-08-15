@@ -5,9 +5,9 @@ import Image from "next/image"
 import { Item } from "@/components/ui/item"
 
 type DeckItemPreview = {
-    sortOrder: number,
-    pokemonId: number,
-    pokemonDisplayName: string,
+    sortOrder: number
+    pokemonId: number
+    pokemonDisplayName: string
     versionGroupDisplayName: string
 }
 
@@ -57,31 +57,27 @@ export function DeckItemsPreview({ items }: DeckItemsPreviewProps) {
 
     return (
         <div className="relative">
-            <ul
-                ref={ scrollerRef }
-                className="flex gap-2 overflow-x-auto pb-2 pr-2"
-                aria-label="Deck item preview"
-            >
-                { items.map((item) => (
-                    <li key={ item.sortOrder } className="shrink-0">
+            <ul ref={scrollerRef} className="flex gap-2 overflow-x-auto pb-2 pr-2" aria-label="Deck item preview">
+                {items.map((item) => (
+                    <li key={item.sortOrder} className="shrink-0">
                         <Item variant="outline" className="flex flex-col items-center gap-2 p-2">
                             <Image
-                                src={ `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.pokemonId}.png` }
-                                alt={ item.pokemonDisplayName }
-                                width={ 96 }
-                                height={ 96 }
+                                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item.pokemonId}.png`}
+                                alt={item.pokemonDisplayName}
+                                width={96}
+                                height={96}
                             />
-                            <p className="text-sm text-muted-foreground">{ item.versionGroupDisplayName }</p>
+                            <p className="text-sm text-muted-foreground">{item.versionGroupDisplayName}</p>
                         </Item>
                     </li>
-                )) }
+                ))}
             </ul>
-            { showLeftFade && (
+            {showLeftFade && (
                 <div className="pointer-events-none absolute inset-y-0 left-0 w-16 bg-linear-to-r from-card to-transparent" />
-            ) }
-            { showRightFade && (
+            )}
+            {showRightFade && (
                 <div className="pointer-events-none absolute inset-y-0 right-0 w-16 bg-linear-to-l from-card to-transparent" />
-            ) }
+            )}
         </div>
     )
 }

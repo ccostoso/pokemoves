@@ -10,8 +10,8 @@ import { NameUpdateSchema } from "@/lib/schemas"
 import { toast } from "sonner"
 
 export default function NameChangeForm({ name }: { name: string }) {
-    const [ newName, setNewName ] = useState(name)
-    const [ isUpdating, setIsUpdating ] = useState(false)
+    const [newName, setNewName] = useState(name)
+    const [isUpdating, setIsUpdating] = useState(false)
 
     const nameChanged = useMemo(() => newName.trim() !== name, [newName, name])
 
@@ -53,7 +53,7 @@ export default function NameChangeForm({ name }: { name: string }) {
             <h2 className="text-2xl font-bold">Change Display Name</h2>
             <Card className="max-w-1/2">
                 <CardContent>
-                    <form id="name-change-form" onSubmit={ handleSubmit }>
+                    <form id="name-change-form" onSubmit={handleSubmit}>
                         <FieldSet className="space-y-2">
                             <FieldGroup>
                                 <Field>
@@ -61,12 +61,13 @@ export default function NameChangeForm({ name }: { name: string }) {
                                     <Input
                                         id="name"
                                         type="text"
-                                        value={ newName }
-                                        onChange={ (e) => setNewName(e.target.value) }
+                                        value={newName}
+                                        onChange={(e) => setNewName(e.target.value)}
                                         className="w-full rounded-md border border-muted-foreground p-2"
                                     />
                                     <FieldDescription>
-                                        This is the name that will be displayed on your profile and in your account settings.
+                                        This is the name that will be displayed on your profile and in your account
+                                        settings.
                                     </FieldDescription>
                                 </Field>
                             </FieldGroup>
@@ -74,12 +75,8 @@ export default function NameChangeForm({ name }: { name: string }) {
                     </form>
                 </CardContent>
                 <CardFooter className="justify-end gap-2">
-                    <Button
-                        type="submit"
-                        form="name-change-form"
-                        disabled={ isUpdating || !nameChanged }
-                    >
-                        { isUpdating ? "Saving..." : "Save Changes" }
+                    <Button type="submit" form="name-change-form" disabled={isUpdating || !nameChanged}>
+                        {isUpdating ? "Saving..." : "Save Changes"}
                     </Button>
                 </CardFooter>
             </Card>

@@ -4,20 +4,9 @@ import { useRouter } from "next/navigation"
 import { SubmitEventHandler, useState } from "react"
 import { toast } from "sonner"
 import { authClient } from "@/lib/auth/auth-client"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import {
-    Field,
-    FieldGroup,
-    FieldSet,
-} from "@/components/ui/field"
+import { Field, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -63,7 +52,7 @@ export default function ResetPasswordPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form id="reset-password-form" onSubmit={ handleResetPassword }>
+                    <form id="reset-password-form" onSubmit={handleResetPassword}>
                         <FieldSet>
                             <FieldGroup>
                                 <Field>
@@ -71,8 +60,8 @@ export default function ResetPasswordPage() {
                                     <Input
                                         type="email"
                                         id="reset-password-email"
-                                        value={ email }
-                                        onChange={ (e) => setEmail(e.target.value) }
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                         className="mt-1 block w-full"
                                     />
@@ -82,12 +71,8 @@ export default function ResetPasswordPage() {
                     </form>
                 </CardContent>
                 <CardFooter>
-                    <Button
-                        type="submit"
-                        form="reset-password-form"
-                        disabled={ isSubmitting }
-                    >
-                        { isSubmitting ? "Sending..." : "Send Reset Link" }
+                    <Button type="submit" form="reset-password-form" disabled={isSubmitting}>
+                        {isSubmitting ? "Sending..." : "Send Reset Link"}
                     </Button>
                 </CardFooter>
             </Card>

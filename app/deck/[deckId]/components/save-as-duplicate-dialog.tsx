@@ -23,8 +23,8 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
 type SaveAsDuplicateDialogProps = {
-    open: boolean,
-    onOpenChange: (open: boolean) => void,
+    open: boolean
+    onOpenChange: (open: boolean) => void
     onCreateDuplicateLearnsetDeckWithChanges: (learnsetName: string) => Promise<DuplicateLearnsetResult>
 }
 
@@ -74,20 +74,20 @@ export default function SaveAsDuplicateDialog({
 
     return (
         <Dialog
-            open={ open }
-            onOpenChange={ (open) => {
+            open={open}
+            onOpenChange={(open) => {
                 onOpenChange(open)
                 if (!open) {
                     form.reset()
                 }
-            } }
+            }}
         >
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Save as duplicate</DialogTitle>
                     <DialogDescription>Enter a name for the duplicate learnset.</DialogDescription>
                 </DialogHeader>
-                <form onSubmit={ form.handleSubmit(handleSave) }>
+                <form onSubmit={form.handleSubmit(handleSave)}>
                     <FieldSet>
                         <FieldGroup className="space-y-4 py-2 pb-4">
                             <Field orientation="vertical">
@@ -96,29 +96,29 @@ export default function SaveAsDuplicateDialog({
                                     id="duplicate-learnset-name"
                                     type="text"
                                     placeholder="Enter a name for the duplicate learnset"
-                                    maxLength={ 50 }
-                                    aria-invalid={ form.formState.errors.learnsetName ? true : undefined }
-                                    { ...form.register("learnsetName") }
-                                    disabled={ isSaving }
+                                    maxLength={50}
+                                    aria-invalid={form.formState.errors.learnsetName ? true : undefined}
+                                    {...form.register("learnsetName")}
+                                    disabled={isSaving}
                                 />
-                                { form.formState.errors.learnsetName && (
-                                    <FieldError>{ form.formState.errors.learnsetName.message }</FieldError>
-                                ) }
+                                {form.formState.errors.learnsetName && (
+                                    <FieldError>{form.formState.errors.learnsetName.message}</FieldError>
+                                )}
                             </Field>
                         </FieldGroup>
                         <DialogFooter>
-                            <Button type="submit" disabled={ isSaving }>
-                                { isSaving ? (
+                            <Button type="submit" disabled={isSaving}>
+                                {isSaving ? (
                                     <span className="inline-flex items-center gap-2">
                                         <Spinner className="size-4" />
                                         Saving...
                                     </span>
                                 ) : (
                                     "Save"
-                                ) }
+                                )}
                             </Button>
                             <DialogClose asChild>
-                                <Button variant="outline" disabled={ isSaving } onClick={ () => onOpenChange(false) }>
+                                <Button variant="outline" disabled={isSaving} onClick={() => onOpenChange(false)}>
                                     Cancel
                                 </Button>
                             </DialogClose>

@@ -1,14 +1,14 @@
 /**
- * This file contains functions to build email templates for changing a user's email address. The emails are sent 
- * to the user to confirm their email change request and to verify their new email address. The emails include both 
+ * This file contains functions to build email templates for changing a user's email address. The emails are sent
+ * to the user to confirm their email change request and to verify their new email address. The emails include both
  * HTML and plain text versions for compatibility with different email clients.
  *
- * The `buildChangeEmailAddressEmail()` function creates an email template for confirming the email change request, 
- * while the `buildEmailChangeVerificationEmail()` function creates an email template for verifying the new email 
- * address. Both functions take in the necessary parameters to customize the email content and return an object 
+ * The `buildChangeEmailAddressEmail()` function creates an email template for confirming the email change request,
+ * while the `buildEmailChangeVerificationEmail()` function creates an email template for verifying the new email
+ * address. Both functions take in the necessary parameters to customize the email content and return an object
  * containing the subject, HTML, and plain text versions of the email.
  *
- * The first email that a user will receive in this process is the `buildChangeEmailAddressEmail` email, which is 
+ * The first email that a user will receive in this process is the `buildChangeEmailAddressEmail` email, which is
  * sent to the user's current email address.
  */
 

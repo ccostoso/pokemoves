@@ -12,8 +12,8 @@ import { toast } from "sonner"
 
 export default function DeleteAccountForm() {
     const router = useRouter()
-    const [ isDeleting, setIsDeleting ] = useState(false)
-    const [ password, setPassword ] = useState("")
+    const [isDeleting, setIsDeleting] = useState(false)
+    const [password, setPassword] = useState("")
 
     const handleDeleteAccount: SubmitEventHandler<HTMLFormElement> = async (e) => {
         e.preventDefault()
@@ -39,7 +39,6 @@ export default function DeleteAccountForm() {
         }
     }
 
-
     return (
         <section className="mt-6 space-y-4">
             <h2 className="text-2xl font-bold text-destructive">Delete Account</h2>
@@ -50,7 +49,7 @@ export default function DeleteAccountForm() {
                     </p>
                 </CardHeader>
                 <CardContent>
-                    <form id="delete-account-form" onSubmit={ handleDeleteAccount }>
+                    <form id="delete-account-form" onSubmit={handleDeleteAccount}>
                         <FieldSet>
                             <FieldGroup>
                                 <Field>
@@ -60,8 +59,8 @@ export default function DeleteAccountForm() {
                                     <Input
                                         type="password"
                                         id="delete-account-password"
-                                        value={ password }
-                                        onChange={ (e) => setPassword(e.target.value) }
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                         required
                                         className="mt-1 block w-full border-destructive focus:border-destructive focus:ring-destructive"
                                     />
@@ -71,11 +70,8 @@ export default function DeleteAccountForm() {
                     </form>
                 </CardContent>
                 <CardFooter className="justify-end gap-2">
-                    <Button 
-                        type="submit" 
-                        form="delete-account-form" 
-                        disabled={ isDeleting || !password }>
-                        { isDeleting ? "Deleting..." : "Delete Account" }
+                    <Button type="submit" form="delete-account-form" disabled={isDeleting || !password}>
+                        {isDeleting ? "Deleting..." : "Delete Account"}
                     </Button>
                 </CardFooter>
             </Card>

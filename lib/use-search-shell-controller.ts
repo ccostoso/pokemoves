@@ -12,64 +12,64 @@ import {
 } from "./utils"
 import { SubmitEventHandler, useEffect, useMemo, useReducer, useRef } from "react"
 
-type RequestState = { status: "idle" } | { status: "loading" } | { status: "error", message: string }
+type RequestState = { status: "idle" } | { status: "loading" } | { status: "error"; message: string }
 
 export type SearchShellState = {
-    pokemonList: PokemonListItem[],
-    versionGroupName: string,
-    pokemonName: string,
-    learnsets: LevelUpLearnset[],
-    savedLearnsetSignature: string,
-    requestState: RequestState,
+    pokemonList: PokemonListItem[]
+    versionGroupName: string
+    pokemonName: string
+    learnsets: LevelUpLearnset[]
+    savedLearnsetSignature: string
+    requestState: RequestState
     isPokemonListLoading: boolean
 }
 
 export type SearchShellAction =
-    | { type: "versionGroupChanged", versionGroupName: string }
-    | { type: "pokemonNameChanged", pokemonName: string }
+    | { type: "versionGroupChanged"; versionGroupName: string }
+    | { type: "pokemonNameChanged"; pokemonName: string }
     | { type: "pokemonListLoading" }
-    | { type: "pokemonListLoaded", pokemonList: PokemonListItem[] }
+    | { type: "pokemonListLoaded"; pokemonList: PokemonListItem[] }
     | { type: "pokemonListFailed" }
     | { type: "addLearnsetToLearnsetDeckStarted" }
-    | { type: "addLearnsetToLearnsetDeckSucceeded", learnset: LevelUpLearnset }
-    | { type: "addLearnsetToLearnsetDeckFailed", message: string }
+    | { type: "addLearnsetToLearnsetDeckSucceeded"; learnset: LevelUpLearnset }
+    | { type: "addLearnsetToLearnsetDeckFailed"; message: string }
     | { type: "learnsetsClearedFromDeck" }
-    | { type: "learnsetRemovedFromDeck", indexToRemove: number }
-    | { type: "learnsetDeckReordered", fromIndex: number, toIndex: number }
+    | { type: "learnsetRemovedFromDeck"; indexToRemove: number }
+    | { type: "learnsetDeckReordered"; fromIndex: number; toIndex: number }
     | { type: "learnsetHydrationStarted" }
-    | { type: "learnsetHydrationSucceeded", learnsets: LevelUpLearnset[] }
-    | { type: "learnsetHydrationFailed", message: string }
-    | { type: "savedBaselineSynced", signature: string }
-    | { type: "learnsetReverted", learnsets: LevelUpLearnset[] }
+    | { type: "learnsetHydrationSucceeded"; learnsets: LevelUpLearnset[] }
+    | { type: "learnsetHydrationFailed"; message: string }
+    | { type: "savedBaselineSynced"; signature: string }
+    | { type: "learnsetReverted"; learnsets: LevelUpLearnset[] }
 
 type UseSearchShellControllerReturn = {
     // form state
-    pokemonList: PokemonListItem[],
-    versionGroupName: string,
-    pokemonName: string,
+    pokemonList: PokemonListItem[]
+    versionGroupName: string
+    pokemonName: string
 
     // learnsets state
-    learnsets: LevelUpLearnset[],
+    learnsets: LevelUpLearnset[]
 
     // request/derived UI state
-    isSubmitting: boolean,
-    pokemonListLoading: boolean,
-    error: string | null,
-    hasUnsavedChanges: boolean,
+    isSubmitting: boolean
+    pokemonListLoading: boolean
+    error: string | null
+    hasUnsavedChanges: boolean
 
     // setters used by SearchPanel inputs
-    setVersionGroupName: (name: string) => void,
-    setPokemonName: (name: string) => void,
+    setVersionGroupName: (name: string) => void
+    setPokemonName: (name: string) => void
 
     // handlers used by child components
-    handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement>,
-    handleUpdateLearnsetDeck: (name: string) => Promise<string>,
-    handleCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
-    handleCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
-    handleRevertChangesToLearnsetDeck: () => void,
-    handleDeleteLearnsetDeck: () => Promise<void>,
-    handleClearLearnsetsFromDeck: () => void,
-    handleRemoveLearnsetFromDeck: (indexToRemove: number) => void,
+    handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement>
+    handleUpdateLearnsetDeck: (name: string) => Promise<string>
+    handleCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>
+    handleCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>
+    handleRevertChangesToLearnsetDeck: () => void
+    handleDeleteLearnsetDeck: () => Promise<void>
+    handleClearLearnsetsFromDeck: () => void
+    handleRemoveLearnsetFromDeck: (indexToRemove: number) => void
     handleReorderLearnsetDeck: (fromIndex: number, toIndex: number) => void
 }
 
@@ -219,7 +219,9 @@ export function useSearchShellController(
                 const pokemon = item.pokemon[0]
 
                 if (!pokemon || pokemon.id == null) {
-                    throw new Error(`Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`)
+                    throw new Error(
+                        `Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`,
+                    )
                 }
 
                 return {
@@ -237,7 +239,8 @@ export function useSearchShellController(
     }, [initialLearnsetDeck, initialHydratedLearnsets])
 
     const initialLearnsetSignature = useMemo(
-        () => originalLearnsetDeckSnapshot.map((item) => `${item.pokemonApiName}:${item.versionGroupApiName}`).join("|"),
+        () =>
+            originalLearnsetDeckSnapshot.map((item) => `${item.pokemonApiName}:${item.versionGroupApiName}`).join("|"),
         [originalLearnsetDeckSnapshot],
     )
 

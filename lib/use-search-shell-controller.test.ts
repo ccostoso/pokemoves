@@ -130,11 +130,7 @@ describe("searchShellReducer", () => {
 
     describe("learnsetDeckReordered", () => {
         const state = makeState({
-            learnsets: [
-                makeLearnset("a", "v"),
-                makeLearnset("b", "v"),
-                makeLearnset("c", "v"),
-            ],
+            learnsets: [makeLearnset("a", "v"), makeLearnset("b", "v"), makeLearnset("c", "v")],
         })
 
         it("moves an item from the front to the back", () => {

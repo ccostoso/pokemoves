@@ -10,10 +10,10 @@ import { PasswordChangeSchema } from "@/lib/schemas"
 import { toast } from "sonner"
 
 export default function PasswordChangeForm() {
-    const [ isUpdating, setIsUpdating ] = useState(false)
-    const [ currentPassword, setCurrentPassword ] = useState("")
-    const [ newPassword, setNewPassword ] = useState("")
-    const [ confirmPassword, setConfirmPassword ] = useState("")
+    const [isUpdating, setIsUpdating] = useState(false)
+    const [currentPassword, setCurrentPassword] = useState("")
+    const [newPassword, setNewPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -58,7 +58,7 @@ export default function PasswordChangeForm() {
             <h2 className="text-2xl font-bold">Change Password</h2>
             <Card className="max-w-1/2">
                 <CardContent>
-                    <form id="password-change-form" onSubmit={ handleSubmit }>
+                    <form id="password-change-form" onSubmit={handleSubmit}>
                         <FieldSet className="space-y-2">
                             <FieldGroup>
                                 <Field>
@@ -66,8 +66,8 @@ export default function PasswordChangeForm() {
                                     <Input
                                         id="current-password"
                                         type="password"
-                                        value={ currentPassword }
-                                        onChange={ (e) => setCurrentPassword(e.target.value) }
+                                        value={currentPassword}
+                                        onChange={(e) => setCurrentPassword(e.target.value)}
                                         className="w-full rounded-md border border-muted-foreground p-2"
                                     />
                                     <FieldDescription>
@@ -79,8 +79,8 @@ export default function PasswordChangeForm() {
                                     <Input
                                         id="new-password"
                                         type="password"
-                                        value={ newPassword }
-                                        onChange={ (e) => setNewPassword(e.target.value) }
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
                                         className="w-full rounded-md border border-muted-foreground p-2"
                                     />
                                     <FieldDescription>
@@ -92,13 +92,11 @@ export default function PasswordChangeForm() {
                                     <Input
                                         id="confirm-password"
                                         type="password"
-                                        value={ confirmPassword }
-                                        onChange={ (e) => setConfirmPassword(e.target.value) }
+                                        value={confirmPassword}
+                                        onChange={(e) => setConfirmPassword(e.target.value)}
                                         className="w-full rounded-md border border-muted-foreground p-2"
                                     />
-                                    <FieldDescription>
-                                        Re-enter your new password to confirm it.
-                                    </FieldDescription>
+                                    <FieldDescription>Re-enter your new password to confirm it.</FieldDescription>
                                 </Field>
                             </FieldGroup>
                         </FieldSet>
@@ -108,9 +106,9 @@ export default function PasswordChangeForm() {
                     <Button
                         type="submit"
                         form="password-change-form"
-                        disabled={ isUpdating || !currentPassword || !newPassword || !confirmPassword }
+                        disabled={isUpdating || !currentPassword || !newPassword || !confirmPassword}
                     >
-                        { isUpdating ? "Updating..." : "Update Password" }
+                        {isUpdating ? "Updating..." : "Update Password"}
                     </Button>
                 </CardFooter>
             </Card>

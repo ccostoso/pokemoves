@@ -1,5 +1,5 @@
 type Pokemon = {
-    name: string,
+    name: string
     id: number
 }
 

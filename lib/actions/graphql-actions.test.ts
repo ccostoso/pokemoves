@@ -2,13 +2,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const gqlRequestMock = vi.hoisted(() => vi.fn())
 
-vi.mock("@/lib/graphql/graphql-client", () => ({ gqlClient: { request: gqlRequestMock }, POKEAPI_SCHEMA_MODE: "v1beta" }))
+vi.mock("@/lib/graphql/graphql-client", () => ({
+    gqlClient: { request: gqlRequestMock },
+    POKEAPI_SCHEMA_MODE: "v1beta",
+}))
 vi.mock("next/cache", () => ({ unstable_cache: (fn: unknown) => fn }))
 
-const {
-    getAllPokemonByVersionGroupName,
-    getLevelUpMovesByPokemonNameAndVersionGroup,
-} = await import("./graphql-actions")
+const { getAllPokemonByVersionGroupName, getLevelUpMovesByPokemonNameAndVersionGroup } =
+    await import("./graphql-actions")
 
 beforeEach(() => {
     vi.clearAllMocks()
@@ -18,9 +19,7 @@ describe("getAllPokemonByVersionGroupName", () => {
     it("throws when the response has neither pokemon field", async () => {
         gqlRequestMock.mockResolvedValue({})
 
-        await expect(getAllPokemonByVersionGroupName("red-blue")).rejects.toThrow(
-            "Empty response, skipping cache",
-        )
+        await expect(getAllPokemonByVersionGroupName("red-blue")).rejects.toThrow("Empty response, skipping cache")
     })
 
     it("requests with the given versionGroupName and returns the mapped list", async () => {
@@ -39,9 +38,9 @@ describe("getLevelUpMovesByPokemonNameAndVersionGroup", () => {
     it("throws when the response has neither pokemon field", async () => {
         gqlRequestMock.mockResolvedValue({})
 
-        await expect(
-            getLevelUpMovesByPokemonNameAndVersionGroup("pikachu", "red-blue"),
-        ).rejects.toThrow("Empty response, skipping cache")
+        await expect(getLevelUpMovesByPokemonNameAndVersionGroup("pikachu", "red-blue")).rejects.toThrow(
+            "Empty response, skipping cache",
+        )
     })
 
     it("requests with the given variables and returns the mapped learnset", async () => {

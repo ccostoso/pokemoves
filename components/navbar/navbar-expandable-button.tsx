@@ -3,11 +3,11 @@ import { Button } from "../ui/button"
 import { cn } from "@/lib/utils"
 
 type NavbarExpandableButtonProps = {
-    label: string,
-    icon: ReactNode,
-    isActive: boolean,
-    onActivate: () => void,
-    activateOnFocus?: boolean,
+    label: string
+    icon: ReactNode
+    isActive: boolean
+    onActivate: () => void
+    activateOnFocus?: boolean
     expandedWidthClass?: string
 } & Omit<ComponentProps<typeof Button>, "children">
 
@@ -28,31 +28,31 @@ export default function NavbarExpandableButton({
 }: NavbarExpandableButtonProps) {
     return (
         <Button
-            ref={ ref }
+            ref={ref}
             variant="outline"
             size="icon"
-            onMouseEnter={ (event) => {
+            onMouseEnter={(event) => {
                 onActivate()
                 onMouseEnter?.(event)
-            } }
-            onFocus={ (event) => {
+            }}
+            onFocus={(event) => {
                 if (activateOnFocus) {
                     onActivate()
                 }
 
                 onFocus?.(event)
-            } }
-            className={ cn(baseClass, isActive ? `${expandedWidthClass} px-4 gap-2` : "w-8 px-0 gap-0", className) }
-            { ...buttonProps }
+            }}
+            className={cn(baseClass, isActive ? `${expandedWidthClass} px-4 gap-2` : "w-8 px-0 gap-0", className)}
+            {...buttonProps}
         >
-            { icon }
+            {icon}
             <span
-                className={ cn(
+                className={cn(
                     "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
                     isActive && "max-w-16",
-                ) }
+                )}
             >
-                { label }
+                {label}
             </span>
         </Button>
     )

@@ -66,10 +66,10 @@ export default function SignUpPage() {
                 </CardHeader>
                 <CardContent>
                     <SignUpForm
-                        form={ form }
-                        onSubmit={ onSubmit }
-                        isLoading={ isLoading }
-                        errorMessage={ errorMessage || undefined }
+                        form={form}
+                        onSubmit={onSubmit}
+                        isLoading={isLoading}
+                        errorMessage={errorMessage || undefined}
                     />
                 </CardContent>
                 <CardFooter>

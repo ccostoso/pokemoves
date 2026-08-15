@@ -11,8 +11,8 @@ import { Spinner } from "../ui/spinner"
 import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type SavePanelProps = {
-    learnsets: LevelUpLearnset[],
-    pokemonList: PokemonListItem[],
+    learnsets: LevelUpLearnset[]
+    pokemonList: PokemonListItem[]
     isSubmitting: boolean
 }
 
@@ -63,14 +63,14 @@ export default function SavePanel({ learnsets, pokemonList, isSubmitting }: Save
                 <CardTitle>Save Learnset Deck</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={ handleCreateLearnsetDeck }>
+                <form onSubmit={handleCreateLearnsetDeck}>
                     <FieldGroup>
                         <Field>
                             <FieldLabel htmlFor="name">Learnset Deck Name</FieldLabel>
                             <Input
                                 id="name"
-                                value={ learnsetDeckName }
-                                onChange={ (e) => setLearnsetDeckName(e.target.value) }
+                                value={learnsetDeckName}
+                                onChange={(e) => setLearnsetDeckName(e.target.value)}
                             />
                             <FieldDescription>Enter a name for your learnset deck.</FieldDescription>
                         </Field>
@@ -78,9 +78,9 @@ export default function SavePanel({ learnsets, pokemonList, isSubmitting }: Save
                             type="submit"
                             className="w-full"
                             variant="default"
-                            disabled={ isSubmitting || pokemonList.length === 0 || !learnsetDeckName }
+                            disabled={isSubmitting || pokemonList.length === 0 || !learnsetDeckName}
                         >
-                            { isSaving ? (
+                            {isSaving ? (
                                 <span className="inline-flex items-center gap-2">
                                     <Spinner className="size-4" />
                                     Saving...
@@ -89,9 +89,9 @@ export default function SavePanel({ learnsets, pokemonList, isSubmitting }: Save
                                 <>
                                     <Save className="mr-2 h-4 w-4" /> Save Learnset Deck
                                 </>
-                            ) }
+                            )}
                         </Button>
-                        { error && <p className="text-red-500 mt-2">{ error }</p> }
+                        {error && <p className="text-red-500 mt-2">{error}</p>}
                     </FieldGroup>
                 </form>
             </CardContent>

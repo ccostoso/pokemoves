@@ -38,7 +38,11 @@ export default async function DeckPage({ params }: DeckPageProps) {
                 item.versionGroupApiName,
             )
 
-            const nextOccurrence = getNextLearnsetOccurrence(occurrenceMap, item.pokemonApiName, item.versionGroupApiName)
+            const nextOccurrence = getNextLearnsetOccurrence(
+                occurrenceMap,
+                item.pokemonApiName,
+                item.versionGroupApiName,
+            )
 
             // For each learnset, create a unique instance ID based on the occurrence
             return {
@@ -51,14 +55,13 @@ export default async function DeckPage({ params }: DeckPageProps) {
     return (
         <main className="container mx-auto p-4 flex-1">
             <SearchShell
-                key={ deckId }
-                toolbarType={ toolbarType }
-                learnsetDeckId={ deckId }
-                learnsetDeckItem={ learnsetDeckItem }
-                initialHydratedLearnsets={ initialHydratedLearnsets }
-                learnsetDeckName={ learnsetDeckMetadata.name }
+                key={deckId}
+                toolbarType={toolbarType}
+                learnsetDeckId={deckId}
+                learnsetDeckItem={learnsetDeckItem}
+                initialHydratedLearnsets={initialHydratedLearnsets}
+                learnsetDeckName={learnsetDeckMetadata.name}
             />
         </main>
     )
 }
-

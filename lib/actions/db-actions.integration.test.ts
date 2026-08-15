@@ -8,12 +8,8 @@ const revalidatePathMock = vi.hoisted(() => vi.fn())
 vi.mock("@/lib/auth/auth-server", () => ({ getServerSession: getServerSessionMock }))
 vi.mock("next/cache", () => ({ revalidatePath: revalidatePathMock }))
 
-const {
-    createLearnsetDeck,
-    getAllLearnsetDecksWithLearnsetDeckItemsByUserId,
-    updateLearnsetDeck,
-    deleteLearnsetDeck,
-} = await import("./db-actions")
+const { createLearnsetDeck, getAllLearnsetDecksWithLearnsetDeckItemsByUserId, updateLearnsetDeck, deleteLearnsetDeck } =
+    await import("./db-actions")
 
 function makeDeckItem(overrides: Partial<LearnsetDeckItem> = {}): LearnsetDeckItem {
     return {
@@ -123,9 +119,7 @@ describe("updateLearnsetDeck (integration)", () => {
         const owner = await createTestUser()
         mockSessionFor(owner.id)
 
-        const deckId = await createLearnsetDeck("Original Name", [
-            makeDeckItem({ pokemonApiName: "pikachu" }),
-        ])
+        const deckId = await createLearnsetDeck("Original Name", [makeDeckItem({ pokemonApiName: "pikachu" })])
 
         await updateLearnsetDeck(deckId, "Renamed Deck", [
             makeDeckItem({ pokemonApiName: "bulbasaur" }),

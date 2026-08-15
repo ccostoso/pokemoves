@@ -9,10 +9,10 @@ export type LocalizedName = { name: string }
 // --- Pokemon list types ---
 
 export type RawPokemonListItem = {
-    id: number,
-    name: string,
+    id: number
+    name: string
     // v1beta2
-    pokemonspecy?: { pokemonspeciesnames: LocalizedName[] },
+    pokemonspecy?: { pokemonspeciesnames: LocalizedName[] }
     // v1beta
     pokemon_v2_pokemonspecy?: {
         pokemon_v2_pokemonspeciesnames: LocalizedName[]
@@ -21,7 +21,7 @@ export type RawPokemonListItem = {
 
 export type RawPokemonListResponse = {
     // v1beta2
-    pokemon?: RawPokemonListItem[],
+    pokemon?: RawPokemonListItem[]
     // v1beta
     pokemon_v2_pokemon?: RawPokemonListItem[]
 }
@@ -29,49 +29,49 @@ export type RawPokemonListResponse = {
 // --- Level-up move types ---
 
 type RawMove = {
-    name: string,
+    name: string
     // v1beta2
-    type?: { name: string },
-    movenames?: LocalizedName[],
+    type?: { name: string }
+    movenames?: LocalizedName[]
     // v1beta
-    pokemon_v2_type?: { name: string },
+    pokemon_v2_type?: { name: string }
     pokemon_v2_movenames?: LocalizedName[]
 }
 
 type RawPokemonMove = {
-    level: number,
+    level: number
     // v1beta2
-    movelearnmethod?: { name: string },
-    move?: RawMove,
+    movelearnmethod?: { name: string }
+    move?: RawMove
     // v1beta
-    pokemon_v2_movelearnmethod?: { name: string },
+    pokemon_v2_movelearnmethod?: { name: string }
     pokemon_v2_move?: RawMove
 }
 
 type RawLevelUpPokemon = {
-    id: number,
-    name: string,
+    id: number
+    name: string
     // v1beta2
-    pokemonmoves?: RawPokemonMove[],
-    pokemonspecy?: RawSpecies,
+    pokemonmoves?: RawPokemonMove[]
+    pokemonspecy?: RawSpecies
     // v1beta
-    pokemon_v2_pokemonmoves?: RawPokemonMove[],
+    pokemon_v2_pokemonmoves?: RawPokemonMove[]
     pokemon_v2_pokemonspecy?: RawSpecies
 }
 
 type RawSpecies = {
     // v1beta2
-    pokemonspeciesnames?: LocalizedName[],
+    pokemonspeciesnames?: LocalizedName[]
     // v1beta
     pokemon_v2_pokemonspeciesnames?: LocalizedName[]
 }
 
 export type RawLevelUpResponse = {
     // v1beta2
-    pokemon?: RawLevelUpPokemon[],
-    pokemonspecy?: RawSpecies[],
+    pokemon?: RawLevelUpPokemon[]
+    pokemonspecy?: RawSpecies[]
     // v1beta
-    pokemon_v2_pokemon?: RawLevelUpPokemon[],
+    pokemon_v2_pokemon?: RawLevelUpPokemon[]
     pokemon_v2_pokemonspecy?: RawSpecies[]
 }
 

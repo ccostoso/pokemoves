@@ -10,14 +10,14 @@ import { SubmitEventHandler } from "react"
 import { PokemonListItem } from "@/lib/types"
 
 type SearchPanelProps = {
-    pokemonList: PokemonListItem[],
-    versionGroupName: string,
-    setVersionGroupName: (name: string) => void,
-    pokemonName: string,
-    setPokemonName: (name: string) => void,
-    isSubmitting: boolean,
-    pokemonListLoading: boolean,
-    error: string | null,
+    pokemonList: PokemonListItem[]
+    versionGroupName: string
+    setVersionGroupName: (name: string) => void
+    pokemonName: string
+    setPokemonName: (name: string) => void
+    isSubmitting: boolean
+    pokemonListLoading: boolean
+    error: string | null
     handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement>
 }
 
@@ -38,31 +38,31 @@ export default function SearchPanel({
                 <CardTitle>Enter Pokémon Details</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={ handleAddLearnsetToLearnsetDeck }>
+                <form onSubmit={handleAddLearnsetToLearnsetDeck}>
                     <FieldGroup>
-                        <VersionInput value={ versionGroupName } onChange={ setVersionGroupName } />
+                        <VersionInput value={versionGroupName} onChange={setVersionGroupName} />
                         <PokemonInput
-                            key={ versionGroupName }
-                            pokemonList={ pokemonList }
-                            value={ pokemonName }
-                            onChange={ setPokemonName }
-                            pokemonListLoading={ pokemonListLoading }
+                            key={versionGroupName}
+                            pokemonList={pokemonList}
+                            value={pokemonName}
+                            onChange={setPokemonName}
+                            pokemonListLoading={pokemonListLoading}
                         />
                         <Button
                             type="submit"
                             variant="default"
-                            disabled={ isSubmitting || pokemonList.length === 0 || !versionGroupName || !pokemonName }
+                            disabled={isSubmitting || pokemonList.length === 0 || !versionGroupName || !pokemonName}
                         >
                             <Plus className="mr-2 h-4 w-4" /> Add to Panel
                         </Button>
-                        { error && <p className="text-red-500 mt-2">{ error }</p> }
+                        {error && <p className="text-red-500 mt-2">{error}</p>}
                     </FieldGroup>
                 </form>
-                { pokemonName && versionGroupName && (
+                {pokemonName && versionGroupName && (
                     <p className="mt-4 text-sm text-gray-600">
-                        Searching for moves of <strong>{ pokemonName }</strong> in <strong>{ versionGroupName }</strong>.
+                        Searching for moves of <strong>{pokemonName}</strong> in <strong>{versionGroupName}</strong>.
                     </p>
-                ) }
+                )}
             </CardContent>
         </Card>
     )

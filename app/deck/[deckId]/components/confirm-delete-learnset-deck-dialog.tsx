@@ -8,13 +8,13 @@ export default function ConfirmDeleteLearnsetDeckDialog({
     onOpenChange,
     onConfirmDeleteLearnsetDeck,
 }: {
-    open: boolean,
-    isDeleting: boolean,
-    onOpenChange: (open: boolean) => void,
+    open: boolean
+    isDeleting: boolean
+    onOpenChange: (open: boolean) => void
     onConfirmDeleteLearnsetDeck: () => Promise<void>
 }) {
     return (
-        <Dialog open={ open } onOpenChange={ onOpenChange }>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Are you sure you want to delete this learnset deck?</DialogTitle>
@@ -23,22 +23,22 @@ export default function ConfirmDeleteLearnsetDeckDialog({
                     </DialogDescription>
                 </DialogHeader>
                 <div className="flex justify-end space-x-2 pt-4">
-                    <Button variant="outline" onClick={ () => onOpenChange(false) } disabled={ isDeleting }>
+                    <Button variant="outline" onClick={() => onOpenChange(false)} disabled={isDeleting}>
                         Cancel
                     </Button>
                     <Button
                         variant="destructive"
-                        onClick={ () => void onConfirmDeleteLearnsetDeck() }
-                        disabled={ isDeleting }
+                        onClick={() => void onConfirmDeleteLearnsetDeck()}
+                        disabled={isDeleting}
                     >
-                        { isDeleting ? (
+                        {isDeleting ? (
                             <span className="inline-flex items-center gap-2">
                                 <Spinner className="size-4" />
                                 Deleting...
                             </span>
                         ) : (
                             "Delete Learnset Deck"
-                        ) }
+                        )}
                     </Button>
                 </div>
             </DialogContent>

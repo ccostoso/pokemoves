@@ -32,24 +32,24 @@ export default async function RootLayout({
     return (
         <html
             lang="en"
-            className={ `${geistSans.variable} ${geistMono.variable} h-full antialiased` }
+            className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
             suppressHydrationWarning
         >
             <body className="min-h-full flex flex-col">
-                <TooltipProvider delayDuration={ 500 }>
+                <TooltipProvider delayDuration={500}>
                     <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
                         <Navbar
                             // Pass the initial user to the Navbar component
                             initialUser={
                                 session?.user
                                     ? {
-                                        name: session.user.name ?? null,
-                                        username: session.user.username ?? null,
-                                    }
+                                          name: session.user.name ?? null,
+                                          username: session.user.username ?? null,
+                                      }
                                     : null
                             }
                         />
-                        { children }
+                        {children}
                         <Toaster />
                     </ThemeProvider>
                 </TooltipProvider>

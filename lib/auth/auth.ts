@@ -53,7 +53,7 @@ export const auth = betterAuth({
         sendResetPassword: async ({ user, url }) => {
             after(async () => {
                 const { subject, html, text } = buildPasswordResetEmail(url)
-                
+
                 if (!process.env.RESEND_API_KEY) {
                     console.error("RESEND_API_KEY is not defined. Password reset email was not sent.", {
                         email: user.email,

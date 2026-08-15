@@ -20,7 +20,7 @@ import Link from "next/link"
 import { Field, FieldError, FieldGroup, FieldLabel } from "../ui/field"
 
 type SignInDialogProps = {
-    open: boolean,
+    open: boolean
     onOpenChange: (open: boolean) => void
 }
 
@@ -64,9 +64,9 @@ export default function SignInDialog({ open, onOpenChange }: SignInDialogProps) 
     }
 
     return (
-        <Dialog open={ open } onOpenChange={ onOpenChange }>
+        <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="data-open:zoom-in-100! data-open:slide-in-from-left-20 data-open:duration-600 sm:max-w-106.25">
-                <form onSubmit={ form.handleSubmit(onSubmit) } className="grid gap-4">
+                <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4">
                     <FieldGroup>
                         <DialogHeader>
                             <DialogTitle>Sign in</DialogTitle>
@@ -76,59 +76,59 @@ export default function SignInDialog({ open, onOpenChange }: SignInDialogProps) 
                             <div className="grid gap-3">
                                 <Controller
                                     name="username"
-                                    control={ form.control }
-                                    render={ ({ field, fieldState }) => (
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
                                         <Field>
                                             <FieldLabel htmlFor="username">Username</FieldLabel>
                                             <Input
-                                                { ...field }
+                                                {...field}
                                                 id="username"
                                                 type="text"
-                                                aria-invalid={ fieldState.invalid }
+                                                aria-invalid={fieldState.invalid}
                                                 autoComplete="off"
                                             />
-                                            { fieldState.invalid && <FieldError errors={ [fieldState.error] } /> }
+                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                                         </Field>
-                                    ) }
+                                    )}
                                 />
                             </div>
                             <div className="grid gap-3">
                                 <Controller
                                     name="password"
-                                    control={ form.control }
-                                    render={ ({ field, fieldState }) => (
+                                    control={form.control}
+                                    render={({ field, fieldState }) => (
                                         <Field>
                                             <FieldLabel htmlFor="password">Password</FieldLabel>
                                             <Input
-                                                { ...field }
+                                                {...field}
                                                 id="password"
                                                 type="password"
-                                                aria-invalid={ fieldState.invalid }
+                                                aria-invalid={fieldState.invalid}
                                                 autoComplete="off"
                                             />
-                                            { fieldState.invalid && <FieldError errors={ [fieldState.error] } /> }
+                                            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                                         </Field>
-                                    ) }
+                                    )}
                                 />
                             </div>
-                            { errorMessage ? <p className="text-sm text-red-600">{ errorMessage }</p> : null }
+                            {errorMessage ? <p className="text-sm text-red-600">{errorMessage}</p> : null}
                             <p className="text-muted-foreground">
-                                Not a member?{ " " }
+                                Not a member?{" "}
                                 <Link
                                     href="/signup"
                                     className="text-primary hover:underline"
-                                    onClick={ () => onOpenChange(false) }
+                                    onClick={() => onOpenChange(false)}
                                 >
                                     Click here to sign up
                                 </Link>
                                 .
                             </p>
                             <p className="text-muted-foreground">
-                                Forgot your password?{ " " }
+                                Forgot your password?{" "}
                                 <Link
                                     href="/reset-password"
                                     className="text-primary hover:underline"
-                                    onClick={ () => onOpenChange(false) }
+                                    onClick={() => onOpenChange(false)}
                                 >
                                     Click here to reset it
                                 </Link>
@@ -139,8 +139,8 @@ export default function SignInDialog({ open, onOpenChange }: SignInDialogProps) 
                             <DialogClose asChild>
                                 <Button variant="outline">Cancel</Button>
                             </DialogClose>
-                            <Button type="submit" disabled={ form.formState.isSubmitting || isLoading }>
-                                { form.formState.isSubmitting || isLoading ? "Signing in..." : "Sign in" }
+                            <Button type="submit" disabled={form.formState.isSubmitting || isLoading}>
+                                {form.formState.isSubmitting || isLoading ? "Signing in..." : "Sign in"}
                             </Button>
                         </DialogFooter>
                     </FieldGroup>

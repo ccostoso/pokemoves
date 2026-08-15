@@ -1,6 +1,6 @@
 type VersionGroup = {
-    apiName: string,
-    name: string,
+    apiName: string
+    name: string
     id: number
 }
 

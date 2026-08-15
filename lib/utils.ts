@@ -76,9 +76,7 @@ export function mapLearnsetsToDeckItems(learnsets: LevelUpLearnset[]): LearnsetD
         const pokemonId = item.pokemon[0]?.id
 
         if (pokemonId === null || pokemonId === undefined) {
-            throw new Error(
-                `Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`,
-            )
+            throw new Error(`Missing pokemonId for learnset "${item.pokemonName}" in "${item.versionGroupName}".`)
         }
 
         return {

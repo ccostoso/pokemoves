@@ -25,7 +25,10 @@ export default async function LearnsetDecks() {
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                     <h1 className="text-2xl font-bold">Learnset Decks</h1>
                     <p className="text-muted-foreground">
-                        You have no learnset decks. <Link href="/" className="text-primary hover:underline">Create one</Link>{ " " }
+                        You have no learnset decks.{" "}
+                        <Link href="/" className="text-primary hover:underline">
+                            Create one
+                        </Link>{" "}
                         to get started.
                     </p>
                 </div>
@@ -42,8 +45,7 @@ export default async function LearnsetDecks() {
                 </p>
             </section>
             <div className="grid gap-4 py-8">
-                { learnsetDecks.map((deck) => {
-                    
+                {learnsetDecks.map((deck) => {
                     const updatedAtLabel = new Date(deck.updatedAt).toLocaleDateString(undefined, {
                         month: "short",
                         day: "numeric",
@@ -52,34 +54,36 @@ export default async function LearnsetDecks() {
 
                     return (
                         <Card
-                            key={ deck.id }
+                            key={deck.id}
                             className="w-full transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:ring-foreground/20"
                         >
                             <CardHeader>
                                 <div className="flex items-start justify-between gap-3">
-                                    <Link href={ `/deck/${deck.id}` }>
+                                    <Link href={`/deck/${deck.id}`}>
                                         <div>
-                                            <h2 className="text-2xl font-bold">{ deck.name }</h2>
+                                            <h2 className="text-2xl font-bold">{deck.name}</h2>
                                             <p className="text-sm text-muted-foreground">
-                                                { deck.items.length } entries • Updated { updatedAtLabel }
+                                                {deck.items.length} entries • Updated {updatedAtLabel}
                                             </p>
                                         </div>
                                     </Link>
-                                    <DeleteDeckButton deckId={ deck.id } deckName={ deck.name } />
+                                    <DeleteDeckButton deckId={deck.id} deckName={deck.name} />
                                 </div>
                             </CardHeader>
                             <Separator />
                             <CardContent className="relative min-h-36">
-                                <DeckItemsPreview items={ deck.items } />
+                                <DeckItemsPreview items={deck.items} />
                             </CardContent>
                             <CardFooter className="justify-end gap-2">
                                 <Button asChild variant="outline" size="sm">
-                                    <Link href={ `/deck/${deck.id}` }>Open deck <ArrowRight className="h-4 w-4" /></Link>
+                                    <Link href={`/deck/${deck.id}`}>
+                                        Open deck <ArrowRight className="h-4 w-4" />
+                                    </Link>
                                 </Button>
                             </CardFooter>
                         </Card>
                     )
-                }) }
+                })}
             </div>
         </main>
     )

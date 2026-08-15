@@ -1,7 +1,7 @@
 import AccountSidebar from "@/app/account/components/account-sidebar"
 import { getServerSession } from "@/lib/auth/auth-server"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic"
 
 export default async function AccountLayout({
     children,
@@ -16,13 +16,13 @@ export default async function AccountLayout({
                 initialUser={
                     session?.user
                         ? {
-                            name: session.user.name ?? null,
-                            username: session.user.username ?? null,
-                        }
+                              name: session.user.name ?? null,
+                              username: session.user.username ?? null,
+                          }
                         : null
                 }
             />
-            { children }
+            {children}
         </main>
     )
 }

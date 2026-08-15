@@ -23,7 +23,8 @@ export const SignUpSchema = z
                 message: "Username must be at most 20 characters long",
             })
             .regex(/^(?!.*[._-]{2})[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?$/, {
-                message: "Username may only contain letters, numbers, '.', '_' and '-', and cannot start/end with '.', '_' or '-'",
+                message:
+                    "Username may only contain letters, numbers, '.', '_' and '-', and cannot start/end with '.', '_' or '-'",
             }),
         email: z.email({ message: "Invalid email address" }),
         password: z
@@ -83,21 +84,23 @@ export const NameUpdateSchema = z.object({
 
 export type NameUpdateSchemaType = z.infer<typeof NameUpdateSchema>
 
-export const EmailUpdateSchema = z.object({
-    email: z
-        .string()
-        .trim()
-        .toLowerCase()
-        .pipe(z.email({ message: "Invalid email address" })),
-    confirmEmail: z
-        .string()
-        .trim()
-        .toLowerCase()
-        .pipe(z.email({ message: "Invalid email address" })),
-}).refine((data) => data.email === data.confirmEmail, {
-    message: "Email and confirm email do not match",
-    path: ["confirmEmail"],
-})
+export const EmailUpdateSchema = z
+    .object({
+        email: z
+            .string()
+            .trim()
+            .toLowerCase()
+            .pipe(z.email({ message: "Invalid email address" })),
+        confirmEmail: z
+            .string()
+            .trim()
+            .toLowerCase()
+            .pipe(z.email({ message: "Invalid email address" })),
+    })
+    .refine((data) => data.email === data.confirmEmail, {
+        message: "Email and confirm email do not match",
+        path: ["confirmEmail"],
+    })
 
 export type EmailUpdateSchemaType = z.infer<typeof EmailUpdateSchema>
 

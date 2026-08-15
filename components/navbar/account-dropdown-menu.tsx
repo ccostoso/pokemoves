@@ -16,12 +16,12 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 
 type AccountDropdownMenuProps = {
-    activeButton: string | null,
-    setActiveButton: (button: string | null) => void,
-    isAccountMenuOpen: boolean,
-    handleAccountMenuOpenChange: (open: boolean) => void,
+    activeButton: string | null
+    setActiveButton: (button: string | null) => void
+    isAccountMenuOpen: boolean
+    handleAccountMenuOpenChange: (open: boolean) => void
     user: {
-        name: string | null,
+        name: string | null
         username: string | null
     } | null
 }
@@ -45,22 +45,22 @@ export default function AccountDropdownMenu({
         })
     }
     return (
-        <DropdownMenu onOpenChange={ handleAccountMenuOpenChange }>
+        <DropdownMenu onOpenChange={handleAccountMenuOpenChange}>
             <DropdownMenuTrigger asChild>
                 <NavbarExpandableButton
                     label="Account"
-                    icon={ <User className="shrink-0 h-5 w-5" /> }
-                    isActive={ activeButton === "account" || isAccountMenuOpen }
-                    onActivate={ () => setActiveButton("account") }
-                    activateOnFocus={ false }
+                    icon={<User className="shrink-0 h-5 w-5" />}
+                    isActive={activeButton === "account" || isAccountMenuOpen}
+                    onActivate={() => setActiveButton("account")}
+                    activateOnFocus={false}
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="min-w-48" align="end" sideOffset={ 4 }>
+            <DropdownMenuContent className="min-w-48" align="end" sideOffset={4}>
                 <DropdownMenuGroup className="whitespace-nowrap">
                     <div className="px-1.5 py-1.5">
-                        <p className="text-sm font-semibold">@{ user?.username }</p>
-                        <p className="text-sm text-muted-foreground">{ user?.name }</p>
+                        <p className="text-sm font-semibold">@{user?.username}</p>
+                        <p className="text-sm text-muted-foreground">{user?.name}</p>
                     </div>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
@@ -68,13 +68,13 @@ export default function AccountDropdownMenu({
                     <DropdownMenuLabel>User</DropdownMenuLabel>
                     <DropdownMenuItem asChild>
                         <Link href="/account" className="flex items-center gap-2">
-                            <User size={ 16 } />
+                            <User size={16} />
                             <span>Account</span>
                         </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem asChild>
                         <Link href="/account/decks" className="flex items-center gap-2">
-                            <Columns3 size={ 16 } />
+                            <Columns3 size={16} />
                             <span>Decks</span>
                         </Link>
                     </DropdownMenuItem>
@@ -82,7 +82,7 @@ export default function AccountDropdownMenu({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Session</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={ sessionSignOut }>Sign Out</DropdownMenuItem>
+                    <DropdownMenuItem onClick={sessionSignOut}>Sign Out</DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

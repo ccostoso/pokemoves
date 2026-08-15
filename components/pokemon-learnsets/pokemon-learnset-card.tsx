@@ -8,8 +8,8 @@ import PokemonLearnsetTable from "./pokemon-learnset-table"
 import Image from "next/image"
 
 type PokemonLearnsetCardProps = {
-    item: LevelUpLearnset | null,
-    onRemove: () => void,
+    item: LevelUpLearnset | null
+    onRemove: () => void
     dragHandleProps?: HTMLAttributes<HTMLButtonElement>
 }
 
@@ -33,7 +33,7 @@ export default function PokemonLearnsetCard({ item, onRemove, dragHandleProps }:
                             size="icon"
                             className="absolute top-4 left-4 z-10 cursor-grab active:cursor-grabbing"
                             aria-label="Drag table"
-                            { ...dragHandleProps }
+                            {...dragHandleProps}
                         >
                             <GripVertical className="h-4 w-4" />
                         </Button>
@@ -41,31 +41,31 @@ export default function PokemonLearnsetCard({ item, onRemove, dragHandleProps }:
                             variant="ghost"
                             size="icon"
                             className="absolute top-4 right-4 z-10"
-                            onClick={ onRemove }
+                            onClick={onRemove}
                             aria-label="Remove table"
                         >
                             <X className="h-4 w-4" />
                         </Button>
                     </div>
                     <div className="flex flex-col items-center justify-center">
-                        { pokemonSpriteUrl && (
+                        {pokemonSpriteUrl && (
                             <Image
-                                src={ pokemonSpriteUrl }
-                                alt={ pokemonName }
+                                src={pokemonSpriteUrl}
+                                alt={pokemonName}
                                 className="mx-auto"
-                                width={ 96 }
-                                height={ 96 }
+                                width={96}
+                                height={96}
                             />
-                        ) }
+                        )}
                         <div className="flex flex-col items-center justify-center gap-1">
-                            <h3 className="text-lg font-semibold">{ pokemonName }</h3>
-                            <p className="text-sm text-muted-foreground">{ versionGroupName }</p>
+                            <h3 className="text-lg font-semibold">{pokemonName}</h3>
+                            <p className="text-sm text-muted-foreground">{versionGroupName}</p>
                         </div>
                     </div>
                 </CardHeader>
                 <CardContent className="p-0">
                     <div className="overflow-hidden">
-                        <PokemonLearnsetTable pokemonMoves={ pokemonMoves } />
+                        <PokemonLearnsetTable pokemonMoves={pokemonMoves} />
                     </div>
                 </CardContent>
             </Card>

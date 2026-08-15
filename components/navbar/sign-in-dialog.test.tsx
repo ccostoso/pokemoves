@@ -32,7 +32,7 @@ describe("SignInDialog", () => {
         signInWithUsernameMock.mockResolvedValue({ error: null })
         const user = userEvent.setup()
 
-        render(<SignInDialog open onOpenChange={ onOpenChangeMock } />)
+        render(<SignInDialog open onOpenChange={onOpenChangeMock} />)
         await fillOutForm(user)
         await user.click(screen.getByRole("button", { name: "Sign in" }))
 
@@ -50,7 +50,7 @@ describe("SignInDialog", () => {
         signInWithUsernameMock.mockResolvedValue({ error: { message: "Invalid username or password" } })
         const user = userEvent.setup()
 
-        render(<SignInDialog open onOpenChange={ onOpenChangeMock } />)
+        render(<SignInDialog open onOpenChange={onOpenChangeMock} />)
         await fillOutForm(user)
         await user.click(screen.getByRole("button", { name: "Sign in" }))
 
@@ -62,7 +62,7 @@ describe("SignInDialog", () => {
         signInWithUsernameMock.mockRejectedValue(new Error("network down"))
         const user = userEvent.setup()
 
-        render(<SignInDialog open onOpenChange={ onOpenChangeMock } />)
+        render(<SignInDialog open onOpenChange={onOpenChangeMock} />)
         await fillOutForm(user)
         await user.click(screen.getByRole("button", { name: "Sign in" }))
 
@@ -73,7 +73,7 @@ describe("SignInDialog", () => {
     it("blocks submission and shows a validation error when the password is too weak", async () => {
         const user = userEvent.setup()
 
-        render(<SignInDialog open onOpenChange={ onOpenChangeMock } />)
+        render(<SignInDialog open onOpenChange={onOpenChangeMock} />)
         await fillOutForm(user, { password: "onlylettershere" })
         await user.click(screen.getByRole("button", { name: "Sign in" }))
 
@@ -86,7 +86,7 @@ describe("SignInDialog", () => {
     it("closes the dialog when Cancel is clicked", async () => {
         const user = userEvent.setup()
 
-        render(<SignInDialog open onOpenChange={ onOpenChangeMock } />)
+        render(<SignInDialog open onOpenChange={onOpenChangeMock} />)
         await user.click(screen.getByRole("button", { name: "Cancel" }))
 
         expect(onOpenChangeMock).toHaveBeenCalledWith(false)

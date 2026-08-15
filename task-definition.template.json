@@ -1,9 +1,7 @@
 {
     "family": "pokemoves",
     "networkMode": "awsvpc",
-    "requiresCompatibilities": [
-        "FARGATE"
-    ],
+    "requiresCompatibilities": ["FARGATE"],
     "cpu": "512",
     "memory": "1024",
     "executionRoleArn": "arn:aws:iam::<ACCOUNT_ID>:role/pokemovesExecutionRole",

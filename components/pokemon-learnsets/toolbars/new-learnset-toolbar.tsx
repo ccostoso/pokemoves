@@ -13,17 +13,13 @@ import { toast } from "sonner"
 import { mapLearnsetsToDeckItems } from "@/lib/utils"
 
 type NewLearnsetToolbarProps = {
-    learnsets: LevelUpLearnset[],
-    onClearLearnsetsFromDeck: () => void,
-    pokemonList: PokemonListItem[],
+    learnsets: LevelUpLearnset[]
+    onClearLearnsetsFromDeck: () => void
+    pokemonList: PokemonListItem[]
     isSubmitting: boolean
 }
 
-export function NewLearnsetToolbar({
-    learnsets,
-    onClearLearnsetsFromDeck,
-    isSubmitting,
-}: NewLearnsetToolbarProps) {
+export function NewLearnsetToolbar({ learnsets, onClearLearnsetsFromDeck, isSubmitting }: NewLearnsetToolbarProps) {
     const { data: session } = authClient.useSession()
     const [learnsetDeckName, setLearnsetDeckName] = useState("")
     const [learnsetDeckNameError, setLearnsetDeckNameError] = useState<string | null>(null)
@@ -41,7 +37,10 @@ export function NewLearnsetToolbar({
         }
 
         if (!session?.user.emailVerified) {
-            toast.error("You must verify your email before saving a learnset deck. Please check your inbox for the verification email.", { position: "top-center" })
+            toast.error(
+                "You must verify your email before saving a learnset deck. Please check your inbox for the verification email.",
+                { position: "top-center" },
+            )
             setIsSaving(false)
             return
         }
@@ -90,7 +89,7 @@ export function NewLearnsetToolbar({
 
     return (
         <div className="flex flex-col p-4 border-b">
-            <form onSubmit={ handleCreateLearnsetDeck }>
+            <form onSubmit={handleCreateLearnsetDeck}>
                 <FieldSet className="flex flex-row justify-between">
                     <FieldGroup>
                         <Field className="flex-1">
@@ -98,25 +97,22 @@ export function NewLearnsetToolbar({
                                 id="learnset-deck-name"
                                 type="text"
                                 placeholder="Learnset Deck Name..."
-                                value={ learnsetDeckName }
-                                maxLength={ 50 }
-                                aria-invalid={ learnsetDeckNameError ? true : undefined }
-                                onChange={ (e) => {
+                                value={learnsetDeckName}
+                                maxLength={50}
+                                aria-invalid={learnsetDeckNameError ? true : undefined}
+                                onChange={(e) => {
                                     setLearnsetDeckName(e.target.value)
                                     if (learnsetDeckNameError) {
                                         setLearnsetDeckNameError(null)
                                     }
-                                } }
+                                }}
                             />
                         </Field>
                     </FieldGroup>
                     <FieldGroup className="flex flex-row justify-end gap-2">
                         <Field orientation="horizontal" className="w-auto">
-                            <Button
-                                type="submit"
-                                disabled={ isSaving || isSubmitting }
-                            >
-                                { isSaving ? (
+                            <Button type="submit" disabled={isSaving || isSubmitting}>
+                                {isSaving ? (
                                     <span className="inline-flex items-center gap-2">
                                         <Spinner className="size-4" />
                                         Saving...
@@ -126,17 +122,17 @@ export function NewLearnsetToolbar({
                                         <Save className="mr-2" />
                                         Save learnset deck
                                     </>
-                                ) }
+                                )}
                             </Button>
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button
                                         className="whitespace-nowrap"
                                         type="button"
-                                        onClick={ (event) => {
+                                        onClick={(event) => {
                                             handleClearLearnsetsFromDeck(event)
-                                        } }
-                                        disabled={ isSaving || isSubmitting || learnsets.length === 0 }
+                                        }}
+                                        disabled={isSaving || isSubmitting || learnsets.length === 0}
                                     >
                                         <BrushCleaning className="mr-2" />
                                         Clear
