@@ -1,6 +1,6 @@
 "use client"
 
-import { CircleQuestionMark, Pencil, User } from "lucide-react"
+import { Pencil, User } from "lucide-react"
 import { useState } from "react"
 import { ModeToggle } from "./mode-toggle"
 import SignInDialog from "./sign-in-dialog"

@@ -1,10 +1,22 @@
+/**
+ * Prisma client singleton.
+ *
+ * In dev, Next.js hot-reloads modules on every save, which would otherwise
+ * create a brand-new PrismaClient (and a brand-new connection pool) on every
+ * reload — quickly exhausting Postgres's connection limit. Stashing the
+ * client on `globalThis` in non-production means hot reloads reuse the same
+ * instance instead of creating a new one each time.
+ *
+ * `PrismaPg` is Prisma's driver adapter for `pg` — required because this
+ * project uses the newer `prisma-client` generator (see schema.prisma),
+ * which needs an explicit adapter rather than managing its own connection
+ * internally the way the older generator did.
+ */
+
 import "dotenv/config"
 import { PrismaPg } from "@prisma/adapter-pg"
 import { PrismaClient } from "../generated/prisma/client"
 
-// This file is a singleton for the Prisma client, which is used to connect to the database.
-// We use a singleton to avoid creating multiple instances of the Prisma client, which can cause
-// issues with database connections.
 const globalForPrisma = globalThis as typeof globalThis & {
     prisma?: PrismaClient
 }

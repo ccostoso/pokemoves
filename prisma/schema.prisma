@@ -1,7 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
+/**
+ * Data model for Pokémoves. Better Auth's User/Session/Account/Verification
+ * tables live alongside the app's own LearnsetDeck/LearnsetDeckItem tables in
+ * this single schema, since both are served by the same Postgres database.
+ * Prisma 7 requires an explicit `output` path for the generator (no more
+ * implicit `node_modules` generation). This project generates to
+ * `../generated/prisma`, so `prisma generate` must run explicitly wherever the
+ * client is needed (see `package.json`'s build script and the Dockerfile).
+ */
 
 generator client {
     provider = "prisma-client"
