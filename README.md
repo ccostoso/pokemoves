@@ -61,7 +61,7 @@ cp .env.example .env
 docker compose up
 ```
 
-This runs a local Postgres container and the app itself, wired together. The app connects to Postgres over the Docker network, matching the shape of how it runs in production (just without ECS/Fargate in between).
+This runs (and wires together) a local Postgres container and the app itself. The app connects to Postgres over the Docker network, matching how it runs in production, just without ECS/Fargate in between.
 
 Alternatively, run the app directly against any Postgres instance (local or otherwise) by setting `DATABASE_URL` in `.env` and skipping Compose:
 

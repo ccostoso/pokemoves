@@ -1,3 +1,16 @@
+/**
+ * Server actions for authenticated reads/writes to Postgres via Prisma.
+ * 
+ * `"use server"` marks every export in this file as a Next.js Server Action.
+ * Each is callable directly from client components as if it were a local 
+ * function, but they are actually executed on the server, with the call 
+ * serialized over the network automatically.
+
+ * Every action here follows the same pattern: check for an authenticated,
+ * verified session first (throwing if absent), then validate input with
+ * the corresponding Zod schema before ever touching the database.
+ */
+
 "use server"
 
 import { prisma } from "@/lib/prisma"

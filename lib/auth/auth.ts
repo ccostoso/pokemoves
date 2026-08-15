@@ -1,3 +1,20 @@
+/**
+ * Better Auth configuration. This is the single source of truth for how
+ * users sign up, sign in, verify their email, reset their password, and
+ * change their email address.
+ *
+ * Email sends happen inside `after()` (Next.js's post-response callback),
+ * not awaited directly in the handler, which lets Better Auth respond to
+ * the client immediately rather than making the user wait on Resend's API
+ * before their signup/reset request completes.
+ *
+ * `sendVerificationEmail` is called by Better Auth for two different flows:
+ * a brand-new signup, and confirming a `changeEmail` request. Both land in
+ * the same callback, so `user.emailVerified` is used to tell them apart.
+ * A new signup always starts unverified, while an existing account going
+ * through `changeEmail` is already verified before this fires.
+ */
+
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { prisma } from "../prisma"
