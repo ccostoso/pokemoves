@@ -1,0 +1,6 @@
+# Build artifacts
+function.zip
+
+# AWS files
+trust-policy.json
+ses-send-policy.json
