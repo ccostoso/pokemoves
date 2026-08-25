@@ -118,6 +118,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
                         isActive={ activeButton === "contact" }
                         onActivate={ () => setActiveButton("contact") }
                         expandedWidthClass="w-28"
+                        href="https://costo.so/contact"
                     />
 
                     <ModeToggle
