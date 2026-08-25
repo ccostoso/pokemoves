@@ -88,6 +88,10 @@ async function checkEndpoint(name, url) {
 }
 
 async function sendAlertEmail(failures, allResults) {
+    if (!FROM_ADDRESS || !RECIPIENT_EMAIL) {
+        throw new Error("Missing required env vars: FROM_ADDRESS and/or RECIPIENT_EMAIL")
+    }
+
     const summary = failures
         .map(([name, r]) => `${name}: ${r.reason}${r.status ? ` (HTTP ${r.status})` : ""}`)
         .join("\n")
