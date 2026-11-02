@@ -20,6 +20,9 @@ type AccountDropdownMenuProps = {
     setActiveButton: (button: string | null) => void,
     isAccountMenuOpen: boolean,
     handleAccountMenuOpenChange: (open: boolean) => void,
+    showLabel?: boolean,
+    buttonClassName?: string,
+    onAction?: () => void,
     user: {
         name: string | null,
         username: string | null
@@ -31,6 +34,9 @@ export default function AccountDropdownMenu({
     setActiveButton,
     isAccountMenuOpen,
     handleAccountMenuOpenChange,
+    showLabel = false,
+    buttonClassName,
+    onAction,
     user,
 }: AccountDropdownMenuProps) {
     const router = useRouter()
@@ -53,6 +59,8 @@ export default function AccountDropdownMenu({
                     isActive={ activeButton === "account" || isAccountMenuOpen }
                     onActivate={ () => setActiveButton("account") }
                     activateOnFocus={ false }
+                    showLabel={ showLabel }
+                    className={ buttonClassName }
                     expandedWidthClass="w-28"
                 />
             </DropdownMenuTrigger>
@@ -66,13 +74,13 @@ export default function AccountDropdownMenu({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>User</DropdownMenuLabel>
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild onSelect={ onAction }>
                         <Link href="/account" className="flex items-center gap-2">
                             <User size={ 16 } />
                             <span>Account</span>
                         </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
+                    <DropdownMenuItem asChild onSelect={ onAction }>
                         <Link href="/account/decks" className="flex items-center gap-2">
                             <Columns3 size={ 16 } />
                             <span>Decks</span>
@@ -82,7 +90,12 @@ export default function AccountDropdownMenu({
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                     <DropdownMenuLabel>Session</DropdownMenuLabel>
-                    <DropdownMenuItem onClick={ sessionSignOut }>Sign Out</DropdownMenuItem>
+                    <DropdownMenuItem
+                        onSelect={ onAction }
+                        onClick={ sessionSignOut }
+                    >
+                        Sign Out
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
             </DropdownMenuContent>
         </DropdownMenu>

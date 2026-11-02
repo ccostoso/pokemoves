@@ -83,6 +83,7 @@ export default function ResetPasswordPage() {
                 </CardContent>
                 <CardFooter>
                     <Button
+                        className="max-md:h-11 max-md:w-full"
                         type="submit"
                         form="reset-password-form"
                         disabled={ isSubmitting }

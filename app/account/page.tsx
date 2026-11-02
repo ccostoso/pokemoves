@@ -27,7 +27,7 @@ export default async function UserPage() {
     }
 
     return (
-        <main className="container mx-auto p-4 flex-1">
+        <main className="container mx-auto p-4 max-md:p-0 flex-1">
             <h1 className="text-4xl font-bold">User Dashboard</h1>
             <NameChangeForm name={ user.name ?? "" } />
             <EmailChangeForm email={ user.email } />

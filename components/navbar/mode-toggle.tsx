@@ -10,10 +10,20 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 type ModeToggleProps = {
     isActive?: boolean,
     onActivate?: () => void,
-    onOpenChange?: (open: boolean) => void
+    onOpenChange?: (open: boolean) => void,
+    showLabel?: boolean,
+    buttonClassName?: string,
+    onSelect?: () => void
 }
 
-export function ModeToggle({ isActive = false, onActivate, onOpenChange }: ModeToggleProps) {
+export function ModeToggle({
+    isActive = false,
+    onActivate,
+    onOpenChange,
+    showLabel = false,
+    buttonClassName,
+    onSelect,
+}: ModeToggleProps) {
     const { setTheme } = useTheme()
 
     return (
@@ -22,10 +32,16 @@ export function ModeToggle({ isActive = false, onActivate, onOpenChange }: ModeT
                 <Button
                     variant="outline"
                     size="icon"
-                    onMouseEnter={ onActivate }
+                    onPointerEnter={ (event) => {
+                        if (event.pointerType === "mouse") {
+                            onActivate?.()
+                        }
+                    } }
                     className={ cn(
-                        "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300",
-                        isActive ? "w-28 px-4 gap-2" : "w-8 px-0 gap-0",
+                        "group origin-left overflow-hidden px-0 gap-0 transition-all duration-300 size-11",
+                        isActive && "[@media(hover:hover)_and_(pointer:fine)]:w-28 [@media(hover:hover)_and_(pointer:fine)]:px-4 [@media(hover:hover)_and_(pointer:fine)]:gap-2",
+                        showLabel && "w-full justify-start gap-3 px-3",
+                        buttonClassName,
                     ) }
                 >
                     <span className="relative inline-flex h-5 w-5 shrink-0 items-center justify-center">
@@ -34,8 +50,12 @@ export function ModeToggle({ isActive = false, onActivate, onOpenChange }: ModeT
                     </span>
                     <span
                         className={ cn(
-                            "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
-                            isActive && "max-w-16",
+                            showLabel
+                                ? "max-w-full overflow-hidden whitespace-nowrap"
+                                : cn(
+                                    "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
+                                    isActive && "[@media(hover:hover)_and_(pointer:fine)]:max-w-16",
+                                ),
                         ) }
                     >
                         Theme
@@ -43,9 +63,9 @@ export function ModeToggle({ isActive = false, onActivate, onOpenChange }: ModeT
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={ () => setTheme("light") }>Light</DropdownMenuItem>
-                <DropdownMenuItem onClick={ () => setTheme("dark") }>Dark</DropdownMenuItem>
-                <DropdownMenuItem onClick={ () => setTheme("system") }>System</DropdownMenuItem>
+                <DropdownMenuItem onClick={ () => { setTheme("light"); onSelect?.() } }>Light</DropdownMenuItem>
+                <DropdownMenuItem onClick={ () => { setTheme("dark"); onSelect?.() } }>Dark</DropdownMenuItem>
+                <DropdownMenuItem onClick={ () => { setTheme("system"); onSelect?.() } }>System</DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
     )

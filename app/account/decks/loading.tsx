@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator"
 
 export default function LoadingDecksPage() {
     return (
-        <main className="container mx-auto p-4 flex-1">
+        <main className="container mx-auto p-4 max-md:p-0 flex-1">
             <section className="mb-4 space-y-2">
                 <Skeleton className="h-8 w-48" />
                 <Skeleton className="h-5 max-w-96 w-full" />
@@ -14,11 +14,11 @@ export default function LoadingDecksPage() {
                     <Card key={ index } className="w-full">
                         <CardHeader>
                             <div className="flex items-start justify-between gap-3">
-                                <div className="space-y-2">
-                                    <Skeleton className="h-8 w-56" />
-                                    <Skeleton className="h-4 w-48" />
+                                <div className="min-w-0 space-y-2">
+                                    <Skeleton className="h-8 w-56 max-w-full" />
+                                    <Skeleton className="h-4 w-48 max-w-full" />
                                 </div>
-                                <Skeleton className="h-9 w-9 rounded-md" />
+                                <Skeleton className="size-11 shrink-0 rounded-md md:size-8" />
                             </div>
                         </CardHeader>
                         <Separator />
@@ -33,7 +33,7 @@ export default function LoadingDecksPage() {
                             </div>
                         </CardContent>
                         <CardFooter className="justify-end">
-                            <Skeleton className="h-9 w-28 rounded-md" />
+                            <Skeleton className="h-11 w-full rounded-md md:h-8 md:w-28" />
                         </CardFooter>
                     </Card>
                 )) }

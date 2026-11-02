@@ -122,6 +122,7 @@ export default function SetNewPasswordPage() {
                 </CardContent>
                 <CardFooter>
                     <Button
+                        className="max-md:h-11 max-md:w-full"
                         type="submit"
                         form="set-new-password-form"
                         disabled={ isSubmitting }

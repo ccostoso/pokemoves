@@ -1,6 +1,6 @@
 "use client"
 
-import { Pencil, User } from "lucide-react"
+import { CircleQuestionMark, Menu, Pencil, User, X } from "lucide-react"
 import { useState } from "react"
 import { ModeToggle } from "./mode-toggle"
 import SignInDialog from "./sign-in-dialog"
@@ -9,6 +9,10 @@ import NavbarExpandableButton from "./navbar-expandable-button"
 import Link from "next/link"
 import AccountDropdownMenu from "./account-dropdown-menu"
 import AboutDialog from "../about/about-dialog"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+
+const mobileMenuButtonClassName = "min-h-11 w-full justify-start gap-3 px-3"
 
 type NavbarUser = {
     name: string | null,
@@ -24,6 +28,8 @@ export default function Navbar({ initialUser }: NavbarProps) {
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false)
     const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
     const [isSignInOpen, setIsSignInOpen] = useState(false)
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false)
     const { data: session, isPending } = authClient.useSession()
 
     // Use server-provided user only while client session status is still pending.
@@ -76,18 +82,18 @@ export default function Navbar({ initialUser }: NavbarProps) {
 
     return (
         <nav
-            className="bg-background text-foreground p-4 border-b border-foreground/20"
+            className="bg-background text-foreground p-2 sm:p-4 border-b border-foreground/20"
             onMouseLeave={ () => {
                 if (!isThemeMenuOpen && !isAccountMenuOpen) {
                     setActiveButton(null)
                 }
             } }
         >
-            <div className="container mx-auto flex justify-between items-center px-4">
+            <div className="container mx-auto flex justify-between items-center px-2 sm:px-4">
                 <div className="text-xl font-bold">
-                    <Link href="/">Pokémoves</Link>
+                    <Link href="/" className="flex min-h-11 items-center">Pokémoves</Link>
                 </div>
-                <div className="flex items-center gap-3 md:gap-4">
+                <div className="hidden items-center gap-3 md:flex">
                     { hasSessionUser ? (
                         <AccountDropdownMenu
                             activeButton={ activeButton }
@@ -136,6 +142,98 @@ export default function Navbar({ initialUser }: NavbarProps) {
                         } }
                     />
                     <SignInDialog open={ isSignInOpen } onOpenChange={ handleSignInOpenChange } />
+                </div>
+
+                <div className="md:hidden">
+                    <Sheet open={ isMobileMenuOpen } onOpenChange={ setIsMobileMenuOpen }>
+                        <SheetTrigger asChild>
+                            <Button variant="outline" size="icon" className="size-11" aria-label="Open menu">
+                                <Menu className="size-5" />
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent side="top" showCloseButton={ false } className="gap-3 px-4 pb-4 pt-5">
+                            <SheetHeader className="p-0 pr-12">
+                                <SheetTitle>Menu</SheetTitle>
+                                <SheetDescription className="sr-only">Navigation links and settings</SheetDescription>
+                            </SheetHeader>
+                            <SheetClose asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="absolute right-3 top-2 size-11"
+                                    aria-label="Close menu"
+                                >
+                                    <X className="size-5" />
+                                </Button>
+                            </SheetClose>
+                            <div className="flex flex-col gap-2">
+                                { hasSessionUser ? (
+                                    <AccountDropdownMenu
+                                        activeButton={ activeButton }
+                                        setActiveButton={ setActiveButton }
+                                        isAccountMenuOpen={ isAccountMenuOpen }
+                                        handleAccountMenuOpenChange={ handleAccountMenuOpenChange }
+                                        showLabel
+                                        buttonClassName={ mobileMenuButtonClassName }
+                                        onAction={ () => setIsMobileMenuOpen(false) }
+                                        user={ effectiveUser }
+                                    />
+                                ) : (
+                                    <SheetClose asChild>
+                                        <Button
+                                            variant="outline"
+                                            className={ mobileMenuButtonClassName }
+                                            onClick={ handleAccountClick }
+                                        >
+                                            <User className="size-5" />
+                                            Account
+                                        </Button>
+                                    </SheetClose>
+                                ) }
+
+                                <Button
+                                    variant="outline"
+                                    className={ mobileMenuButtonClassName }
+                                    onClick={ () => {
+                                        setIsMobileMenuOpen(false)
+                                        setIsMobileAboutOpen(true)
+                                    } }
+                                >
+                                    <CircleQuestionMark className="size-5" />
+                                    About
+                                </Button>
+
+                                <Button
+                                    variant="outline"
+                                    asChild
+                                    className={ mobileMenuButtonClassName }
+                                >
+                                    <a
+                                        href="https://costo.so/contact"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        onClick={ () => setIsMobileMenuOpen(false) }
+                                    >
+                                        <Pencil className="size-5" />
+                                        Contact
+                                    </a>
+                                </Button>
+
+                                <ModeToggle
+                                    showLabel
+                                    buttonClassName={ mobileMenuButtonClassName }
+                                    onSelect={ () => setIsMobileMenuOpen(false) }
+                                />
+                            </div>
+                        </SheetContent>
+                    </Sheet>
+                    <AboutDialog
+                        activeButton={ activeButton }
+                        setActiveButton={ setActiveButton }
+                        open={ isMobileAboutOpen }
+                        onOpenChange={ setIsMobileAboutOpen }
+                        hideTrigger
+                    />
                 </div>
             </div>
         </nav>

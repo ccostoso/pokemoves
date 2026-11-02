@@ -1,5 +1,6 @@
 "use client"
 
+import { SubmitEventHandler, useState } from "react"
 import SearchPanel from "./pokemon-search/search-panel"
 import { useSearchShellController } from "@/lib/use-search-shell-controller"
 import PokemonLearnsetWindow from "./pokemon-learnsets/pokemon-learnset-window"
@@ -42,11 +43,19 @@ export default function SearchShell({
         handleReorderLearnsetDeck,
     } = useSearchShellController(learnsetDeckItem, learnsetDeckId, initialHydratedLearnsets)
 
+    const [isSearchPanelOpen, setIsSearchPanelOpen] = useState(learnsets.length === 0)
+
+    const handleAddAndCollapse: SubmitEventHandler<HTMLFormElement> = async (e) => {
+        const wasAdded = await handleAddLearnsetToLearnsetDeck(e)
+
+        setIsSearchPanelOpen(!wasAdded)
+    }
+
     return (
         <>
-            <div className="flex gap-6 mt-6">
+            <div className="mt-6 flex flex-col gap-6 md:flex-row">
                 { (toolbarType === "new" || toolbarType === "owner") && (
-                    <aside className="w-72 shrink-0">
+                    <aside className="w-full shrink-0 md:w-72">
                         <SearchPanel
                             pokemonList={ pokemonList }
                             versionGroupName={ versionGroupName }
@@ -56,7 +65,9 @@ export default function SearchShell({
                             isSubmitting={ isSubmitting }
                             pokemonListLoading={ pokemonListLoading }
                             error={ error }
-                            handleAddLearnsetToLearnsetDeck={ handleAddLearnsetToLearnsetDeck }
+                            handleAddLearnsetToLearnsetDeck={ handleAddAndCollapse }
+                            open={ isSearchPanelOpen }
+                            onOpenChange={ setIsSearchPanelOpen }
                         />
                     </aside>
                 ) }

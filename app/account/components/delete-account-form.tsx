@@ -43,7 +43,7 @@ export default function DeleteAccountForm() {
     return (
         <section className="mt-6 space-y-4">
             <h2 className="text-2xl font-bold text-destructive">Delete Account</h2>
-            <Card className="max-w-1/2">
+            <Card className="w-full lg:max-w-1/2">
                 <CardHeader>
                     <p className="text-sm text-muted-foreground">
                         Deleting your account is permanent and cannot be undone. Please enter your password to confirm.
@@ -63,7 +63,7 @@ export default function DeleteAccountForm() {
                                         value={ password }
                                         onChange={ (e) => setPassword(e.target.value) }
                                         required
-                                        className="mt-1 block w-full border-destructive focus:border-destructive focus:ring-destructive"
+                                        className="mt-1 block w-full border-destructive focus:border-destructive focus:ring-destructive max-md:h-11"
                                     />
                                 </Field>
                             </FieldGroup>
@@ -72,6 +72,7 @@ export default function DeleteAccountForm() {
                 </CardContent>
                 <CardFooter className="justify-end gap-2">
                     <Button 
+                        className="max-md:h-11 max-md:w-full"
                         type="submit" 
                         form="delete-account-form" 
                         disabled={ isDeleting || !password }>

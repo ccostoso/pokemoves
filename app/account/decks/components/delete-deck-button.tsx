@@ -43,7 +43,7 @@ export function DeleteDeckButton({ deckId, deckName }: DeleteDeckButtonProps) {
                             type="button"
                             variant="ghost"
                             size="icon"
-                            className="text-muted-foreground hover:text-destructive"
+                            className="text-muted-foreground hover:text-destructive max-md:size-11 shrink-0"
                             aria-label={ `Delete ${deckName}` }
                             onClick={ () => setOpen(true) }
                         >

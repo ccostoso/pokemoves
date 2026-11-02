@@ -51,7 +51,7 @@ export default function NameChangeForm({ name }: { name: string }) {
     return (
         <section className="mt-6 space-y-4">
             <h2 className="text-2xl font-bold">Change Display Name</h2>
-            <Card className="max-w-1/2">
+            <Card className="w-full lg:max-w-1/2">
                 <CardContent>
                     <form id="name-change-form" onSubmit={ handleSubmit }>
                         <FieldSet className="space-y-2">
@@ -63,7 +63,7 @@ export default function NameChangeForm({ name }: { name: string }) {
                                         type="text"
                                         value={ newName }
                                         onChange={ (e) => setNewName(e.target.value) }
-                                        className="w-full rounded-md border border-muted-foreground p-2"
+                                        className="w-full rounded-md border border-muted-foreground p-2 max-md:h-11"
                                     />
                                     <FieldDescription>
                                         This is the name that will be displayed on your profile and in your account settings.
@@ -75,6 +75,7 @@ export default function NameChangeForm({ name }: { name: string }) {
                 </CardContent>
                 <CardFooter className="justify-end gap-2">
                     <Button
+                        className="max-md:h-11 max-md:w-full"
                         type="submit"
                         form="name-change-form"
                         disabled={ isUpdating || !nameChanged }
