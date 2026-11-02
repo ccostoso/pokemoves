@@ -8,11 +8,12 @@ type NavbarExpandableButtonProps = {
     isActive: boolean,
     onActivate: () => void,
     activateOnFocus?: boolean,
-    expandedWidthClass?: string,
+    showLabel?: boolean,
+    expandedWidthClass?: "w-24" | "w-28",
     href?: string
 } & Omit<ComponentProps<typeof Button>, "children">
 
-const baseClass = "group w-8 origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
+const baseClass = "group origin-left overflow-hidden px-0 gap-0 transition-all duration-300"
 
 export default function NavbarExpandableButton({
     label,
@@ -20,10 +21,11 @@ export default function NavbarExpandableButton({
     isActive,
     onActivate,
     activateOnFocus = true,
+    showLabel = false,
     expandedWidthClass = "w-28",
     href,
     className,
-    onMouseEnter,
+    onPointerEnter,
     onFocus,
     ref,
     ...buttonProps
@@ -33,14 +35,21 @@ export default function NavbarExpandableButton({
             { icon }
             <span
                 className={ cn(
-                    "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
-                    isActive && "max-w-16",
+                    showLabel
+                        ? "max-w-full overflow-hidden whitespace-nowrap"
+                        : cn(
+                            "max-w-0 overflow-hidden whitespace-nowrap transition-all duration-300",
+                            isActive && "[@media(hover:hover)_and_(pointer:fine)]:max-w-16",
+                        ),
                 ) }
             >
                 { label }
             </span>
         </>
     )
+    const expandedWidth = expandedWidthClass === "w-24"
+        ? "[@media(hover:hover)_and_(pointer:fine)]:w-24"
+        : "[@media(hover:hover)_and_(pointer:fine)]:w-28"
 
     return (
         <Button
@@ -48,9 +57,12 @@ export default function NavbarExpandableButton({
             variant="outline"
             size="icon"
             asChild={ Boolean(href) }
-            onMouseEnter={ (event) => {
-                onActivate()
-                onMouseEnter?.(event)
+            onPointerEnter={ (event) => {
+                if (event.pointerType === "mouse") {
+                    onActivate()
+                }
+
+                onPointerEnter?.(event)
             } }
             onFocus={ (event) => {
                 if (activateOnFocus) {
@@ -59,7 +71,12 @@ export default function NavbarExpandableButton({
 
                 onFocus?.(event)
             } }
-            className={ cn(baseClass, isActive ? `${expandedWidthClass} px-4 gap-2` : "w-8 px-0 gap-0", className) }
+            className={ cn(
+                baseClass,
+                "size-11",
+                isActive && `${expandedWidth} [@media(hover:hover)_and_(pointer:fine)]:px-4 [@media(hover:hover)_and_(pointer:fine)]:gap-2`,
+                className,
+            ) }
             { ...buttonProps }
         >
             { href ? (

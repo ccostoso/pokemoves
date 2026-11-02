@@ -4,10 +4,19 @@ import { CircleQuestionMark } from "lucide-react"
 
 type AboutDialogProps = {
     activeButton: string | null,
-    setActiveButton: (button: string | null) => void
+    setActiveButton: (button: string | null) => void,
+    showLabel?: boolean,
+    buttonClassName?: string,
+    onTriggerClick?: () => void
 }
 
-export default function AboutDialog({ activeButton, setActiveButton }: AboutDialogProps) {
+export default function AboutDialog({
+    activeButton,
+    setActiveButton,
+    showLabel = false,
+    buttonClassName,
+    onTriggerClick,
+}: AboutDialogProps) {
     return (
         <Dialog>
             <DialogTrigger asChild>
@@ -16,6 +25,9 @@ export default function AboutDialog({ activeButton, setActiveButton }: AboutDial
                     icon={ <CircleQuestionMark className="shrink-0 h-5 w-5" /> }
                     isActive={ activeButton === "about" }
                     onActivate={ () => setActiveButton("about") }
+                    showLabel={ showLabel }
+                    className={ buttonClassName }
+                    onClick={ onTriggerClick }
                     expandedWidthClass="w-24"
                 />
             </DialogTrigger>
