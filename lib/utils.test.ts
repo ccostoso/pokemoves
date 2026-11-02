@@ -3,6 +3,7 @@ import {
     countLearnsetPairOccurrences,
     createLearnsetInstanceId,
     getLearnsetPairKey,
+    getClosestIndex,
     getNextLearnsetOccurrence,
     getPokemonDisplayName,
     getRegionalSuffix,
@@ -178,3 +179,18 @@ function makeLearnset(pokemonName: string, versionGroupName: string): LevelUpLea
         ],
     }
 }
+
+describe("getClosestIndex", () => {
+    it("returns the index of the nearest center", () => {
+        expect(getClosestIndex([100, 400, 700], 380)).toBe(1)
+        expect(getClosestIndex([100, 400, 700], 650)).toBe(2)
+    })
+
+    it("returns the first index when two centers are equally close", () => {
+        expect(getClosestIndex([100, 300], 200)).toBe(0)
+    })
+
+    it("returns 0 for an empty list", () => {
+        expect(getClosestIndex([], 200)).toBe(0)
+    })
+})

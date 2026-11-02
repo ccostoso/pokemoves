@@ -24,14 +24,15 @@ export default function PokemonLearnsetCard({ item, onRemove, dragHandleProps }:
     const pokemonSpriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${item?.pokemon?.[0]?.id}.png`
 
     return (
-        <div className="basis-1/4 shrink-0 min-w-72">
+        <div className="md:min-w-72">
             <Card className="m-0 p-0 gap-0">
                 <CardHeader className="flex items-start justify-center gap-2 relative p-4">
                     <div className="">
+                        { /* touch-none stops the browser from claiming the gesture so dnd-kit's TouchSensor can drag; select-none/callout stop iOS selecting on long-press */ }
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="absolute top-4 left-4 z-10 cursor-grab active:cursor-grabbing"
+                            className="absolute top-2 left-2 z-10 size-11 cursor-grab touch-none select-none [-webkit-touch-callout:none] active:cursor-grabbing md:top-4 md:left-4 md:size-8"
                             aria-label="Drag table"
                             { ...dragHandleProps }
                         >
@@ -40,7 +41,7 @@ export default function PokemonLearnsetCard({ item, onRemove, dragHandleProps }:
                         <Button
                             variant="ghost"
                             size="icon"
-                            className="absolute top-4 right-4 z-10"
+                            className="absolute top-2 right-2 z-10 size-11 md:top-4 md:right-4 md:size-8"
                             onClick={ onRemove }
                             aria-label="Remove table"
                         >

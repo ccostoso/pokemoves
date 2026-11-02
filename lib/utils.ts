@@ -94,3 +94,20 @@ export function mapLearnsetsToDeckItems(learnsets: LevelUpLearnset[]): LearnsetD
 
 export const toLearnsetSignature = (learnsets: LevelUpLearnset[]): string =>
     learnsets.map((item) => `${item.pokemonName}:${item.versionGroupName}`).join("|")
+
+// Index of the value in `centers` nearest to `target`; 0 when the list is empty.
+export function getClosestIndex(centers: number[], target: number): number {
+    let closestIndex = 0
+    let closestDistance = Number.POSITIVE_INFINITY
+
+    centers.forEach((center, index) => {
+        const distance = Math.abs(center - target)
+
+        if (distance < closestDistance) {
+            closestDistance = distance
+            closestIndex = index
+        }
+    })
+
+    return closestIndex
+}
