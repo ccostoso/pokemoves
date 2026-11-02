@@ -6,9 +6,9 @@ type SearchShellGridSkeletonProps = {
 
 export default function SearchShellGridSkeleton({ showSearchPanel = true }: SearchShellGridSkeletonProps) {
     return (
-        <div className="mt-6 flex gap-6">
+        <div className="mt-6 flex flex-col gap-6 md:flex-row">
             { showSearchPanel && (
-                <aside className="w-72 shrink-0">
+                <aside className="w-full shrink-0 md:w-72">
                     <div className="rounded-xl border p-6">
                         <Skeleton className="mx-auto h-8 w-52" />
                         <div className="mt-6 space-y-4">

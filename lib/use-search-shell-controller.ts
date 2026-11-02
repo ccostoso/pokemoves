@@ -62,7 +62,7 @@ type UseSearchShellControllerReturn = {
     setPokemonName: (name: string) => void,
 
     // handlers used by child components
-    handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement>,
+    handleAddLearnsetToLearnsetDeck: (e: Parameters<SubmitEventHandler<HTMLFormElement>>[0]) => Promise<boolean>,
     handleUpdateLearnsetDeck: (name: string) => Promise<string>,
     handleCreateDuplicateLearnsetDeckWithChanges: (userId: string, learnsetName: string) => Promise<string>,
     handleCreateDuplicateRevertedLearnsetDeck: (userId: string, learnsetName: string) => Promise<string>,
@@ -292,7 +292,7 @@ export function useSearchShellController(
 
     const setPokemonName = (name: string) => dispatch({ type: "pokemonNameChanged", pokemonName: name })
 
-    const handleAddLearnsetToLearnsetDeck: SubmitEventHandler<HTMLFormElement> = async (e) => {
+    const handleAddLearnsetToLearnsetDeck: UseSearchShellControllerReturn["handleAddLearnsetToLearnsetDeck"] = async (e) => {
         e.preventDefault()
 
         const isDuplicate = state.learnsets.some(
@@ -305,7 +305,7 @@ export function useSearchShellController(
                 type: "addLearnsetToLearnsetDeckFailed",
                 message: `${state.pokemonName} in ${state.versionGroupName} is already in this deck.`,
             })
-            return
+            return false
         }
 
         dispatch({ type: "addLearnsetToLearnsetDeckStarted" })
@@ -323,7 +323,7 @@ export function useSearchShellController(
                     type: "addLearnsetToLearnsetDeckFailed",
                     message: `No level-up moves found for ${state.pokemonName} in ${state.versionGroupName}.`,
                 })
-                return
+                return false
             }
 
             dispatch({
@@ -341,11 +341,13 @@ export function useSearchShellController(
                     ),
                 },
             })
+            return true
         } catch {
             dispatch({
                 type: "addLearnsetToLearnsetDeckFailed",
                 message: "An error occurred while searching. Please try again.",
             })
+            return false
         }
     }
 
