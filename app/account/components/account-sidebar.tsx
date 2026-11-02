@@ -111,7 +111,10 @@ export default function AccountSidebar({ initialUser }: AccountSidebarProps) {
             return
         }
 
-        const target = activeLink.offsetLeft - (scroller.clientWidth - activeLink.offsetWidth) / 2
+        const target = scroller.scrollLeft
+            + activeLink.getBoundingClientRect().left
+            - scroller.getBoundingClientRect().left
+            - (scroller.clientWidth - activeLink.offsetWidth) / 2
 
         scroller.scrollTo({ left: Math.max(0, target) })
     }, [pathname])
