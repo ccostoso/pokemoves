@@ -21,7 +21,7 @@ export default async function LearnsetDecks() {
 
     if (learnsetDecks.length === 0) {
         return (
-            <main className="container mx-auto p-4 flex-1">
+            <main className="container mx-auto p-4 max-md:p-0 flex-1">
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                     <h1 className="text-2xl font-bold">Learnset Decks</h1>
                     <p className="text-muted-foreground">
@@ -34,7 +34,7 @@ export default async function LearnsetDecks() {
     }
 
     return (
-        <main className="container mx-auto p-4 flex-1">
+        <main className="container mx-auto p-4 max-md:p-0 flex-1">
             <section className="mb-4">
                 <h1 className="text-2xl font-bold">Learnset Decks</h1>
                 <p className="text-muted-foreground">
@@ -57,9 +57,9 @@ export default async function LearnsetDecks() {
                         >
                             <CardHeader>
                                 <div className="flex items-start justify-between gap-3">
-                                    <Link href={ `/deck/${deck.id}` }>
+                                    <Link href={ `/deck/${deck.id}` } className="min-w-0">
                                         <div>
-                                            <h2 className="text-2xl font-bold">{ deck.name }</h2>
+                                            <h2 className="text-2xl font-bold break-words">{ deck.name }</h2>
                                             <p className="text-sm text-muted-foreground">
                                                 { deck.items.length } entries • Updated { updatedAtLabel }
                                             </p>
@@ -73,7 +73,7 @@ export default async function LearnsetDecks() {
                                 <DeckItemsPreview items={ deck.items } />
                             </CardContent>
                             <CardFooter className="justify-end gap-2">
-                                <Button asChild variant="outline" size="sm">
+                                <Button asChild variant="outline" size="sm" className="max-md:h-11 max-md:w-full">
                                     <Link href={ `/deck/${deck.id}` }>Open deck <ArrowRight className="h-4 w-4" /></Link>
                                 </Button>
                             </CardFooter>

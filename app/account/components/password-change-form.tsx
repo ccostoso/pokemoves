@@ -56,7 +56,7 @@ export default function PasswordChangeForm() {
     return (
         <section className="mt-6 space-y-4">
             <h2 className="text-2xl font-bold">Change Password</h2>
-            <Card className="max-w-1/2">
+            <Card className="w-full lg:max-w-1/2">
                 <CardContent>
                     <form id="password-change-form" onSubmit={ handleSubmit }>
                         <FieldSet className="space-y-2">
@@ -68,7 +68,7 @@ export default function PasswordChangeForm() {
                                         type="password"
                                         value={ currentPassword }
                                         onChange={ (e) => setCurrentPassword(e.target.value) }
-                                        className="w-full rounded-md border border-muted-foreground p-2"
+                                        className="w-full rounded-md border border-muted-foreground p-2 max-md:h-11"
                                     />
                                     <FieldDescription>
                                         Enter your current password to authorize the change.
@@ -81,7 +81,7 @@ export default function PasswordChangeForm() {
                                         type="password"
                                         value={ newPassword }
                                         onChange={ (e) => setNewPassword(e.target.value) }
-                                        className="w-full rounded-md border border-muted-foreground p-2"
+                                        className="w-full rounded-md border border-muted-foreground p-2 max-md:h-11"
                                     />
                                     <FieldDescription>
                                         Enter your new password. Make sure it&apos;s strong and secure.
@@ -94,7 +94,7 @@ export default function PasswordChangeForm() {
                                         type="password"
                                         value={ confirmPassword }
                                         onChange={ (e) => setConfirmPassword(e.target.value) }
-                                        className="w-full rounded-md border border-muted-foreground p-2"
+                                        className="w-full rounded-md border border-muted-foreground p-2 max-md:h-11"
                                     />
                                     <FieldDescription>
                                         Re-enter your new password to confirm it.
@@ -106,6 +106,7 @@ export default function PasswordChangeForm() {
                 </CardContent>
                 <CardFooter className="justify-end gap-2">
                     <Button
+                        className="max-md:h-11 max-md:w-full"
                         type="submit"
                         form="password-change-form"
                         disabled={ isUpdating || !currentPassword || !newPassword || !confirmPassword }

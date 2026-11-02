@@ -11,7 +11,7 @@ export default async function AccountLayout({
     const session = await getServerSession()
 
     return (
-        <main className="container mx-auto p-4 flex-1 flex flex-row gap-4 items-stretch">
+        <main className="container mx-auto p-4 flex-1 flex flex-col md:flex-row gap-4 items-stretch">
             <AccountSidebar
                 initialUser={
                     session?.user

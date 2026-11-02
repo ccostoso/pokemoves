@@ -10,7 +10,7 @@ type ToolbarActionsProps = {
     label?: string
 }
 
-export function ToolbarActions({ children, label = "Deck actions" }: ToolbarActionsProps) {
+export function ToolbarActions({ children, label = "Actions" }: ToolbarActionsProps) {
     const [open, setOpen] = useState(false)
     const contentId = useId()
 

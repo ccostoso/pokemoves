@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator"
 
 export default function LoadingDecksPage() {
     return (
-        <main className="container mx-auto p-4 flex-1">
+        <main className="container mx-auto p-4 max-md:p-0 flex-1">
             <section className="mb-4 space-y-2">
                 <Skeleton className="h-8 w-48" />
                 <Skeleton className="h-5 max-w-96 w-full" />
