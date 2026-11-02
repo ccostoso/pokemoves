@@ -7,7 +7,10 @@ type AboutDialogProps = {
     setActiveButton: (button: string | null) => void,
     showLabel?: boolean,
     buttonClassName?: string,
-    onTriggerClick?: () => void
+    onTriggerClick?: () => void,
+    open?: boolean,
+    onOpenChange?: (open: boolean) => void,
+    hideTrigger?: boolean
 }
 
 export default function AboutDialog({
@@ -16,21 +19,26 @@ export default function AboutDialog({
     showLabel = false,
     buttonClassName,
     onTriggerClick,
+    open,
+    onOpenChange,
+    hideTrigger = false,
 }: AboutDialogProps) {
     return (
-        <Dialog>
-            <DialogTrigger asChild>
-                <NavbarExpandableButton
-                    label="About"
-                    icon={ <CircleQuestionMark className="shrink-0 h-5 w-5" /> }
-                    isActive={ activeButton === "about" }
-                    onActivate={ () => setActiveButton("about") }
-                    showLabel={ showLabel }
-                    className={ buttonClassName }
-                    onClick={ onTriggerClick }
-                    expandedWidthClass="w-24"
-                />
-            </DialogTrigger>
+        <Dialog open={ open } onOpenChange={ onOpenChange }>
+            { !hideTrigger && (
+                <DialogTrigger asChild>
+                    <NavbarExpandableButton
+                        label="About"
+                        icon={ <CircleQuestionMark className="shrink-0 h-5 w-5" /> }
+                        isActive={ activeButton === "about" }
+                        onActivate={ () => setActiveButton("about") }
+                        showLabel={ showLabel }
+                        className={ buttonClassName }
+                        onClick={ onTriggerClick }
+                        expandedWidthClass="w-24"
+                    />
+                </DialogTrigger>
+            ) }
             <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto p-6">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold">About Pokémoves</DialogTitle>

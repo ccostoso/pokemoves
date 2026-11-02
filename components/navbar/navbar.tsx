@@ -1,6 +1,6 @@
 "use client"
 
-import { Menu, Pencil, User, X } from "lucide-react"
+import { CircleQuestionMark, Menu, Pencil, User, X } from "lucide-react"
 import { useState } from "react"
 import { ModeToggle } from "./mode-toggle"
 import SignInDialog from "./sign-in-dialog"
@@ -10,7 +10,7 @@ import Link from "next/link"
 import AccountDropdownMenu from "./account-dropdown-menu"
 import AboutDialog from "../about/about-dialog"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 
 const mobileMenuButtonClassName = "min-h-11 w-full justify-start gap-3 px-3"
 
@@ -29,6 +29,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
     const [isAccountMenuOpen, setIsAccountMenuOpen] = useState(false)
     const [isSignInOpen, setIsSignInOpen] = useState(false)
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+    const [isMobileAboutOpen, setIsMobileAboutOpen] = useState(false)
     const { data: session, isPending } = authClient.useSession()
 
     // Use server-provided user only while client session status is still pending.
@@ -153,6 +154,7 @@ export default function Navbar({ initialUser }: NavbarProps) {
                         <SheetContent side="top" showCloseButton={ false } className="gap-3 px-4 pb-4 pt-5">
                             <SheetHeader className="p-0 pr-12">
                                 <SheetTitle>Menu</SheetTitle>
+                                <SheetDescription className="sr-only">Navigation links and settings</SheetDescription>
                             </SheetHeader>
                             <SheetClose asChild>
                                 <Button
@@ -189,13 +191,17 @@ export default function Navbar({ initialUser }: NavbarProps) {
                                     </SheetClose>
                                 ) }
 
-                                <AboutDialog
-                                    activeButton={ activeButton }
-                                    setActiveButton={ setActiveButton }
-                                    showLabel
-                                    buttonClassName={ mobileMenuButtonClassName }
-                                    onTriggerClick={ () => setIsMobileMenuOpen(false) }
-                                />
+                                <Button
+                                    variant="outline"
+                                    className={ mobileMenuButtonClassName }
+                                    onClick={ () => {
+                                        setIsMobileMenuOpen(false)
+                                        setIsMobileAboutOpen(true)
+                                    } }
+                                >
+                                    <CircleQuestionMark className="size-5" />
+                                    About
+                                </Button>
 
                                 <Button
                                     variant="outline"
@@ -221,6 +227,13 @@ export default function Navbar({ initialUser }: NavbarProps) {
                             </div>
                         </SheetContent>
                     </Sheet>
+                    <AboutDialog
+                        activeButton={ activeButton }
+                        setActiveButton={ setActiveButton }
+                        open={ isMobileAboutOpen }
+                        onOpenChange={ setIsMobileAboutOpen }
+                        hideTrigger
+                    />
                 </div>
             </div>
         </nav>
