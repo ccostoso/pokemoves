@@ -22,7 +22,7 @@ export default function ConfirmDeleteLearnsetDeckDialog({
                         This action cannot be undone. This will permanently delete the learnset deck from your account.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="flex justify-end space-x-2 pt-4">
+                <div className="flex flex-col-reverse gap-2 pt-4 max-sm:*:h-11 sm:flex-row sm:justify-end">
                     <Button variant="outline" onClick={ () => onOpenChange(false) } disabled={ isDeleting }>
                         Cancel
                     </Button>

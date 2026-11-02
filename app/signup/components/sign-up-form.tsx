@@ -64,7 +64,7 @@ export default function SignUpForm({ form, onSubmit, isLoading, errorMessage }: 
 
             { errorMessage && <p className="text-sm text-red-600">{ errorMessage }</p> }
 
-            <Button type="submit" disabled={ isLoading } className="w-full">
+            <Button type="submit" disabled={ isLoading } className="w-full max-md:h-11">
                 { isLoading ? "Signing Up..." : "Sign Up" }
             </Button>
         </form>
