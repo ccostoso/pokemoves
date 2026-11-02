@@ -6,6 +6,7 @@ import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplic
 import { Button } from "@/components/ui/button"
 import { CopyCheck } from "lucide-react"
 import { DuplicateLearnsetResult } from "@/lib/types"
+import { ToolbarActions } from "./toolbar-actions"
 
 type ViewerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
@@ -66,11 +67,12 @@ export function ViewerLearnsetToolbar({
     return (
         <div className="flex flex-col p-4 border-b">
             <form>
-                <FieldSet className="flex flex-row justify-between">
+                <FieldSet className="flex flex-col gap-3 lg:flex-row lg:justify-between">
                     <FieldGroup>
                         <Field className="flex-1 max-w-full">
                             <Input
                                 id="learnset-name"
+                                className="max-md:h-11"
                                 type="text"
                                 placeholder="Learnset Name..."
                                 value={ learnsetDeckName ?? "" }
@@ -79,21 +81,23 @@ export function ViewerLearnsetToolbar({
                         </Field>
                     </FieldGroup>
                     { isMounted && session?.user && (
-                        <FieldGroup className="flex flex-row justify-end gap-2">
-                            <Field orientation="horizontal" className="w-auto">
-                                <Button type="button" onClick={ handleOpenDuplicateDialog }>
-                                    <CopyCheck className="mr-2" />
-                                    Save as duplicate
-                                </Button>
-                                <SaveAsDuplicateDialog
-                                    open={ isOpen }
-                                    onOpenChange={ setIsOpen }
-                                    onCreateDuplicateLearnsetDeckWithChanges={
-                                        handleCreateDuplicateLearnsetDeckWithChanges
-                                    }
-                                />
-                            </Field>
-                        </FieldGroup>
+                        <ToolbarActions>
+                            <FieldGroup className="flex flex-row flex-wrap justify-start gap-2 lg:justify-end">
+                                <Field orientation="horizontal" className="w-auto max-md:w-full">
+                                    <Button className="max-md:h-11 max-md:w-full" type="button" onClick={ handleOpenDuplicateDialog }>
+                                        <CopyCheck className="mr-2" />
+                                        Save as duplicate
+                                    </Button>
+                                    <SaveAsDuplicateDialog
+                                        open={ isOpen }
+                                        onOpenChange={ setIsOpen }
+                                        onCreateDuplicateLearnsetDeckWithChanges={
+                                            handleCreateDuplicateLearnsetDeckWithChanges
+                                        }
+                                    />
+                                </Field>
+                            </FieldGroup>
+                        </ToolbarActions>
                     ) }
                 </FieldSet>
             </form>

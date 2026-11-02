@@ -12,6 +12,7 @@ import SaveAsDuplicateDialog from "@/app/deck/[deckId]/components/save-as-duplic
 import ConfirmDeleteLearnsetDeckDialog from "@/app/deck/[deckId]/components/confirm-delete-learnset-deck-dialog"
 import { toast } from "sonner"
 import { DuplicateLearnsetResult } from "@/lib/types"
+import { ToolbarActions } from "./toolbar-actions"
 
 type OwnerLearnsetToolbarProps = {
     learnsetDeckName?: string | null,
@@ -141,11 +142,12 @@ export function OwnerLearnsetToolbar({
     return (
         <div className="flex flex-col p-4 border-b">
             <form id="owner-learnset-toolbar-form" onSubmit={ handleUpdateLearnsetDeck }>
-                <FieldSet className="flex flex-row justify-between">
+                <FieldSet className="flex flex-col gap-3 lg:flex-row lg:justify-between">
                     <FieldGroup>
                         <Field className="flex-1">
                             <Input
                                 id="learnset-name"
+                                className="max-md:h-11"
                                 type="text"
                                 placeholder="Learnset Name..."
                                 value={ inputValue }
@@ -153,106 +155,112 @@ export function OwnerLearnsetToolbar({
                             />
                         </Field>
                     </FieldGroup>
-                    <FieldGroup className="flex flex-row justify-end gap-2">
-                        <Field orientation="horizontal" className="w-auto">
-                            <ButtonGroup className="flex justify-end">
-                                <Button
-                                    type="submit"
-                                    variant="default"
-                                    disabled={ !hasAnyUnsavedChanges || learnsetsLength === 0 }
-                                    name="intent"
-                                    value="save-changes"
-                                >
-                                    <Save className="mr-2" /> Save changes
-                                </Button>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button disabled={ learnsetsLength === 0 }>
-                                            <ChevronDownIcon />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-auto min-w-44">
-                                        <DropdownMenuItem
-                                            className="whitespace-nowrap"
-                                            disabled={ !hasUnsavedChanges || learnsetsLength === 0 }
-                                            onSelect={ () => handleDuplicateMenuItemSelect("current") }
-                                        >
-                                            <CopyCheck className="mr-2" />
-                                            Save as duplicate
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            className="whitespace-nowrap"
-                                            disabled={ learnsetsLength === 0 }
-                                            onSelect={ () => handleDuplicateMenuItemSelect("original") }
-                                        >
-                                            <CopyX className="mr-2" />
-                                            Duplicate without unsaved changes
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </ButtonGroup>
-                        </Field>
-                        <Field orientation="horizontal" className="w-auto">
-                            <Tooltip>
-                                <TooltipTrigger asChild>
+                    <ToolbarActions>
+                        <FieldGroup className="flex flex-row flex-wrap justify-start gap-2 lg:justify-end">
+                            <Field orientation="horizontal" className="w-auto max-md:w-full">
+                                <ButtonGroup className="flex justify-end max-md:w-full">
                                     <Button
-                                        type="button"
-                                        disabled={ !hasAnyUnsavedChanges }
-                                        onClick={ handleRevertChangesToLearnsetDeck }
+                                        className="max-md:h-11 max-md:flex-1"
+                                        type="submit"
+                                        variant="default"
+                                        disabled={ !hasAnyUnsavedChanges || learnsetsLength === 0 }
+                                        name="intent"
+                                        value="save-changes"
                                     >
-                                        <Undo className="mr-2" />
-                                        Revert
+                                        <Save className="mr-2" /> Save changes
                                     </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Discard all unsaved changes</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </Field>
-                        <Field orientation="horizontal" className="w-auto">
-                            <ButtonGroup className="flex">
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                className="max-md:h-11 max-md:w-11"
+                                                aria-label="More save options"
+                                                disabled={ learnsetsLength === 0 }
+                                            >
+                                                <ChevronDownIcon />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-auto min-w-44">
+                                            <DropdownMenuItem
+                                                className="whitespace-nowrap max-md:min-h-11"
+                                                disabled={ !hasUnsavedChanges || learnsetsLength === 0 }
+                                                onSelect={ () => handleDuplicateMenuItemSelect("current") }
+                                            >
+                                                <CopyCheck className="mr-2" />
+                                                Save as duplicate
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem
+                                                className="whitespace-nowrap max-md:min-h-11"
+                                                disabled={ learnsetsLength === 0 }
+                                                onSelect={ () => handleDuplicateMenuItemSelect("original") }
+                                            >
+                                                <CopyX className="mr-2" />
+                                                Duplicate without unsaved changes
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </ButtonGroup>
+                            </Field>
+                            <Field orientation="horizontal" className="w-auto max-md:w-full">
                                 <Tooltip>
                                     <TooltipTrigger asChild>
                                         <Button
+                                            className="max-md:h-11 max-md:w-full"
                                             type="button"
-                                            variant="destructive"
-                                            onClick={ () => setIsDeleteDialogOpen(true) }
+                                            disabled={ !hasAnyUnsavedChanges }
+                                            onClick={ handleRevertChangesToLearnsetDeck }
                                         >
-                                            <Trash className="mr-2" />
-                                            Delete
+                                            <Undo className="mr-2" />
+                                            Revert
                                         </Button>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>Delete this learnset deck</p>
+                                        <p>Discard all unsaved changes</p>
                                     </TooltipContent>
                                 </Tooltip>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="destructive">
-                                            <ChevronDownIcon />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-auto min-w-44">
-                                        <Tooltip>
-                                            <TooltipTrigger asChild>
-                                                <DropdownMenuItem
-                                                    className="whitespace-nowrap"
-                                                    onSelect={ handleClearLearnsetsFromDeck }
-                                                    disabled={ learnsetsLength === 0 }
-                                                >
-                                                    <BrushCleaning className="mr-2" />
-                                                    Clear
-                                                </DropdownMenuItem>
-                                            </TooltipTrigger>
-                                            <TooltipContent side="left">
-                                                <p>Remove all learnsets from this deck</p>
-                                            </TooltipContent>
-                                        </Tooltip>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </ButtonGroup>
-                        </Field>
-                    </FieldGroup>
+                            </Field>
+                            <Field orientation="horizontal" className="w-auto max-md:w-full">
+                                <ButtonGroup className="flex max-md:w-full">
+                                    <Tooltip>
+                                        <TooltipTrigger asChild>
+                                            <Button
+                                                className="max-md:h-11 max-md:flex-1"
+                                                type="button"
+                                                variant="destructive"
+                                                onClick={ () => setIsDeleteDialogOpen(true) }
+                                            >
+                                                <Trash className="mr-2" />
+                                                Delete
+                                            </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>Delete this learnset deck</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                    <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button
+                                                className="max-md:h-11 max-md:w-11"
+                                                aria-label="More delete options"
+                                                variant="destructive"
+                                            >
+                                                <ChevronDownIcon />
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-auto min-w-44">
+                                            <DropdownMenuItem
+                                                className="whitespace-nowrap max-md:min-h-11"
+                                                onSelect={ handleClearLearnsetsFromDeck }
+                                                disabled={ learnsetsLength === 0 }
+                                            >
+                                                <BrushCleaning className="mr-2" />
+                                                Clear all learnsets
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </ButtonGroup>
+                            </Field>
+                        </FieldGroup>
+                    </ToolbarActions>
                 </FieldSet>
             </form>
             <SaveAsDuplicateDialog

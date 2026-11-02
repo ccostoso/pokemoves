@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button"
 import { Field, FieldGroup, FieldSet } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { ToolbarActions } from "./toolbar-actions"
 import { Spinner } from "@/components/ui/spinner"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import { createLearnsetDeck } from "@/lib/actions/db-actions"
 import { authClient } from "@/lib/auth/auth-client"
 import { LearnsetDeckTitleSchema } from "@/lib/schemas"
@@ -91,11 +91,12 @@ export function NewLearnsetToolbar({
     return (
         <div className="flex flex-col p-4 border-b">
             <form onSubmit={ handleCreateLearnsetDeck }>
-                <FieldSet className="flex flex-row justify-between">
+                <FieldSet className="flex flex-col gap-3 lg:flex-row lg:justify-between">
                     <FieldGroup>
                         <Field className="flex-1">
                             <Input
                                 id="learnset-deck-name"
+                                className="max-md:h-11"
                                 type="text"
                                 placeholder="Learnset Deck Name..."
                                 value={ learnsetDeckName }
@@ -110,44 +111,40 @@ export function NewLearnsetToolbar({
                             />
                         </Field>
                     </FieldGroup>
-                    <FieldGroup className="flex flex-row justify-end gap-2">
-                        <Field orientation="horizontal" className="w-auto">
-                            <Button
-                                type="submit"
-                                disabled={ isSaving || isSubmitting }
-                            >
-                                { isSaving ? (
-                                    <span className="inline-flex items-center gap-2">
-                                        <Spinner className="size-4" />
-                                        Saving...
-                                    </span>
-                                ) : (
-                                    <>
-                                        <Save className="mr-2" />
-                                        Save learnset deck
-                                    </>
-                                ) }
-                            </Button>
-                            <Tooltip>
-                                <TooltipTrigger asChild>
-                                    <Button
-                                        className="whitespace-nowrap"
-                                        type="button"
-                                        onClick={ (event) => {
-                                            handleClearLearnsetsFromDeck(event)
-                                        } }
-                                        disabled={ isSaving || isSubmitting || learnsets.length === 0 }
-                                    >
-                                        <BrushCleaning className="mr-2" />
-                                        Clear
-                                    </Button>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>Remove all learnsets from this deck</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </Field>
-                    </FieldGroup>
+                    <ToolbarActions>
+                        <FieldGroup className="flex flex-row flex-wrap justify-start gap-2 lg:justify-end">
+                            <Field orientation="horizontal" className="w-auto max-md:w-full max-md:flex-col">
+                                <Button
+                                    className="max-md:h-11 max-md:w-full"
+                                    type="submit"
+                                    disabled={ isSaving || isSubmitting }
+                                >
+                                    { isSaving ? (
+                                        <span className="inline-flex items-center gap-2">
+                                            <Spinner className="size-4" />
+                                            Saving...
+                                        </span>
+                                    ) : (
+                                        <>
+                                            <Save className="mr-2" />
+                                            Save learnset deck
+                                        </>
+                                    ) }
+                                </Button>
+                                <Button
+                                    className="max-md:h-11 max-md:w-full"
+                                    type="button"
+                                    onClick={ (event) => {
+                                        handleClearLearnsetsFromDeck(event)
+                                    } }
+                                    disabled={ isSaving || isSubmitting || learnsets.length === 0 }
+                                >
+                                    <BrushCleaning className="mr-2" />
+                                    Clear all learnsets
+                                </Button>
+                            </Field>
+                        </FieldGroup>
+                    </ToolbarActions>
                 </FieldSet>
             </form>
         </div>
