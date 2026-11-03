@@ -42,7 +42,7 @@ export default function SearchShellGridSkeleton({ showSearchPanel = true }: Sear
                         <Skeleton className="h-5 w-12" />
                     </div>
                     <div className="@container overflow-hidden">
-                        <div className="flex gap-3 px-[calc((100cqw-82cqw)/2)] pt-4 pb-8 md:gap-4 md:px-4 md:pt-4">
+                        <div className="flex gap-3 px-[9cqw] pt-4 pb-8 md:gap-4 md:px-4 md:pt-4">
                             { Array.from({ length: 3 }).map((_, index) => (
                                 <div key={ index } className="w-[82cqw] shrink-0 rounded-xl border p-4 md:w-72">
                                     <div className="mb-4 flex items-start justify-between gap-2">
