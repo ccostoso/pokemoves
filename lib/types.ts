@@ -22,11 +22,13 @@ export type LevelUpMove = {
 
 type BaseLearnset = {
     pokemonName: string,
-    versionGroupName: string,
-    id: string
+    versionGroupName: string
 }
 
-export type LevelUpLearnset = BaseLearnset & {
+// The shape returned by the API/mapper layer. It deliberately has no `id` —
+// the SPA is the sole owner of learnset instance IDs (see createLearnsetInstanceId),
+// since a server-cached response can't provide a per-instance, per-occurrence ID anyway.
+export type LevelUpLearnsetData = BaseLearnset & {
     pokemon: Array<{
         id: number,
         name: string,
@@ -35,6 +37,10 @@ export type LevelUpLearnset = BaseLearnset & {
             names: LocalizedName[]
         }
     }>
+}
+
+export type LevelUpLearnset = LevelUpLearnsetData & {
+    id: string
 }
 
 export type LearnsetDeckItem = {

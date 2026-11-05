@@ -1,4 +1,4 @@
-import { LevelUpLearnset, PokemonListItem } from "../types"
+import { LevelUpLearnsetData, PokemonListItem } from "../types"
 
 // --- Shared primitives ---
 
@@ -90,7 +90,7 @@ export const mapPokemonListResponse = (response: RawPokemonListResponse): Pokemo
     }))
 }
 
-export const mapLevelUpResponse = (response: RawLevelUpResponse, versionGroupName: string): LevelUpLearnset => {
+export const mapLevelUpResponse = (response: RawLevelUpResponse, versionGroupName: string): LevelUpLearnsetData => {
     const rawPokemon = response.pokemon ?? response.pokemon_v2_pokemon ?? []
     const fallbackSpecies = (response.pokemonspecy ?? response.pokemon_v2_pokemonspecy ?? [])[0]
 
@@ -120,9 +120,7 @@ export const mapLevelUpResponse = (response: RawLevelUpResponse, versionGroupNam
         },
     }))
 
-    const id = crypto.randomUUID()
-
     const pokemonName = pokemon[0]?.name ?? ""
 
-    return { pokemon, pokemonName, versionGroupName, id }
+    return { pokemon, pokemonName, versionGroupName }
 }
