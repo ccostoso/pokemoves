@@ -68,7 +68,6 @@ describe("mapLevelUpResponse", () => {
         )
 
         expect(result).toEqual({
-            id: expect.any(String),
             pokemonName: "pikachu",
             versionGroupName: "red-blue",
             pokemon: [
@@ -118,7 +117,6 @@ describe("mapLevelUpResponse", () => {
         )
 
         expect(result).toEqual({
-            id: expect.any(String),
             pokemonName: "bulbasaur",
             versionGroupName: "yellow",
             pokemon: [
@@ -158,7 +156,6 @@ describe("mapLevelUpResponse", () => {
         const result = mapLevelUpResponse({}, "yellow")
 
         expect(result).toEqual({
-            id: expect.any(String),
             pokemonName: "",
             versionGroupName: "yellow",
             pokemon: [],

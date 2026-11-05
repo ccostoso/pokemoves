@@ -5,7 +5,7 @@ import { GET_POKEMON_BY_VERSIONGROUP_NAME, GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AN
 
 import { unstable_cache } from "next/cache"
 import { pokemonListCacheKey, POKEMON_LIST_TAG, movesCacheKey, MOVES_TAG } from "../cache-keys"
-import { LevelUpLearnset, PokemonListItem } from "../types"
+import { LevelUpLearnsetData, PokemonListItem } from "../types"
 import {
     mapLevelUpResponse,
     mapPokemonListResponse,
@@ -36,7 +36,7 @@ export const getAllPokemonByVersionGroupName = unstable_cache(
 )
 
 export const getLevelUpMovesByPokemonNameAndVersionGroup = unstable_cache(
-    async (pokemonName: string, versionGroupName: string): Promise<LevelUpLearnset> => {
+    async (pokemonName: string, versionGroupName: string): Promise<LevelUpLearnsetData> => {
         const response = await gqlClient.request<RawLevelUpResponse>(
             GET_LEVEL_UP_MOVES_BY_POKEMON_NAME_AND_VERSIONGROUP,
             { pokemonName, versionGroupName },
